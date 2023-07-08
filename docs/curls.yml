@@ -1,0 +1,46 @@
+Return Values
+200: Successful operation.
+400: Invalid request format.
+401: Unauthorized access, no authentication provided.
+403: User does not have access to the requested resource.
+500: Unexpected server error.
+
+
+REST API Verbs
+POST - Create new object (new object ID created)
+PUT - Update existing object (need object ID)
+GET - Retrieve existing object (need object ID)
+DELETE - Remove existing object (need object ID)
+
+
+Examples
+
+Opportunity Service POST Request:
+curl -d '{"name": "David Test","description": "Test Opportunity","currencyIsoCode": "USD"}' -H "Content-Type: application/json" -H "Accept: application/json" -H "Authorization: Bearer $TOKEN" -X POST https://cpq-dev.cdsvisual.net/v1/projects/opportunities
+
+Opportunity Service GET Request:
+curl -H "Accept: application/json" -H "Authorization: Bearer $TOKEN" https://cpq-dev.cdsvisual.net/v1/projects/opportunities/08a0001vuneqqwdh
+
+Opportunity Service PUT Request:
+curl -d '{"description": "Updated David Opportunity"}' -H "Content-Type: application/json" -H "Accept: application/json" -H "Authorization: Bearer $TOKEN" -X PUT https://cpq-dev.cdsvisual.net/v1/projects/opportunities/08a0001vuneqqwdh
+
+
+Quotes Service POST Request:
+curl -d '{"name": "David Test Quote","description": "Test Quote","opportunityId": "08a0001vuneqqwdh"}' -H "Content-Type: application/json" -H "Accept: application/json" -H "Authorization: Bearer $TOKEN" -X POST https://cpq-dev.cdsvisual.net/v1/projects/quotes
+
+Quotes Service GET Request:
+curl -H "Accept: application/json" -H "Authorization: Bearer $TOKEN" https://cpq-dev.cdsvisual.net/v1/projects/quotes/03a0000gobgewlqr
+
+Quotes Service PUT Request:
+curl -d '{"description": "Updated Test Quote"}' -H "Content-Type: application/json" -H "Accept: application/json" -H "Authorization: Bearer $TOKEN" -X PUT https://cpq-dev.cdsvisual.net/v1/projects/quotes/03a0000dfskwxyev
+
+Quotes Lines Service POST Request:
+curl -d '{"name": "David Configuration 2","parentQuoteId": "03a0000gobgewlqr","productId":"FLX-2+0x2-M0120-L0070","quantity":1}' -H "Content-Type: application/json" -H "Accept: application/json" -H "Authorization: Bearer $TOKEN" -X POST https://cpq-dev.cdsvisual.net/v1/projects/quoteLines
+
+Quotes Lines Service GET Request:
+curl -H "Accept: application/json" -H "Authorization: Bearer $TOKEN" https://cpq-dev.cdsvisual.net/v1/projects/quoteLines/07a0001uzlmlorzb
+
+Quotes Lines Service PUT Request:
+curl -d '{"quantity":5}' -H "Content-Type: application/json" -H "Accept: application/json" -H "Authorization: Bearer $TOKEN" -X PUT https://cpq-dev.cdsvisual.net/v1/projects/quoteLines/07a0001hsmfehvev
+
+

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.0.2 (Python 3.11.3 on win32)" generated="20230626 12:01:21.814" rpa="false" schemaversion="3">
+<suite id="s1" name="TS TestActivityFile" source="C:\work\DoverPrj\cpq_aut\src\test\TestActivityFile_Test\TS_TestActivityFile.robot">
+<test id="s1-t1" name="Firts Test Case" line="6">
+<kw name="Write" library="GlobalAPI">
+<arg>--- It is the first line</arg>
+<if>
+<branch type="IF" condition="${console_output} == 1">
+<kw name="Log To Console" library="BuiltIn">
+<arg>${\n}${text}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="NOT RUN" starttime="20230626 12:01:21.968" endtime="20230626 12:01:21.968"/>
+</kw>
+<status status="NOT RUN" starttime="20230626 12:01:21.967" endtime="20230626 12:01:21.968"/>
+</branch>
+<status status="PASS" starttime="20230626 12:01:21.967" endtime="20230626 12:01:21.968"/>
+</if>
+<if>
+<branch type="IF" condition="${file_output} == 1">
+<kw name="Writeln" library="TestActivityFile">
+<arg>${text}</arg>
+<status status="NOT RUN" starttime="20230626 12:01:21.968" endtime="20230626 12:01:21.968"/>
+</kw>
+<status status="NOT RUN" starttime="20230626 12:01:21.968" endtime="20230626 12:01:21.968"/>
+</branch>
+<status status="PASS" starttime="20230626 12:01:21.968" endtime="20230626 12:01:21.968"/>
+</if>
+<status status="PASS" starttime="20230626 12:01:21.967" endtime="20230626 12:01:21.968"/>
+</kw>
+<kw name="Write" library="GlobalAPI">
+<arg>--- It is the second file</arg>
+<if>
+<branch type="IF" condition="${console_output} == 1">
+<kw name="Log To Console" library="BuiltIn">
+<arg>${\n}${text}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="NOT RUN" starttime="20230626 12:01:21.968" endtime="20230626 12:01:21.968"/>
+</kw>
+<status status="NOT RUN" starttime="20230626 12:01:21.968" endtime="20230626 12:01:21.968"/>
+</branch>
+<status status="PASS" starttime="20230626 12:01:21.968" endtime="20230626 12:01:21.968"/>
+</if>
+<if>
+<branch type="IF" condition="${file_output} == 1">
+<kw name="Writeln" library="TestActivityFile">
+<arg>${text}</arg>
+<status status="NOT RUN" starttime="20230626 12:01:21.968" endtime="20230626 12:01:21.968"/>
+</kw>
+<status status="NOT RUN" starttime="20230626 12:01:21.968" endtime="20230626 12:01:21.968"/>
+</branch>
+<status status="PASS" starttime="20230626 12:01:21.968" endtime="20230626 12:01:21.968"/>
+</if>
+<status status="PASS" starttime="20230626 12:01:21.968" endtime="20230626 12:01:21.968"/>
+</kw>
+<status status="PASS" starttime="20230626 12:01:21.967" endtime="20230626 12:01:21.968"/>
+</test>
+<status status="PASS" starttime="20230626 12:01:21.816" endtime="20230626 12:01:21.969"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="1" fail="0" skip="0" id="s1" name="TS TestActivityFile">TS TestActivityFile</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
