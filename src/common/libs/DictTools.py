@@ -173,4 +173,26 @@ class DictTools:
             else:
                 self.printing( toShow, "\t\tValue B: " + str( value ) )
         self.printing( toShow, "==========================")
-            
+    ###
+    # It create a dictionary using 2 list, the first list are the keys and the second the values, the dictionary use all keys,
+    # if the values are shoter than the keyes then the rest of keys will have a None value.
+    # -param keys(list): It is the list of keys used for the dictionary.
+    # -param values(list): It is the list of values used for the dictionary.
+    # -return(dictionary): It is the dictionary crated in base of the list used as parameters.
+    ###
+    @keyword
+    def create_dictionary_from_lists( keys, values):
+        res = {}
+        if keys == None:
+            return res
+        if values == None:
+            values = []
+        size = len( keys )
+        for index in range( size ):
+            key = keys[index]
+            if index in values:
+                value = values[ index ]
+            else:
+                value = None
+            res[ key ] = value
+        return res

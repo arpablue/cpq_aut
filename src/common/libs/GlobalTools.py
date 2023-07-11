@@ -101,7 +101,7 @@ class GlobalTools:
         src_path = dir[ :src_pos ]
         src_path = src_path + prjPath
         sep = os.path.sep
-        src_path = src_path.replace( sep+sep, sep )
+        src_path = src_path.replace( sep + sep, sep )
         return src_path
         
 
