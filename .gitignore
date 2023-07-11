@@ -1,5 +1,5 @@
 test_result/
-**/__pycache__/
+**/__pycache__
 *.dat
 *.html
 *.xml
