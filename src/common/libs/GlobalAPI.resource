@@ -22,6 +22,7 @@ Start session
     Set Global Variable  ${SessionAPI}
 #################################### TEST SUITS ####################################
 Test Start
+    ${Log_ACtitivity_Test}=  Set variable  None
     Set Global Variable  ${Log_ACtitivity_Test}
 
 #################################### LOG METHODS ####################################
@@ -123,8 +124,16 @@ Dictionary key exists
     #${flag}=  Run Keyword And Return Status  Evaluate  ${key} in ${dict}
     ${flag}=  DictTools.Dictionary this key exists  ${dict}  ${key}
     [Return]  ${flag}
-
-
+###
+# It create a dictionaty using two lists.
+# -param listA(List): It the lists of keys.
+# -param listB(List): It is the list of values for each key of  the list A.
+# -return(Dictionary): It is the dictionary created from the lists.
+###
+Dictionary create from lists
+    [Arguments]  ${listA}  ${listB}
+    ${dict}=  DictTools.Dictionary Create From Lists  ${listA}  ${listB}
+    [Return]  ${dict}
 ###
 # It generate a random numbers of 4 digits.
 # -returns (str) : It is aleatory number of 4 digits.

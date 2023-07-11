@@ -1,6 +1,7 @@
 import os
 import sys
 import datetime
+from robot.api import logger
 
 dir = os.path.dirname( __file__ )
 src_pos = dir.index('src')
@@ -17,12 +18,13 @@ class LolFile( FileReader ):
     def __init__(self) -> None:
         super().__init__()
         self.mLists = []
+        self.mStrSeparator = "  "
     ###
     # It process each file of the file loaded.
     # -param line(String): It is a line of the file.
     ###        
     def process_line(self, line):
-        list = line.split( "  " )
+        list = line.split( self.mStrSeparator )
         self.mLists.append( list )
     ###
     # It return the current list

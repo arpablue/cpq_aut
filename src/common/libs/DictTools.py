@@ -181,16 +181,17 @@ class DictTools:
     # -return(dictionary): It is the dictionary crated in base of the list used as parameters.
     ###
     @keyword
-    def create_dictionary_from_lists( keys, values):
+    def dictionary_create_from_lists(self, keys, values):
         res = {}
         if keys == None:
             return res
         if values == None:
             values = []
         size = len( keys )
+        size2 = len( values )
         for index in range( size ):
-            key = keys[index]
-            if index in values:
+            key = keys[ index ]
+            if index < size2 :
                 value = values[ index ]
             else:
                 value = None

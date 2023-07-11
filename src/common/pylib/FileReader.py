@@ -67,6 +67,7 @@ class FileReader:
                         if not line.isspace() :
                             line = line.replace( "\n", "" )
                             self.process_line( line )
+                            
         except FileNotFoundError:
             return False
         except Exception as e:

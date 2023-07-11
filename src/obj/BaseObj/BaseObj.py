@@ -8,9 +8,14 @@ class BaseObj:
     # -params dictData(dictionary): It is the data used by the quote, by default is empty.
     ###
     def __init__(self, dictData = {}) -> None:
-        self.mAttrs = dictData
+        self.set_data( dictData )
         if self.mAttrs == None :
             self.mAttrs = {}
+    ###
+    # It specify the attributes for the current object
+    ###
+    def set_data( self, data ):
+        self.mAttrs = data
     ###
     # It return the list of attributes of the current oobject.
     # -return(list): It is the list of attributes.
