@@ -11,5 +11,5 @@ sys.path.append( src_path )
 from BaseObj import BaseObj
 
 
-class RolObj( BaseObj ):
+class RoleObj( BaseObj ):
     pass
