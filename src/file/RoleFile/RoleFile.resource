@@ -15,14 +15,14 @@ Library    ../../../src/file/RoleFile/RoleFile_ext.py
 ###
 Get role in the position
     [Arguments]  ${position}
-    ${role}=  RoleFile.Get role position  ${position}
+    ${role}=  RoleFile_ext.Get role position  ${position}
     [Return]  ${role}
 ###
 # It return the all roles that exists int the file.
 # -return(List): It is the list of RolesObj list.
 ###
 Get roles in file
-    ${roles}=  RoleFile.Load roles from file
+    ${roles}=  RoleFile_ext.Load roles from file
     [Return]  ${roles}
 
 
