@@ -22,7 +22,7 @@ def failed( text ):
 # It verify the roles has been loaded without problems
 ###
 def test_RoleFile_get_all_roles():
-    exp = 4
+    exp = 9
     uf = RoleFile_ext()
     
     roles = uf.load_roles_from_file()
@@ -34,10 +34,10 @@ def test_RoleFile_get_all_roles():
     if size ==exp:
         passed("TC: test_RoleFile_get_all_roles - The quantity of role is correct")
     else:
-        failed("TC: test_RoleFile_get_all_roles - The quantity of roles are differents: exp (" + str( exp ) + " != current(" + size + ") ")
+        failed("TC: test_RoleFile_get_all_roles - The quantity of roles are differents: exp (" + str( exp ) + " != current(" + str( size ) + ") ")
         
 def test_RoleFile_get_one_especific_role():
-    exp = '{"RoleObj":{"id": "3333", "name": "May", "lastname": "Realy", "email": "May.Realy@test.com"}}'
+    exp = '{"RoleObj":{"id": "0ba0006dp3394wu", "name": "Customer Accounts Champion", "createAt": "20-10-31 19:34:26", "modifyAt": "2018-10-31 19:34:35"}}'
     uf = RoleFile_ext()
     
     role = uf.get_role_position( 2 )
