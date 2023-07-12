@@ -34,7 +34,7 @@ def test_permissionFile_get_all_permissions():
     if size ==exp:
         passed("TC: test_permissionFile_get_all_permissions - The quantity of permission is correct")
     else:
-        failed("TC: test_permissionFile_get_all_permissions - The quantity of permissions are differents: exp (" + str( exp ) + " != current(" + size + ") ")
+        failed("TC: test_permissionFile_get_all_permissions - The quantity of permissions are differents: exp (" + str( exp ) + " != current(" + str( size ) + ") ")
         
 def test_permissionFile_get_one_especific_permission():
     exp = '{"PermissionObj":{"id": "09a00001abcdef03", "name": "Admin Permission", "createAt": "2018-09-26 12:29:20"}}'
