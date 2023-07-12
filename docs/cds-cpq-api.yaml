@@ -1,0 +1,1576 @@
+swagger: "2.0"
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+info:
+  description: "REST API for CDS CPQ web services."
+  version: "0.1.0"
+  title: "CDS CPQ"
+host: "cpq-dev.cdsvisual.net"
+basePath: "/v1"
+schemes:
+- "https"
+paths:
+  # access routes
+  /sessions:
+    get:
+      tags:
+      - "access"
+      summary: "Return authentication status of the current user"
+      description: "Validates JWT token used to authenticate the user and generates a CSRF token."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters: []
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/UserStatus"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "500":
+          description: "Unexpected server error."
+  /sessions/{userId}:
+    get:
+      tags:
+      - "access"
+      summary: "Return access status of a user"
+      description: "Returns a 200 status if this is a valid user.  Returned UserStatus object should only contain ID and active fields."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "User to determine status of."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/UserStatus"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+    put:
+      tags:
+      - "access"
+      summary: "Set user status to active."
+      description: "Set user status to active."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "User to set status of."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+    delete:
+      tags:
+      - "access"
+      summary: "Set user status to inactive."
+      description: "Set user status to inactive."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "User to set status of."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+        "400":
+          description: "Invalid request format."
+        "500":
+          description: "Unexpected server error."
+
+  /roles:
+    get:
+      tags:
+      - "access"
+      summary: "Get all roles."
+      description: "Returns a list of every role that is visible to the current user."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters: []
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/UserRole"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+  /roles/{userId}:
+    get:
+      tags:
+      - "access"
+      summary: "Get the user's role."
+      description: "Returns the role assigned to the given user."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "User the role is attached to."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/UserRole"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+    put:
+      tags:
+      - "access"
+      summary: "Set the user's role."
+      description: "Attaches the given role to the user.  Only the role ID field is required in the request body JSON."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "User to attach the role to."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Role to attach to the user.  Only the id field is required."
+        required: true
+        schema:
+          $ref: "#/definitions/UserRole"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/UserRole"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+
+  /permissions/users/{userId}:
+    put:
+      tags:
+      - "access"
+      summary: "Attaches permission sets to a user."
+      description: "Sets the list of permission sets that are attached to the user."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "User to attach the permissions to."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "List of permission sets to attach to the user."
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/PermissionSet"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/PermissionSet"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+  /permissions/roles/{roleId}:
+    put:
+      tags:
+      - "access"
+      summary: "Attaches permission sets to a role."
+      description: "Sets the list of permission sets that are attached to the role."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "roleId"
+        in: "path"
+        description: "Role to attach the permissions to."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "List of permission sets to attach to the role."
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/PermissionSet"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/PermissionSet"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+  /permissions/partners/{partnerId}:
+    put:
+      tags:
+      - "access"
+      summary: "Attaches permission sets to a partner."
+      description: "Sets the list of permission sets that are attached to the partner."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "partnerId"
+        in: "path"
+        description: "Partner to attach the permissions to."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "List of permission sets to attach to the partner."
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/PermissionSet"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/PermissionSet"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+  /permissions/objects/{entity}/{objectId}:
+    get:
+      tags:
+      - "access"
+      summary: "Get permissions for an object."
+      description: "Returns the list of users, roles, partners that have permissions to access the given object."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "objectId"
+        in: "path"
+        description: "The ID of the object to query permissions for."
+        required: true
+        type: "string"
+      - name: "entity"
+        in: "path"
+        description: "The type of the object to query permissions for (opportunity, quote, product, etc)."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ObjectPermission"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+  /permissions/shares/{userId}:
+    put:
+      tags:
+      - "access"
+      summary: "Grants access to an object to a user."
+      description: "Grants specific permissions to the given object to a specific user."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "The user we are granting permissions to."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Object and permissions to grant to the given user."
+        required: true
+        schema:
+          $ref: "#/definitions/ObjectPermission"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/PermissionSet"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+
+  # configurator routes
+  /options:
+    get:
+      tags:
+      - "configurators"
+      summary: "Get option groups for a scope and configuration."
+      description: "Returns ths list of option groups and options that are available in a given scope and current configuration."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "scope"
+        in: "query"
+        description: "Comma delimited list of scopes to include."
+        required: false
+        type: "string"
+      - in: "query"
+        name: "q"
+        description: "Currently selected configuration options."
+        required: false
+        type: "string"
+      - in: "query"
+        name: "searchable"
+        description: "Return only searchable option groups."
+        required: false
+        type: "boolean"
+      - in: "query"
+        name: "configurable"
+        description: "Return only configurable option groups."
+        required: false
+        type: "boolean"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/OptionGroup"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+  /products:
+    get:
+      tags:
+      - "configurators"
+      summary: "Search for products."
+      description: "Returns ths list of products that match the current configuration."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - in: "query"
+        name: "q"
+        description: "Currently selected configuration options."
+        required: false
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Product"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+  /products/{productId}:
+    get:
+      tags:
+      - "configurators"
+      summary: "Get product."
+      description: "Returns the requested product and all associated configurator data."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "productId"
+        in: "path"
+        description: "The ID of the desired product (usually the SKU)."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Product"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+  /configurations:
+    post:
+      tags:
+      - "configurators"
+      summary: "Create new configuration."
+      description: "Creates a new configuration from the given option group selections."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Object and permissions to grant to the given user."
+        required: true
+        schema:
+          $ref: "#/definitions/Configuration"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Configuration"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+    put:
+      tags:
+      - "configurators"
+      summary: "Save configuration."
+      description: "Saves a configuration from the given option group selections."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Object and permissions to grant to the given user."
+        required: true
+        schema:
+          $ref: "#/definitions/Configuration"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Configuration"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+  /configurations/{configId}:
+    get:
+      tags:
+      - "configurators"
+      summary: "Get configuration."
+      description: "Returns the requested configuration."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "configId"
+        in: "path"
+        description: "The ID of the desired configuration."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Configuration"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+
+  /projects/opportunities:
+    post:
+      tags:
+      - "projects"
+      summary: "Create new opportunity."
+      description: "Creates a new opportunity."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Opportunity object to save."
+        required: true
+        schema:
+          $ref: "#/definitions/Opportunity"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Opportunity"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+    get:
+      tags:
+      - "projects"
+      summary: "Get opportunities."
+      description: "Returns all opportunities visible to the current user."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters: []
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Opportunity"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+
+  /projects/opportunities/{opportunityId}:
+    get:
+      tags:
+      - "projects"
+      summary: "Get opportunity."
+      description: "Returns the requested opportunity and all associated quotes."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "opportunityId"
+        in: "path"
+        description: "The ID of the desired opportunity."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Opportunity"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+    put:
+      tags:
+      - "projects"
+      summary: "Update opportunity."
+      description: "Updates the given opportunity."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "opportunityId"
+        in: "path"
+        description: "The ID of the opportunity to save."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Opportunity object to save."
+        required: true
+        schema:
+          $ref: "#/definitions/Opportunity"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Opportunity"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+    delete:
+      tags:
+      - "projects"
+      summary: "Delete opportunity."
+      description: "Delete the given opportunity."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "opportunityId"
+        in: "path"
+        description: "The ID of the opportunity to delete."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Opportunity"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+
+  /projects/quotes:
+    post:
+      tags:
+      - "projects"
+      summary: "Create new quote."
+      description: "Creates a new quote."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Quote object to save."
+        required: true
+        schema:
+          $ref: "#/definitions/Quote"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Quote"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+    get:
+      tags:
+      - "projects"
+      summary: "Get quotes."
+      description: "Returns all quotes visible to the current user."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters: []
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Quote"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+  /projects/quotes/{quoteId}:
+    get:
+      tags:
+      - "projects"
+      summary: "Get quote."
+      description: "Returns the requested quote and all associated quote lines."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "quoteId"
+        in: "path"
+        description: "The ID of the desired quote."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Quote"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+    put:
+      tags:
+      - "projects"
+      summary: "Update quote."
+      description: "Updates the given quote."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "quoteId"
+        in: "path"
+        description: "The ID of the quote to save."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Quote object to save."
+        required: true
+        schema:
+          $ref: "#/definitions/Quote"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Quote"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+    delete:
+      tags:
+      - "projects"
+      summary: "Delete quote."
+      description: "Deletes the given quote."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "quoteId"
+        in: "path"
+        description: "The ID of the quote to delete."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Quote object to delete."
+        required: true
+        schema:
+          $ref: "#/definitions/Quote"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Quote"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+
+  /projects/quoteLines:
+    post:
+      tags:
+      - "projects"
+      summary: "Create new quote line."
+      description: "Creates a new quote line."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Quote line object to save."
+        required: true
+        schema:
+          $ref: "#/definitions/QuoteLine"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/QuoteLine"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+  /projects/quoteLines/{quoteLineId}:
+    get:
+      tags:
+      - "projects"
+      summary: "Get quote line."
+      description: "Returns the requested quote line."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "quoteLineId"
+        in: "path"
+        description: "The ID of the desired quote line."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/QuoteLine"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+    put:
+      tags:
+      - "projects"
+      summary: "Update quote line."
+      description: "Updates the given quote line."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "quoteLineId"
+        in: "path"
+        description: "The ID of the quote line to save."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Quote line object to save."
+        required: true
+        schema:
+          $ref: "#/definitions/QuoteLine"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/QuoteLine"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+
+  /projects/accounts:
+    get:
+      tags:
+      - "projects"
+      summary: "Get accounts."
+      description: "Returns all accounts visible to the current user."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters: []
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Account"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+
+  /projects/accounts/{accountId}:
+    get:
+      tags:
+      - "projects"
+      summary: "Get account."
+      description: "Returns the requested account."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "accountId"
+        in: "path"
+        description: "The ID of the desired account."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Account"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+    put:
+      tags:
+      - "projects"
+      summary: "Update account."
+      description: "Updates the given account."
+      produces:
+      - "application/json"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "accountId"
+        in: "path"
+        description: "The ID of the account to save."
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Account object to save."
+        required: true
+        schema:
+          $ref: "#/definitions/Account"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Account"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+
+  /projects/proposals/{quoteId}:
+    get:
+      tags:
+      - "projects"
+      summary: "Get proposal."
+      description: "Returns the current proposal documents for the requested quote."
+      produces:
+      - "application/pdf"
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: "quoteId"
+        in: "path"
+        description: "The ID of the desired quote."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "file"
+        "400":
+          description: "Invalid request format."
+        "401":
+          description: "Unauthorized access, no authentication provided."
+        "403":
+          description: "User does not have access to the requested resource."
+        "404":
+          description: "The requested resource does not exist."
+        "500":
+          description: "Unexpected server error."
+
+definitions:
+  UserStatus:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      active:
+        type: "boolean"
+      authenticated:
+        type: "boolean"
+      csrfToken:
+        type: "string"
+  UserRole:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      parentId:
+        type: "string"
+      externalId:
+        type: "string"
+      isPartnerRole:
+        type: "boolean"
+  Permission:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      description:
+        type: "string"
+      target:
+        type: "string"
+      read:
+        type: "boolean"
+      create:
+        type: "boolean"
+      update:
+        type: "boolean"
+      delete:
+        type: "boolean"
+  PermissionSet:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      description:
+        type: "string"
+      permissions:
+          type: "array"
+          items:
+            $ref: "#/definitions/Permission"
+  ObjectPermission:
+    type: "object"
+    properties:
+      entityType:
+        type: "string"
+        description: "User, role, or partner"
+      entityId:
+        type: "string"
+        description: "The ID of the user, role, or partner."
+      read:
+        type: "boolean"
+      create:
+        type: "boolean"
+      update:
+        type: "boolean"
+      delete:
+        type: "boolean"
+  OptionGroup:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      description:
+        type: "string"
+      label:
+        type: "string"
+      dataType:
+        type: "string"
+      scopes:
+        type: "string"
+      sortOrder:
+        type: "integer"
+      tooltip:
+        type: "string"
+      imageUrl:
+        type: "string"
+      size:
+        type: "integer"
+      numericScale:
+        type: "integer"
+      numericStep:
+        type: "integer"
+      unit:
+        type: "string"
+      metricDefaultUnit:
+        type: "string"
+      englishDefaultUnit:
+        type: "string"
+      searchable:
+        type: "boolean"
+      configurable:
+        type: "boolean"
+      visible:
+        type: "boolean"
+      minFloat:
+        type: "number"
+      maxFloat:
+        type: "number"
+      minInt:
+        type: "integer"
+      maxInt:
+        type: "integer"
+      enums:
+        type: "array"
+        items:
+          $ref: "#/definitions/OptionGroupEnum"
+  OptionGroupEnum:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      label:
+        type: "string"
+      sortOrder:
+        type: "integer"
+  ConfigurationSelection:
+    type: "object"
+    properties:
+      option:
+        type: "string"
+      value:
+        type: "string"
+  Configuration:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      description:
+        type: "string"
+      sku:
+        type: "string"
+      configurations:
+        type: "array"
+        items:
+          $ref: "#/definitions/ConfigurationSelection"
+  Product:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      description:
+        type: "string"
+      longDescription:
+        type: "string"
+      label:
+        type: "string"
+      category:
+        type: "string"
+      keywords:
+        type: "string"
+      sortOrder:
+        type: "string"
+      imageUrl:
+        type: "string"
+      largeImageUrl:
+        type: "string"
+      thumbnailUrl:
+        type: "string"
+      listPrice:
+        type: "integer"
+  Opportunity:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      accountId:
+        type: "string"
+      ownerId:
+        type: "string"
+      currencyIsoCode:
+        type: "string"
+      primaryQuoteId:
+        type: "string"
+      clonedId:
+        type: "string"
+      crmId:
+        type: "string"
+      crmExportStatus:
+        type: "string"
+      isClosed:
+        type: "boolean"
+      isArchived:
+        type: "boolean"
+  Quote:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      note:
+        type: "string"
+      isPrimary:
+        type: "boolean"
+      lastExportedTime:
+        type: "string"
+      clonedId:
+        type: "string"
+      opportunityId:
+        type: "string"
+      ownerId:
+        type: "string"
+      externalId:
+        type: "string"
+      productsCount:
+        type: "string"
+      workflowStatus:
+        type: "string"
+      isDependentDataOutOfSync:
+        type: "boolean"
+      isProductUpdateAllowed:
+        type: "boolean"
+      isLocked:
+        type: "boolean"
+      lockedTime:
+        type: "string"
+      lockedBy:
+        type: "string"
+      currencyIsoCode:
+        type: "string"
+      totalAmount:
+        type: "string"
+      productsAmount:
+        type: "string"
+      totalDiscountsAmount:
+        type: "string"
+      totalChargesAmount:
+        type: "string"
+      totalFeesAmount:
+        type: "string"
+      chargesAmount:
+        type: "string"
+      feesAmount:
+        type: "string"
+      discountAmount:
+        type: "string"
+      totalCost:
+        type: "integer"
+      totalProfit:
+        type: "string"
+      totalMargin:
+        type: "string"
+      totalProductsCost:
+        type: "integer"
+      totalChargesCost:
+        type: "integer"
+      totalFeesCost:
+        type: "integer"
+      totalDiscountsCost:
+        type: "integer"
+      lines:
+        type: "array"
+        items:
+          $ref: "#/definitions/QuoteLine"
+  QuoteLine:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      extendedDescription:
+        type: "string"
+      orderCode:
+        type: "string"
+      keycode:
+        type: "string"
+      productId:
+        type: "string"
+      isSelected:
+        type: "boolean"
+      quantity:
+        type: "string"
+      sequence:
+        type: "string"
+      parentQuoteId:
+        type: "string"
+      rootQuoteId:
+        type: "string"
+      quoteBundleId:
+        type: "string"
+      parentId:
+        type: "string"
+      rootId:
+        type: "string"
+      clonedId:
+        type: "string"
+      baseListPrice:
+        type: "integer"
+      baseSellingPrice:
+        type: "integer"
+      unitListPrice:
+        type: "integer"
+      unitSellingPrice:
+        type: "integer"
+      totalSellingPrice:
+        type: "integer"
+      totalOptionsSellingPrice:
+        type: "integer"
+      totalBaseSellingPrice:
+        type: "integer"
+      listPrice:
+        type: "integer"
+      nestedProductsSellingPrice:
+        type: "integer"
+      optionsSellingPrice:
+        type: "integer"
+      optionsListPrice:
+        type: "integer"
+      grandTotalChargesAmount:
+        type: "string"
+      grandTotalDiscountsAmount:
+        type: "string"
+      optionsCost:
+        type: "integer"
+      optionsProfit:
+        type: "string"
+      optionsMargin:
+        type: "string"
+      cost:
+        type: "integer"
+      totalCost:
+        type: "integer"
+      totalProfit:
+        type: "string"
+      totalMargin:
+        type: "string"
+      includeInExport:
+        type: "string"
+      currencyIsoCode:
+        type: "string"
+      isInQuoteBundle:
+        type: "boolean"
+      products:
+        type: "array"
+        items:
+          $ref: "#/definitions/Configuration"
+  Account:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      accountNumber:
+        type: "string"
+      ownerId:
+        type: "string"
+      billingAddressId:
+        type: "integer"
+      shippingAddressId:
+        type: "integer"
+      website:
+        type: "string"
+      externalId:
+        type: "boolean"

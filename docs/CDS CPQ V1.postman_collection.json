@@ -1,0 +1,499 @@
+{
+	"info": {
+		"_postman_id": "2033ba63-9492-46cf-a5a8-77f60396ba75",
+		"name": "CDS CPQ V1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12811971"
+	},
+	"item": [
+		{
+			"name": "Access",
+			"item": [
+				{
+					"name": "Session",
+					"item": [
+						{
+							"name": "Login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/v1/access/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"access",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Status",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/v1/access/status",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"access",
+										"status"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Roles",
+					"item": [
+						{
+							"name": "Get Roles",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/v1/access/roles",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"access",
+										"roles"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get User Role",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/v1/access/roles/users/{{currentUserId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"access",
+										"roles",
+										"users",
+										"{{currentUserId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Set User Role",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"roleId\": \"{{currentRoleId}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/access/roles/users/{{currentUserId}}/setRole",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"access",
+										"roles",
+										"users",
+										"{{currentUserId}}",
+										"setRole"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Permissions",
+					"item": [
+						{
+							"name": "Roles",
+							"item": [
+								{
+									"name": "List Role PermissionSets",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/v1/access/permissions/roles/{{currentRoleId}}/permissionSets",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"access",
+												"permissions",
+												"roles",
+												"{{currentRoleId}}",
+												"permissionSets"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Set Role PermissionSets",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"permissionSetsIds\": [\n        \"quote_create\",\n        \"quote_role_descendants\"\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/access/permissions/roles/{{currentRoleId}}/permissionSets",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"access",
+												"permissions",
+												"roles",
+												"{{currentRoleId}}",
+												"permissionSets"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Add Role PermissionSets",
+									"request": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"permissionSetsIds\": [\n        \"quote_from_user_fpx_admin\",\n        \"quote_from_partner_dfr_test_org\",\n        \"quote_from_role_isr_specialty\"\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/access/permissions/roles/{{currentRoleId}}/permissionSets",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"access",
+												"permissions",
+												"roles",
+												"{{currentRoleId}}",
+												"permissionSets"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Remove Role PermissionSets",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"permissionSetsIds\": [\n        \"quote_from_user_fpx_admin\"\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/access/permissions/roles/{{currentRoleId}}/permissionSets",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"access",
+												"permissions",
+												"roles",
+												"{{currentRoleId}}",
+												"permissionSets"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Get All PermissionSets",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/v1/access/permissions/permissionSets",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"access",
+										"permissions",
+										"permissionSets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get User Effective PermissionSets",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/v1/access/permissions/users/09a0001txj7xmexc/effectivePermissionSets",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"access",
+										"permissions",
+										"users",
+										"09a0001txj7xmexc",
+										"effectivePermissionSets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create PermissionSet",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"cpq::sales_supervisor\",\n    \"name\": \"Sales Supervisor\",\n    \"description\": \"Supervisor of all sales\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/access/permissions/permissionSets",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"access",
+										"permissions",
+										"permissionSets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Set User PermissionSets",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"permissionSetsIds\": [\n        \n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/access/permissions/users/{{currentUserId}}/permissionSets",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"access",
+										"permissions",
+										"users",
+										"{{currentUserId}}",
+										"permissionSets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Set Partner PermissionSets",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/v1/access/permissions/partners/{{currentPartnerId}}/permissionSets",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"access",
+										"permissions",
+										"partners",
+										"{{currentPartnerId}}",
+										"permissionSets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Object Authorizations",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/v1/access/permissions/objects/{{currentObjectId}}/authorizations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"access",
+										"permissions",
+										"objects",
+										"{{currentObjectId}}",
+										"authorizations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Share Object",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/v1/access/permissions/objects/{{currentObjectId}}/share",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"access",
+										"permissions",
+										"objects",
+										"{{currentObjectId}}",
+										"share"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Quotes",
+			"item": [
+				{
+					"name": "Get Quote",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/quotes/100",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"quotes",
+								"100"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Quote",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/quotes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"quotes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

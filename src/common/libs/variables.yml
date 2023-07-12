@@ -1,0 +1,5 @@
+http_success: "200"
+http_invalid: "400"
+http_unauthorized: "401"
+http_no_access: "403"
+http_error: "500"
