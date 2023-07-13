@@ -85,6 +85,24 @@ WriteBox
     Write  =========================================
 ############################## eneral methods ######################
 ###
+# It encode a string to URL format.
+# -param target(String): It is the string to encode to URL format.
+# -return(String): It is the string encoded.
+###
+URL encode
+    [Arguments]  ${target}
+    ${res}=  GlobalTools.URL encode  ${target}
+    [Return]  ${res}
+###
+# It decode a url to a comprensible string.
+# -param target(String): It is a string in URL format.
+# -return(String): It is the uncoded string.
+###
+URL decode
+    [Arguments]  ${target}
+    ${res}=  GlobalTools.URL decode  ${target}
+    [Return]  ${res}
+###
 # It retun the type of a variable
 ###
 Type of

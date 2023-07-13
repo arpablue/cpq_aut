@@ -2,6 +2,7 @@ from robot.api.deco import library
 from robot.api.deco import keyword
 from robot.api import logger
 import os
+import urllib.parse
 
 # It contain the global method to process special action in the execution of the test cases
 @library
@@ -103,6 +104,25 @@ class GlobalTools:
         sep = os.path.sep
         src_path = src_path.replace( sep + sep, sep )
         return src_path
-        
+    ###
+    # It encode a string to URL format.
+    # -param target(String): It is the string to encode to URL format.
+    # -return(String): It is the string encoded.
+    ###
+    @keyword
+    def url_encode( self, target ):
+        if target == None:
+            return None
+        return urllib.parse.quote( target )
+    ###
+    # It decode a url to a comprensible string.
+    # -param target(String): It is a string in URL format.
+    # -return(String): It is the uncoded string.
+    ###
+    @keyword
+    def url_decode( self, target ):
+        if target == None:
+            return None
+        return urllib.parse.unquote( target )
 
     
