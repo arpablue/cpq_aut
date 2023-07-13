@@ -65,9 +65,9 @@ Add a new opportunity
 Create a random opportunity
     GlobalAPI.Step  Create a random opportunity
     ${newOpp}=  Add a new opportunity
-    ${newOppID}=  GlobalAPI.Object get attribute  ${newOpp}  id
+    ${newOppID}=  GlobalAPI.Object get attribute  ${newOpp}  Id
     GlobalAPI.Write  ID of the new opportunity: ${newOppId}
-    ${oppInfo}=  OpportunityAPI.Get Info  ${newOppID}
+    ${oppInfo}=  OpportunityAPI.Get Info  ${newOppID}  200
     [Return]  ${oppInfo}
 
 ###
@@ -77,7 +77,7 @@ Create a random opportunity
 Verify if the opportunity has been created
     [Arguments]  ${opp}
     GlobalAPI.Step  Verify if the opportunity has been created
-    ${id}=  GlobalAPI.Object get attribute  ${opp}  id
+    ${id}=  GlobalAPI.Object get attribute  ${opp}  Id
     ${flag}=  OpportunityAPI.Exists by ID  ${id}
     Validations.Verify it is true  ${flag}  The opportunity not exist in the system, when should be created.
     ${oppInf}=  OpportunityAPI.Get Info  ${id}
@@ -92,7 +92,7 @@ Verify if the opportunity has been created
 Verify the opportunity exists
     [Arguments]  ${opp}
     GlobalAPI.Step  Verify the opportunity exists
-    ${id}=  GlobalAPI.Object get attribute  ${opp}  id
+    ${id}=  GlobalAPI.Object get attribute  ${opp}  Id
     ${flag}=  OpportunityAPI.Exists by ID  ${id}
     Validations.Verify it is true  ${flag}  The opportunity not exist in the system.
     ${oppInf}=  OpportunityAPI.Get Info  ${id}
@@ -107,7 +107,7 @@ Verify the opportunity exists
 Verify the opportunity not exist
     [Arguments]  ${opp}
     GlobalAPI.Step  Verify the opportunity not exist
-    ${id}=  GlobalAPI.Object get attribute  ${opp}  id
+    ${id}=  GlobalAPI.Object get attribute  ${opp}  Id
     ${flag}=  OpportunityAPI.Exists by ID  ${id}
     Validations.Verify it is False  ${flag}  The opportunity exist in the system when should not exists.
     GlobalAPI.Success  The opportunity not exist in the system
@@ -120,7 +120,7 @@ Verify the opportunity not exist
 Modify an opportunity 
     [Arguments]  ${oppInfo}
     GlobalAPI.Step  Modify an opportunity
-    ${oppID}=  GlobalAPI.Object get attribute  ${oppInfo}  id
+    ${oppID}=  GlobalAPI.Object get attribute  ${oppInfo}  Id
     Write  Number generated to use in the new description ${rand}
     ${oppDataEdit}=  Create Dictionary  ${attr}=${valueExp}
     ${oppEdit}=  OpportunityAPI.Modify  ${oppID}  ${oppDataEdit}
@@ -133,7 +133,7 @@ Modify an opportunity
 Delete an opportunity
     [Arguments]  ${oppInfo}
     GlobalAPI.Step  Delete an opportunity
-    ${oppID}=  GlobalAPI.Object get attribute  ${oppInfo}  id
+    ${oppID}=  GlobalAPI.Object get attribute  ${oppInfo}  Id
     #### Upate Opportunity
     ${oppEdit}=  OpportunityAPI.Delete  ${oppID}
     [Return]  ${oppEdit}

@@ -74,12 +74,15 @@ DELETE request
 # -param QuoteLinesID(string): it is the ID of the QuoteLines.
 # -param exp_code(String)= It is the expected code of the requests, if the expected request is different to this a fail is reqised, the default response code is 200.
 # -return(dictionary): It return a dicttionary related to the QuoteLines.
-Get Info  ${exp_code}=200
-    [Arguments]  ${QuoteLinesID}
+Get Info
+    [Arguments]  ${QuoteLinesID}  ${exp_code}=None
     GlobalAPI.Action  QuoteLines GET INFO
     GlobalAPI.Write  Getting data for QuoteLines ID: ${QuoteLinesID}
     ${response}=  GET request  ${QuoteLinesID}
     ${response}=  DELETE request  ${oppID}
+    IF  ${exp_code} == None
+        ${exp_code}=  Set Variable  ${http_success}
+    END
     IF  ${response.status_code} != ${exp_code}
         ${msg}=  Set Variable  Wrong expected code. Expectected code ${exp_code}, but the current code is ${response.status_code}
         GlobalAPI.Failed  ${msg}
@@ -98,10 +101,13 @@ Get Info  ${exp_code}=200
 # -param exp_code(String)= It is the expected code of the requests, if the expected request is different to this a fail is reqised, the default response code is 200.
 ###
 Create
-    [Arguments]  ${dictData}  ${exp_code}=200
+    [Arguments]  ${dictData}  ${exp_code}=None
     GlobalAPI.Action  QuoteLines CREATING QUOTE LINES
     ${response}=  POST request  ${dictData}
     ${response}=  DELETE request  ${oppID}
+    IF  ${exp_code} == None
+        ${exp_code}=  Set Variable  ${http_success}
+    END
     IF  ${response.status_code} != ${exp_code}
         ${msg}=  Set Variable  Wrong expected code. Expectected code ${exp_code}, but the current code is ${response.status_code}
         GlobalAPI.Failed  ${msg}
@@ -125,10 +131,13 @@ Create
 # -return(QuoteLinessOjct): It is the data of the request modified.
 ###
 Modify
-    [Arguments]  ${QuoteLinesID}  ${dictData}  ${exp_code}=200
+    [Arguments]  ${QuoteLinesID}  ${dictData}  ${exp_code}=None
     GlobalAPI.Action  QuoteLines MODIFYING QUOTE LINES
     GlobalAPI.Write  Modiying the QuoteLine: ${QuoteLinesID}
     GlobalAPI.WriteBox  New data  ${dictData}
+    IF  ${exp_code} == None
+        ${exp_code}=  Set Variable  ${http_success}
+    END
     ${body}=  Set Variable  ${dictData}
     ${response}=  PUT request  ${QuoteLinesID}  ${dictData}
     ${response}=  DELETE request  ${oppID}
@@ -150,7 +159,10 @@ Modify
 # -param exp_code(String)= It is the expected code of the requests, if the expected request is different to this a fail is reqised, the default response code is 200.
 ###
 Delete 
-    [Arguments]  ${QuoteLinesID}  ${exp_code}=200
+    [Arguments]  ${QuoteLinesID}  ${exp_code}=None
+    IF  ${exp_code} == None
+        ${exp_code}=  Set Variable  ${http_success}
+    END
     GlobalAPI.Write  QuoteLines DELETING QUOTE LINES ---------------
     GlobalAPI.Write  Deleting QuoteLines for: ${QuoteLinesID}
     ${response}=  DELETE request  ${QuoteLinesID}

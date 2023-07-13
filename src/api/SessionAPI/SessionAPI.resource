@@ -82,3 +82,6 @@ IsActive
     #    END
     #END
     [Return]  ${flag}
+
+Get Current User ID
+    Log to console  .........In development

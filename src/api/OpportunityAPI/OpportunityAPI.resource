@@ -29,7 +29,7 @@ ${recordPath_opp}  /resources/records/opportunities_created.dat
 GET request
     [Arguments]  ${opportunityID}
     ${headers}=  Create Dictionary  Authorization=${token}
-    ${response}=  GET On Session  ${SessionAPI}  ${endPoint_opp}/${opportunityID}  ${headers}
+    ${response}=  GET On Session  ${SessionAPI}  ${endPoint_opp}/${opportunityID}  headers=${headers}
     #GlobalAPI.WriteBox  OPPORTUNITY GET Response  ${response.content }
     [Return]  ${response}
 
@@ -101,7 +101,10 @@ Exists by ID
 # -param opportunityID(string): it is the ID of the opportunity.
 # -return(dictionary): It return a dicttionary related to the opportunity.
 Get Info
-    [Arguments]  ${opportunityID}  ${exp_code}=200
+    [Arguments]  ${opportunityID}  ${exp_code}=None
+    IF  ${exp_code} == None
+        ${exp_code}=  Set Variable  ${http_success}
+    END
     GlobalAPI.Action  GETTING OPPORTUNITY ----------------
     GlobalAPI.Write  Get data of the opportunity ID: ${opportunityID}
     ${response}=  GET request  ${opportunityID}
@@ -136,7 +139,10 @@ Verify the data exists for
 # -param exp_code(String)= It is the expected code of the requests, if the expected request is different to this a fail is reqised, the default response code is 200.
 ###
 Create
-    [Arguments]  ${dictData}  ${exp_code}=200
+    [Arguments]  ${dictData}  ${exp_code}=None
+    IF  ${exp_code} == None
+        ${exp_code}=  Set Variable  ${http_success}
+    END
     GlobalAPI.Action  CREATING OPPORTUNITY ----------------
     GlobalAPI.WriteBox  Data for the new opportunity  ${dictData}
     ${response}=  POST request  ${dictData}
@@ -144,13 +150,13 @@ Create
         ${msg}=  Set Variable  Wrong expected code. Expectected code ${exp_code}, but the current code is ${response.status_code}
         GlobalAPI.Failed  ${msg}
     END
-    GlobalAPI.Verify the data exists for  ${response}  opportunity
+    GlobalAPI.Verify the data exists for  ${response}  data
     # It convert the response body in a dictionary
     ${dictBody}=  Convert to dictionary  ${response.content}
     ${res}=  Get From Dictionary  ${dictBody}  data
-    ${res}=  Get From Dictionary  ${res}  opportunity
+    #${res}=  Get From Dictionary  ${res}  opportunity
     ${res}=  OpportunityAPI_ext.create from data  ${res}
-    ${id}=  GlobalAPI.Object get attribute  ${res}  id
+    ${id}=  GlobalAPI.Object get attribute  ${res}  Id
     ${path}=  GlobalAPI.Get Path  ${recordPath_opp}
     DataRecorder.Register in file  ${path}  ${id}
     GlobalAPI.WriteBox  OPPORTUNITY CREATED  ${res}
@@ -163,7 +169,10 @@ Create
 # -return(OpportunityOjct): It is the data of the request modified.
 ###
 Modify
-    [Arguments]  ${opportunityID}  ${dictData}  ${exp_code}=200
+    [Arguments]  ${opportunityID}  ${dictData}  ${exp_code}=None
+    IF  ${exp_code} == None
+        ${exp_code}=  Set Variable  ${http_success}
+    END
     GlobalAPI.Action  MODIFYING OPPORTUNITY ---------------
     GlobalAPI.WriteBox  New Opportunity data  ${dictData}
     ${body}=  Set Variable  ${dictData}
@@ -185,7 +194,10 @@ Modify
 # -param exp_code(String)= It is the expected code of the requests, if the expected request is different to this a fail is reqised, the default response code is 200.
 ###
 Delete 
-    [Arguments]  ${oppID}  ${exp_code}=200
+    [Arguments]  ${oppID}  ${exp_code}=None
+    IF  ${exp_code} == None
+        ${exp_code}=  Set Variable  ${http_success}
+    END
     GlobalAPI.Action  DELETING OPPORTUNITY ---------------
     GlobalAPI.Write  Deleting opportunity for: ${oppID}
     ${response}=  DELETE request  ${oppID}
