@@ -1,0 +1,2 @@
+Query Objects
+    - QueryObj: /api/cpq/object/{object}/{iopçbjectID}

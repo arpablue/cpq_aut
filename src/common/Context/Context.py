@@ -1,52 +1,108 @@
-import sys
-import os
-import collections
-import json
-
-dir = os.path.dirname( __file__ )
-src_pos = dir.index('src')
-src_path = dir[:src_pos] + os.path.join('src','common','libs')
-sys.path.append( src_path )
 
 
-from GlobalTools import GlobalTools
-
-###
-# It ontian the data about  the context used for the execution environment
-###
+##########
+# Mierda
+###########
 class Context:
     ###
     # Default constructor.
+    # -param name(String): It is the name of the context.
     ###
-    def __init__(self) -> None:
-        # it is the reference to the context file
-        self.mContextFile = ""
-        # It is the context data for the execution.
+    def __init__( self, name= None) -> None:
         self.mData = None
-        # It is the current context.
-        self.mActiveContext = None
-        load_context()
-    
-    ### 
-    # It load the context used for the execution.
+        self.mName = name
+        self.mUrl = "url"
+        self.mDomain = "domain"
+        self.mCodes = "http_codes"
+        
+        self.mSuccess_Get = "Success_Get"
+        self.mSuccess_Get_NoContent = "Success_Get_NoContent"
+        self.mSuccess_Post = "Success_Post"
+        self.mSuccess_Post_NoContent = "Success_Post_NoContent"
+        self.mSuccess_Put = "Success_Put"
+        self.mSuccess_Put_NoContent = "Success_Put_NoContent"
+        self.mSuccess_Delete = "Success_Delete"
+        self.mSuccess_Delete_NoContent = "Success_Delete_NoContent"
+        self.mSuccess_Patch = "Success_Patch"
+        self.mSuccess_Patch_NoContent = "Success_Patch_NoContent"
+        self.mNo_User = "No_User"
+        self.mUnauthorized_Access = "Unauthorized_Access"
+        self.mForbidden = "Forbidden"
+        self.mServer_Error = "Server_Error"
+        
+    def __str__(self):
+        return str( self.mData )
     ###
-    def load_context( self ):
-        if self.mContextFile == None:
-            return
-        if not os.path.exists( self.mContextFile ):
+    # It specify the data for the context.
+    # -param data(Dictionary): It is the data used as context.
+    ###
+    def set_data( self, data ):
+        self.mData = data
+    ###
+    # It return the name of the current context.
+    # -return(String): It is the name of the current name.
+    ###
+    def get_name( self ):
+        return self.mName
+    ###
+    # It set the name for the current context.
+    # -param name(String): It is the neam of the current name.
+    ###
+    def set_name( self, name ):
+        self.mName = name
+    
+    def get_url( self ):    
+        if self.mData == None:
+            return None
+        if not self.mUrl in self.mData:
+            return None
+        return self.mData[ self.mUrl ]
+    
+    def get_domain( self ):
+        if self.mData == None:
+            return None
+        if not self.mDomain in self.mData:
+            return None
+        return self.mData[ self.mDomain ]
+    
+    
+    def get_code( self, code):
+        if code == None:
             return 
-        if not os.path.isfile( self.mContextFile ):
-            return 
-        with open( self.mContextFile, 'r' ) as file:
-            content = file.read()
-        self.mData = json.loads( content )
-    def set_Context( self, context ):
-        if not context == None:
-            return
-        context_target = self.mData[ context ]
-        if context in context_target:
-            self.mActiveContext = context_target[ context ]
-        else
-            self.mActiveContext = None
+        if self.mData == None:
+            return None
+        if not self.mCodes in self.mData:
+            return None
+        codes = self.mCodes
+        if not code in codes:
+            return None
+        return codes[ code ]
         
-        
+    def get_Success_Get( self ):
+        return self.get_code( self.mSuccess_Get )
+    def get_Success_Get_NoContent( self ):
+        return self.get_code( self.mSuccess_Get_NoContent )
+    def get_Success_Post( self ):
+        return self.get_code( self.mSuccess_Post )
+    def get_Success_Post_NoContent( self ):
+        return self.get_code( self.mSuccess_Post_NoContent )
+    def get_Success_Put( self ):
+        return self.get_code( self.mSuccess_Put )
+    def get_Success_Put_NoContent( self ):
+        return self.get_code( self.mSuccess_Put_NoContent )
+    def get_Success_Delete( self ):
+        return self.get_code( self.mSuccess_Delete )
+    def get_Success_Delete_NoContent( self ):
+        return self.get_code( self.mSuccess_Delete_NoContent )
+    def get_Success_Patch( self ):
+        return self.get_code( self.mSuccess_Patch )
+    def get_Success_Patch_NoContent( self ):
+        return self.get_code( self.mSuccess_Patch_NoContent )
+    def get_No_User( self ):
+        return self.get_code( self.mNo_User )
+    def get_Unauthorized_Access( self ):
+        return self.get_code( self.mUnauthorized_Access )
+    def get_Forbidden( self ):
+        return self.get_code( self.mForbidden )
+    def get_Server_Error( self ):
+        return self.get_code( self.mServer_Error )

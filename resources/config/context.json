@@ -2,6 +2,7 @@
     "context":{
         "fpx":{
             "url":"https://dfr-co2-dev-webapp.azurewebsites.net",
+            "domain":".dfr-co2-dev-webapp.azurewebsites.net",
             "http_codes":{
                 "Success_Get":200,
                 "Success_Get_NoContent":200,
@@ -21,6 +22,7 @@
         },
         "dover":{
             "url":"https://dfr-co2-dev-webapp.azurewebsites.net",
+            "domain": "Not specified",
             "http_codes":{
                 "Success_Get":200,
                 "Success_Get_NoContent":200,
@@ -40,6 +42,7 @@
         },
         "cpq":{
             "url":"https://cpq-dev.cdsvisual.net",
+            "domain": "Not specified",
             "http_codes":{
                 "Success_Get":200,
                 "Success_Get_NoContent":204,
