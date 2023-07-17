@@ -6,7 +6,7 @@
             "http_codes":{
                 "Success_Get":200,
                 "Success_Get_NoContent":200,
-                "Success_Post":201,
+                "Success_Post":200,
                 "Success_Post_NoContent":200,
                 "Success_Put":200,
                 "Success_Put_NoContent":200,
@@ -17,7 +17,7 @@
                 "No_User":400,
                 "Unauthorized_Access":401,
                 "Forbidden":403,
-                "Server_Error":"500"
+                "Server_Error":500
             }
         },
         "dover":{
@@ -26,7 +26,7 @@
             "http_codes":{
                 "Success_Get":200,
                 "Success_Get_NoContent":200,
-                "Success_Post":201,
+                "Success_Post":200,
                 "Success_Post_NoContent":200,
                 "Success_Put":200,
                 "Success_Put_NoContent":200,
@@ -37,7 +37,7 @@
                 "No_User":400,
                 "Unauthorized_Access":401,
                 "Forbidden":403,
-                "Server_Error":"500"
+                "Server_Error":500
             }
         },
         "cpq":{
@@ -57,7 +57,7 @@
                 "No_User":400,
                 "Unauthorized_Access":401,
                 "Forbidden":403,
-                "Server_Error":"500"
+                "Server_Error":500
             }
         }
 

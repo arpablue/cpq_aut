@@ -38,7 +38,10 @@ Display
     IF  ${file_output} == 1
         TestActivityFile.Writeln  ${text}
     END
-
+###
+# It dilay a passed message with a speific text.
+# -param text(String): It is the message to be di`layed with the pass message.
+###
 Passed
     [Arguments]  ${text}
     Display  PASS: ${text}

@@ -137,9 +137,14 @@ class DictTools:
         if obj == None:
             return None
         return obj.get( attr )
+    ###
+    # It call a write() method to raise a message-
+    # -param toShow( Logger ): It is th elog object ot raise message.
+    # -param text(String): It is a message that will be raised the message.
+    ###
     def printing(self, toShow, text ):
         if not toShow == None:
-            toShow.wrtite( text )
+            toShow.write( text )
     ###
     # It print in console th values of two objects in base a list of attributes.
     # -param objA(Object): It is the first object to display the object.

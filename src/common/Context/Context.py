@@ -29,9 +29,12 @@ class Context:
         self.mUnauthorized_Access = "Unauthorized_Access"
         self.mForbidden = "Forbidden"
         self.mServer_Error = "Server_Error"
-        
+    ###
+    # It return the tuype and the name of the name of the current context.
+    # -return(String): It is the string of the current 
+    ###
     def __str__(self):
-        return str( self.mData )
+        return str( '{"Objcet":"Context","name":"' + self.get_name() + '"}' )
     ###
     # It specify the data for the context.
     # -param data(Dictionary): It is the data used as context.
@@ -50,7 +53,8 @@ class Context:
     ###
     def set_name( self, name ):
         self.mName = name
-    
+    ###
+    # It return the current 
     def get_url( self ):    
         if self.mData == None:
             return None
@@ -67,13 +71,14 @@ class Context:
     
     
     def get_code( self, code):
+        
         if code == None:
             return 
         if self.mData == None:
             return None
         if not self.mCodes in self.mData:
             return None
-        codes = self.mCodes
+        codes = self.mData[self.mCodes]
         if not code in codes:
             return None
         return codes[ code ]
