@@ -47,16 +47,25 @@ class TestActivityFile( LogFile ):
         sep = os.path.sep
         # get the project folder
         dir = self.get_prj_directory()
+        # Get the name of the *.robot file
         suite_source = BuiltIn().get_variable_value("${SUITE_SOURCE}")
-        suite_source = suite_source.replace( dir + "test_cases" , "" )
+        suite_source = suite_source.replace( dir , "" ) # deleting the refrence to the folder        
+        suite_source = suite_source.replace( "test_cases" , "" ) # deleting the refrence to the folder
+        
+        # Get the name of the test case execution
         test_name = BuiltIn().get_variable_value("${TEST_NAME}")
+        
         # Create the name of the activity log file
         test_name = test_name.strip().replace(" ","_") + ".log"
+        
         # prepare the folder
+        # Generate the folder related to the *.robot file
         folder = suite_source.replace(".robot","")
         
+        # To concate the project folder with the folder of the *.robt file
         dir = dir + sep + "test_result" + sep+ rand +sep + folder
         dir = dir.replace( sep +sep, sep)
+        
         self.mkdir( dir )
         dir = dir + sep + test_name
         dir = dir.replace( sep +sep, sep)

@@ -5,7 +5,9 @@ from robot.libraries.BuiltIn import BuiltIn
 import os
 import sys
 import urllib.parse
+import yaml
 
+### Loading the TestActivitFile
 dir = os.path.dirname( __file__ )
 src_pos = dir.index('src')
 src_path = dir[:src_pos] + os.path.join('src','common','pylib')
@@ -13,17 +15,41 @@ sys.path.append( src_path )
 
 from TestActivityFile import TestActivityFile
 
-
+###Load the Context file.
+dir = os.path.dirname( __file__ )
+src_pos = dir.index('src')
+src_path = dir[:src_pos] + os.path.join('src','common','Context')
+sys.path.append( src_path )
+from ContextList import ContextList
 
 # It contain the global method to process special action in the execution of the test cases
 @library
 class GlobalTools:
+    ###
+    # Default constructor.
+    ###
     def __init__( self ):
         #self.mTLib = TestLib()
         self.mBI = BuiltIn()
-        self.mConsole_output = self.mBI.get_variable_value("${console_output}")
-        self.mFile_output = self.mBI.get_variable_value("${file_output}")
+        globalvar = self.load_global_vars()
+        
+        self.mConsole_output = globalvar["console_output"]
+        self.mFile_output = globalvar["file_output"]
+        self.mExeutionContext = globalvar["context"]
+        
         self.mTestActivityFile = TestActivityFile()
+        
+        contexts = ContextList()
+        self.mContext = contexts.get_context( self.mExeutionContext )
+    ###
+    #
+    ##
+    def load_global_vars( self ):
+        pathFile = self.get_prj_folder('config.yml')
+        with open( pathFile, 'r' ) as file:
+            data = yaml.safe_load( file )
+        return data
+
     ###
     # It return true if a string contains another string.
     # -param str: It is the string where will be search.
@@ -258,4 +284,322 @@ class GlobalTools:
     def failed( self, text ):
         self.display( "FAIL:" + str( text ) )
 
+    ######################### Response Verification code ###########################
+    ###
+    # It evaluate the current code with the expected code of Success_Get according to the execution context.
+    # -param code(String): It is the code to be evualeted.
+    # -return(Bool): It is the true if the code es equalst to the evaluated code.
+    ###
+    def evaluation_response_code( self,code_name, code):
+        exp = self.mContext.get_code( code_name)
+        if code == None:
+            self.error('( GlobalTools - evaluetion_code_' + code_name + ' ): It is not possible verify a code for a NULL value.')
+            return False
+        if exp == None:
+            self.error( '( GlobalsTools - evaluation_code_' + code_name + ' ): It is not possible verify the code because the expected result is NULL.')
+            return False
+        code = str( code )
+        exp = str( exp )
+        return code == exp
+    ###
+    # It verify the code is the same than the expected code. If the code is not the expected
+    # then a FAIL exception is raised to stop the execution of the step.
+    # -param code(String/Int): It is the code to be verified.
+    ###
+    def verification_response_code( self, code_name, code ):
+        flag = self.evaluation_response_code( code_name, code )
+        if flag == False:
+            msg = code_name +" - The current code is not the expected code. Currrent code [" + code + "]"
+            self.failed( msg)
+            self.mBI.fail( msg )
+
+
+
+
+
+
+    ###
+    # It evaluate the current code with the expected code of Success_Get according to the execution context.
+    # -param code(String): It is the code to be evualeted.
+    # -return(Bool): It is the true if the code es equalst to the evaluated code.
+    ###
+    @keyword
+    def evaluation_Success_Get(self, code):
+        return self.evaluation_code( 'Success_Get' , code )
+    ###
+    # It verify the code is the same than the expected code. If the code is not the expected
+    # then a FAIL exception is raised to stop the execution of the step.
+    # -param code(String/Int): It is the code to be verified.
+    ###
+    @keyword
+    def verification_Success_Get( self, code ):
+        self.verification_response_code( 'Success_Get' ,code )
         
+        
+        
+        
+    ###
+    # It evaluate the current code with the expected code of Success_Get according to the execution context.
+    # -param code(String): It is the code to be evualeted.
+    # -return(Bool): It is the true if the code es equalst to the evaluated code.
+    ###
+    @keyword
+    def evaluation_Success_Get_NoContent(self, code):
+        return self.evaluation_code( 'Success_Get_NoContent' , code )
+    ###
+    # It verify the code is the same than the expected code. If the code is not the expected
+    # then a FAIL exception is raised to stop the execution of the step.
+    # -param code(String/Int): It is the code to be verified.
+    ###
+    @keyword
+    def verification_Success_Get_NoContent( self, code ):
+        self.verification_response_code( 'Success_Get_NoContent' ,code )
+
+
+
+        
+        
+        
+    ###
+    # It evaluate the current code with the expected code of Success_Get according to the execution context.
+    # -param code(String): It is the code to be evualeted.
+    # -return(Bool): It is the true if the code es equalst to the evaluated code.
+    ###
+    @keyword
+    def evaluation_Success_Post(self, code):
+        return self.evaluation_code( 'Success_Post' , code )
+    ###
+    # It verify the code is the same than the expected code. If the code is not the expected
+    # then a FAIL exception is raised to stop the execution of the step.
+    # -param code(String/Int): It is the code to be verified.
+    ###
+    @keyword
+    def verification_Success_Post( self, code ):
+        self.verification_response_code( 'Success_Post' ,code )
+
+
+
+
+
+    ###
+    # It evaluate the current code with the expected code of Success_Get according to the execution context.
+    # -param code(String): It is the code to be evualeted.
+    # -return(Bool): It is the true if the code es equalst to the evaluated code.
+    ###
+    @keyword
+    def evaluation_Success_Post_NoContent(self, code):
+        return self.evaluation_code( 'Success_Post_NoContent' , code )
+    ###
+    # It verify the code is the same than the expected code. If the code is not the expected
+    # then a FAIL exception is raised to stop the execution of the step.
+    # -param code(String/Int): It is the code to be verified.
+    ###
+    @keyword
+    def verification_Success_Post_NoContent( self, code ):
+        self.verification_response_code( 'Success_Post_NoContent' ,code )
+    
+
+
+
+    
+    ###
+    # It evaluate the current code with the expected code of Success_Get according to the execution context.
+    # -param code(String): It is the code to be evualeted.
+    # -return(Bool): It is the true if the code es equalst to the evaluated code.
+    ###
+    @keyword
+    def evaluation_Success_Put(self, code):
+        return self.evaluation_code( 'Success_Put' , code )
+    ###
+    # It verify the code is the same than the expected code. If the code is not the expected
+    # then a FAIL exception is raised to stop the execution of the step.
+    # -param code(String/Int): It is the code to be verified.
+    ###
+    @keyword
+    def verification_Success_Put( self, code ):
+        self.verification_response_code( 'Success_Put' ,code )
+        
+        
+
+    
+    
+    
+    ###
+    # It evaluate the current code with the expected code of Success_Get according to the execution context.
+    # -param code(String): It is the code to be evualeted.
+    # -return(Bool): It is the true if the code es equalst to the evaluated code.
+    ###
+    @keyword
+    def evaluation_Success_Put_NoContent(self, code):
+        return self.evaluation_code( 'Success_Put_NoContent' , code )
+    ###
+    # It verify the code is the same than the expected code. If the code is not the expected
+    # then a FAIL exception is raised to stop the execution of the step.
+    # -param code(String/Int): It is the code to be verified.
+    ###
+    @keyword
+    def verification_Success_Put_NoContent( self, code ):
+        self.verification_response_code( 'Success_Put_NoContent' ,code )
+
+
+
+    ###
+    # It evaluate the current code with the expected code of Success_Get according to the execution context.
+    # -param code(String): It is the code to be evualeted.
+    # -return(Bool): It is the true if the code es equalst to the evaluated code.
+    ###
+    @keyword
+    def evaluation_Success_Delete(self, code):
+        return self.evaluation_code( 'Success_Delete' , code )
+    ###
+    # It verify the code is the same than the expected code. If the code is not the expected
+    # then a FAIL exception is raised to stop the execution of the step.
+    # -param code(String/Int): It is the code to be verified.
+    ###
+    @keyword
+    def verification_Success_Delete( self, code ):
+        self.verification_response_code( 'Success_Delete' ,code )
+
+
+
+    ###
+    # It evaluate the current code with the expected code of Success_Get according to the execution context.
+    # -param code(String): It is the code to be evualeted.
+    # -return(Bool): It is the true if the code es equalst to the evaluated code.
+    ###
+    @keyword
+    def evaluation_Success_Delete_NoContent(self, code):
+        return self.evaluation_code( 'Success_Delete_NoContent' , code )
+    ###
+    # It verify the code is the same than the expected code. If the code is not the expected
+    # then a FAIL exception is raised to stop the execution of the step.
+    # -param code(String/Int): It is the code to be verified.
+    ###
+    @keyword
+    def verification_Success_Delete_NoContent( self, code ):
+        self.verification_response_code( 'Success_Delete_NoContent' ,code )
+        
+
+
+
+    ###
+    # It evaluate the current code with the expected code of Success_Get according to the execution context.
+    # -param code(String): It is the code to be evualeted.
+    # -return(Bool): It is the true if the code es equalst to the evaluated code.
+    ###
+    @keyword
+    def evaluation_Success_Patch(self, code):
+        return self.evaluation_code( 'Success_Patch' , code )
+    ###
+    # It verify the code is the same than the expected code. If the code is not the expected
+    # then a FAIL exception is raised to stop the execution of the step.
+    # -param code(String/Int): It is the code to be verified.
+    ###
+    @keyword
+    def verification_Success_Patch( self, code ):
+        self.verification_response_code( 'Success_Patch' ,code )
+        
+
+
+
+    ###
+    # It evaluate the current code with the expected code of Success_Get according to the execution context.
+    # -param code(String): It is the code to be evualeted.
+    # -return(Bool): It is the true if the code es equalst to the evaluated code.
+    ###
+    @keyword
+    def evaluation_Success_Patch_NoContent(self, code):
+        return self.evaluation_code( 'Success_Patch_NoContent' , code )
+    ###
+    # It verify the code is the same than the expected code. If the code is not the expected
+    # then a FAIL exception is raised to stop the execution of the step.
+    # -param code(String/Int): It is the code to be verified.
+    ###
+    @keyword
+    def verification_Success_Patch_NoContent( self, code ):
+        self.verification_response_code( 'Success_Patch_NoContent' ,code )
+        
+
+    ###
+    # It evaluate the current code with the expected code of Success_Get according to the execution context.
+    # -param code(String): It is the code to be evualeted.
+    # -return(Bool): It is the true if the code es equalst to the evaluated code.
+    ###
+    @keyword
+    def evaluation_No_User(self, code):
+        return self.evaluation_code( 'No_User' , code )
+    ###
+    # It verify the code is the same than the expected code. If the code is not the expected
+    # then a FAIL exception is raised to stop the execution of the step.
+    # -param code(String/Int): It is the code to be verified.
+    ###
+    @keyword
+    def verification_No_User( self, code ):
+        self.verification_response_code( 'No_User' ,code )
+
+
+
+    ###
+    # It evaluate the current code with the expected code of Success_Get according to the execution context.
+    # -param code(String): It is the code to be evualeted.
+    # -return(Bool): It is the true if the code es equalst to the evaluated code.
+    ###
+    @keyword
+    def evaluation_Unauthorized_Access(self, code):
+        return self.evaluation_code( 'Unauthorized_Access' , code )
+    ###
+    # It verify the code is the same than the expected code. If the code is not the expected
+    # then a FAIL exception is raised to stop the execution of the step.
+    # -param code(String/Int): It is the code to be verified.
+    ###
+    @keyword
+    def verification_Unauthorized_Access( self, code ):
+        self.verification_response_code( 'Unauthorized_Access' ,code )
+
+
+
+
+
+
+
+
+    ###
+    # It evaluate the current code with the expected code of Success_Get according to the execution context.
+    # -param code(String): It is the code to be evualeted.
+    # -return(Bool): It is the true if the code es equalst to the evaluated code.
+    ###
+    @keyword
+    def evaluation_Forbidden(self, code):
+        return self.evaluation_code( 'Forbidden' , code )
+    ###
+    # It verify the code is the same than the expected code. If the code is not the expected
+    # then a FAIL exception is raised to stop the execution of the step.
+    # -param code(String/Int): It is the code to be verified.
+    ###
+    @keyword
+    def verification_Forbidden( self, code ):
+        self.verification_response_code( 'Forbidden' ,code )
+
+
+
+
+
+
+    ###
+    # It evaluate the current code with the expected code of Success_Get according to the execution context.
+    # -param code(String): It is the code to be evualeted.
+    # -return(Bool): It is the true if the code es equalst to the evaluated code.
+    ###
+    @keyword
+    def evaluation_Server_Error(self, code):
+        return self.evaluation_code( 'Server_Error' , code )
+    ###
+    # It verify the code is the same than the expected code. If the code is not the expected
+    # then a FAIL exception is raised to stop the execution of the step.
+    # -param code(String/Int): It is the code to be verified.
+    ###
+    @keyword
+    def verification_Server_Error( self, code ):
+        self.verification_response_code( 'Server_Error' ,code )
+    
+

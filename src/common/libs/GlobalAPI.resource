@@ -27,18 +27,6 @@ Test Start
 
 #################################### LOG METHODS ####################################
 ###
-# It write a message in the console
-# text: It is the message to be displayed
-###
-#Display
-#    [Arguments]  ${text}
-#    IF  ${console_output} == 1
-#        Log To Console  ${text}
-#    END
-#    IF  ${file_output} == 1
-#        TestActivityFile.Writeln  ${text}
-#    END
-###
 # It dilay a passed message with a speific text.
 # -param text(String): It is the message to be di`layed with the pass message.
 ###
@@ -85,7 +73,7 @@ Error
 Failed
     [Arguments]  ${text}
     GlobalTools.Failed  ${text}
-    FAIL  ${text}
+    #FAIL  ${text}
     
 ###
 # It write a message in the console delimeted buy lines
@@ -260,4 +248,62 @@ String contains string
     [Arguments]  ${str}  ${substr}
     ${res}=  GlobalTools.String contains substr  ${str}  ${substr}
     [Return]  ${res}
-    
+
+
+################  Http request library  #########################
+Verification GET success
+    [Arguments]  ${code}
+    GlobalTools.Verification Success Get  ${code}
+
+Verification GET NoContent
+    [Arguments]  ${code}
+    GlobalTools.Verification Success Get NoContent  ${code}
+
+
+Verification POST Success
+    [Arguments]  ${code}
+    GlobalTools.Verification Success POST  ${code}
+
+Verification POST Success NoContent
+    [Arguments]  ${code}
+    GlobalTools.Verification Success POST NoContent  ${code}
+
+Verification PUT Success
+    [Arguments]  ${code}
+    GlobalTools.Verification Success PUT  ${code}
+
+Verification PUT Success NoContent
+    [Arguments]  ${code}
+    GlobalTools.Verification Success PUT NoContent  ${code}
+
+Verification DELETE Success
+    [Arguments]  ${code}
+    GlobalTools.Verification Success DELETE  ${code}
+
+Verification DELETE Success NoContent
+    [Arguments]  ${code}
+    GlobalTools.Verification Success DELETE NoContent  ${code}
+
+Verification PATCH Success
+    [Arguments]  ${code}
+    GlobalTools.Verification Success PATCH  ${code}
+
+Verification PATCH Success NoContent
+    [Arguments]  ${code}
+    GlobalTools.Verification Success PATCH NoContent  ${code}
+
+Verification NoUser
+    [Arguments]  ${code}
+    GlobalTools.Verification NoUser  ${code}
+
+Verification Unauthorized Access
+    [Arguments]  ${code}
+    GlobalTools.Verification Unauthorized Access  ${code}
+
+Verification Forbidden
+    [Arguments]  ${code}
+    GlobalTools.Verification Forbidden  ${code}
+
+Verification Server Error 
+    [Arguments]  ${code}
+    GlobalTools.Verification Server Error  ${code}

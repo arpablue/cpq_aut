@@ -1,5 +1,5 @@
 # It isthe context execution of the teste cases
-context: fpx
+context: cpq
 # It allow generate a file with the messages during the execution.
 file_output: 1
 # It allow shiow the messages of the execution be displayed in the console.

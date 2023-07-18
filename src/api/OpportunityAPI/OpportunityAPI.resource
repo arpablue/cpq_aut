@@ -97,7 +97,7 @@ Exists by ID
     IF  ${flag} == True
         GlobalAPI.Write  The opportunity [${oppID}] not exists.
         ${res}=  Set Variable  False
-    ELSE:
+    ELSE
         GlobalAPI.Write  The opportunity [${oppID}] exists.
     END
     
