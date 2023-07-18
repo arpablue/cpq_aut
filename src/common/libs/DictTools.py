@@ -1,5 +1,6 @@
 import sys
 import os
+import string
 from robot.api.deco import library
 from robot.api.deco import keyword
 from robot.api import logger
@@ -9,6 +10,8 @@ src_pos = dir.index('src')
 src_path = dir[:src_pos] + os.path.join('src','commons','libs')
 sys.path.append( src_path )
 from GlobalTools import GlobalTools
+
+
 ###
 # It contain the method to process the dictionaries
 ###
@@ -134,9 +137,18 @@ class DictTools:
     ###
     @keyword
     def object_get_attribute( self, obj, attr):
+        
         if obj == None:
+            self.mGlobal.warning("It is not possible get a value of an attribute for a None object.")
             return None
-        return obj.get( attr )
+        if attr == None:
+            self.mGlobal.warning("It is not poissible get an attribute when this attribute is none value.")
+            return None
+        
+        attr = attr.capitalize()
+        value = obj.get( attr )
+        self.mGlobal.write( "Getting attribute: " + str( attr) + " = " + str( value ) )
+        return value
     ###
     # It call a write() method to raise a message-
     # -param toShow( Logger ): It is th elog object ot raise message.

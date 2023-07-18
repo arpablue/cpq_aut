@@ -1,12 +1,29 @@
 from robot.api.deco import library
 from robot.api.deco import keyword
 from robot.api import logger
+from robot.libraries.BuiltIn import BuiltIn
 import os
+import sys
 import urllib.parse
+
+dir = os.path.dirname( __file__ )
+src_pos = dir.index('src')
+src_path = dir[:src_pos] + os.path.join('src','common','pylib')
+sys.path.append( src_path )
+
+from TestActivityFile import TestActivityFile
+
+
 
 # It contain the global method to process special action in the execution of the test cases
 @library
 class GlobalTools:
+    def __init__( self ):
+        #self.mTLib = TestLib()
+        self.mBI = BuiltIn()
+        self.mConsole_output = self.mBI.get_variable_value("${console_output}")
+        self.mFile_output = self.mBI.get_variable_value("${file_output}")
+        self.mTestActivityFile = TestActivityFile()
     ###
     # It return true if a string contains another string.
     # -param str: It is the string where will be search.
@@ -43,11 +60,40 @@ class GlobalTools:
         if attr in obj.mAttrs:
             return obj.mAttrs[ attr ]
         return None
-    
+    ###
+    # It compare the compare two objects. It is a flexible comparison, only compare
+    # the atributes and the values of the first object.
+    # -param objA(Dictionary): It is the firts opbjet to compare, it wikk use the attributes of the first object.
+    # -param objB(Dictionary): It is the second object to be compared.
+    # -return(Bool): It return true if bot objects are equals.
+    ###
     @keyword
-    def compare_object( self, oppA, oppB):
-        dict = DictTools()
-        keys1 = None
+    def compare_objects( self, objA, objB):
+        res = objA.compare( objB )
+        return res
+    ###
+    # It compare the compare two objects. It evaluate that both objects should have the same keys.
+    # the values of the attributes are not evaluated.
+    # the atributes and the values of the first object.
+    # -param objA(Dictionary): It is the firts opbjet to compare, it will use the attributes of the first object.
+    # -param objB(Dictionary): It is the second object to be compared.
+    # -return(Bool): It return true if bot objects are equals.
+    ###
+    @keyword
+    def compare_objects( self, objA, objB):
+        res = objA.compare_attrs( objB )
+        return res
+    ###
+    # It evaluate if two objectas are equals. It is is a strict comparison, both objects should have the same attributes
+    # and values.
+    # -param objA(Dictionary): It is the firts opbjet ot compare
+    # -param objB(Dictionary): It is the second object to be compared.
+    # -return(Bool): It return true if bot objects are equals.
+    ###
+    @keyword
+    def compare_objects( self, objA, objB):
+        res = objA.compare( objB )
+        return res
     ###
     # It add a value to a list, if the value exists in the list then the value is not added.
     # -param list(list): It is the list where the value will be added.
@@ -124,5 +170,92 @@ class GlobalTools:
         if target == None:
             return None
         return urllib.parse.unquote( target )
+    ########################### Log methods #####################################
+    ###
+    # It write a message in the console
+    # text: It is the message to be displayed
+    ###
+    def display( self, text ):
+        if  self.mConsole_output  == 1:
+            logger.console( text )
+        if  self.mFile_output == 1:
+            self.mTestActivityFile.writeln( text )
+    ###
+    # It display a passed message with a speific text.
+    # -param text(String): It is the message to be displayed with the pass message.
+    ###
+    @keyword
+    def passed( self, text ):
+        self.display( "PASS: " + str( text ) )
+    ###
+    # It display a success message with a speific text.
+    # -param text(String): It is the message to be displayed with the pass message.
+    ###
+    @keyword
+    def success( self, text ):
+        self.display( "\t\tSUCCESS: " + str( text ) )
+    ###
+    # It display an unsuccess message with a speific text.
+    # -param text(String): It is the message to be displayed with the pass message.
+    ###
+    @keyword
+    def unsuccess( self, text ):
+        self.display( "\t\tUNSUCCESS: " + str( text ) )
+    ###
+    # It display a warning message with a speific text.
+    # -param text(String): It is the message to be displayed with the pass message.
+    ###
+    @keyword
+    def warning( self, text ):
+        self.display( "\t\tWARNING: " + str( text ) )
+    ###
+    # It display an info message with a speific text.
+    # -param text(String): It is the message to be displayed with the pass message.
+    ###
+    @keyword
+    def info( self, text ):
+        self.display( "INFO: " + str( text ) )
+    ###
+    # It display a step message with a speific text.
+    # -param text(String): It is the message to be displayed with the pass message.
+    ###
+    @keyword
+    def step( self, text ):
+        self.display( "\tSTEP: " + str( text ) )
+    ###
+    # It display a action message with a speific text.
+    # -param text(String): It is the message to be displayed with the pass message.
+    ###
+    @keyword
+    def action( self, text ):
+        self.display( "\t\tACTION: " + str( text ) )
+    ###
+    # It display a write message with a speific text.
+    # -param text(String): It is the message to be displayed with the pass message.
+    ###
+    @keyword
+    def write( self, text ):
+        self.display( "\t\t\t" + str( text ) )
+    ###
+    # It display a mistake message with a speific text.
+    # -param text(String): It is the message to be displayed with the pass message.
+    ###
+    @keyword
+    def mistake( self, text ):
+        self.display( "\t\tMISTAKE: " + str( text ) )
+    ###
+    # It display a error message with a speific text.
+    # -param text(String): It is the message to be displayed with the pass message.
+    ###
+    @keyword
+    def error( self, text ):
+        self.display( "\t\tERROR: " + str( text ) )
+    ###
+    # It display a failed message with a speific text.
+    # -param text(String): It is the message to be displayed with the pass message.
+    ###
+    @keyword
+    def failed( self, text ):
+        self.display( "FAIL:" + str( text ) )
 
-    
+        

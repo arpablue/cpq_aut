@@ -3,7 +3,7 @@
 Library  RequestsLibrary
 Library  ../../../src/common/libs/GlobalTools.py
 Library  ../../../src/common/libs/DictTools.py
-Library  ../../../src/common/pylib/TestActivityFile.py
+#Library  ../../../src/common/pylib/TestActivityFile.py
 Variables  ../../../src/common/libs/variables.yml
 # It load the token used for the connection with the API
 Variables  ../../../config.yml
@@ -30,51 +30,61 @@ Test Start
 # It write a message in the console
 # text: It is the message to be displayed
 ###
-Display
-    [Arguments]  ${text}
-    IF  ${console_output} == 1
-        Log To Console  ${text}
-    END
-    IF  ${file_output} == 1
-        TestActivityFile.Writeln  ${text}
-    END
+#Display
+#    [Arguments]  ${text}
+#    IF  ${console_output} == 1
+#        Log To Console  ${text}
+#    END
+#    IF  ${file_output} == 1
+#        TestActivityFile.Writeln  ${text}
+#    END
 ###
 # It dilay a passed message with a speific text.
 # -param text(String): It is the message to be di`layed with the pass message.
 ###
 Passed
     [Arguments]  ${text}
-    Display  PASS: ${text}
+    GlobalTools.Passed  ${text}
+
 Success
     [Arguments]  ${text}
-    Display  \t\tSUCCESS: ${text}
+    GlobalTools.Success  ${text}
+
 Unsuccess
     [Arguments]  ${text}
-    Display  \t\tUNSUCCESS: ${text}
+    GlobalTools.Unsuccess  ${text}
+
 Warning
     [Arguments]  ${text}
-    Display  \t\tWARNING: ${text}
+    Display.Warning  ${text}
+
 Info
     [Arguments]  ${text}
-    Display  INFO: ${text}
+    GlobalTools.Display  ${text}
+
 Step
     [Arguments]  ${text}
-    Display  \tSTEP: ${text}
+    GlobalTools.Info  ${text}
+
 Action
     [Arguments]  ${text}
-    Display  \t\tACTION: ${text}
+    GlobalTools.Action  ${text}
+
 Write
     [Arguments]  ${text}
-    Display  \t\t\t${text}
+    GlobalTools.Write  ${text}
+
 Mistake
     [Arguments]  ${text}
-    Display  \t\tMISTAKE: ${text}
+    GlobalTools.Mistake  ${text}
+
 Error
     [Arguments]  ${text}
-    Display  \t\tERROR: ${text}
+    GlobalTools.Error  ${text}
+
 Failed
     [Arguments]  ${text}
-    Display  FAIL: ${text}
+    GlobalTools.Failed  ${text}
     FAIL  ${text}
     
 ###

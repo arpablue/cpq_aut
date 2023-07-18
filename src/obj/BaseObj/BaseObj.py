@@ -81,7 +81,7 @@ class BaseObj:
             return False
         return local_id == target_id
     ###
-    # It compare the current comparet the curretn object with another opportuinity.
+    # It compare the current object with another object. It is a flexible comparison ( keys and values ).
     # This method return true if the keys and the value are the same, It is possible that
     # the target object have more attributes, these are not covered, only the attriutes of
     # the current object.
@@ -99,18 +99,18 @@ class BaseObj:
            if not my_attrs[ key ] == attrs[ key ]:
                return False
        return True
-       ###
-    # It compare the current comparet the curretn oppportunity with another opportuinity.
-    # This method return true if the keys and the value are the same.
-    # -param opp(quote): It is the quote to be compared.
-    # -return(bool): It is true bot opportunities are the same.
     ###
-    def equal( self, opp ):
-       if(  opp == None ):
+    # It compare the current object with another object. This is a strict comparizon, the values, attributes and numbers of attributes.
+    # This method return true if the attributes and the value are the same.
+    # -param target(quote): It is the object to be compared.
+    # -return(bool): It is true both objects are the same.
+    ###
+    def equal( self, target ):
+       if(  target == None ):
            return False
-       if not self.size() == opp.size():
+       if not self.size() == target.size():
            return False
-       attrs = opp.mAttrs
+       attrs = target.mAttrs
        my_attrs = self.mAttrs
        for key in my_attrs:
            if not key in attrs:
@@ -118,17 +118,33 @@ class BaseObj:
            if not my_attrs[ key ] == attrs[ key ]:
                return False
        return True
+   ###
+   # It compare two object, It is a key evaluation.
+   # It compare the attributes and sexi of each object,  but not the values of the attributes.
+   # -param target(Object): It is the object to comkpare.
+   # -return(bool): It is true if both objects has the samñe number of attributes and attributes.
+   def compare_attrs( self, target):
+        if(  target == None ):
+            return False
+        if not self.size() == target.size():
+            return False
+        attrs = target.mAttrs
+        my_attrs = self.mAttrs
+        for key in my_attrs:
+            if not key in attrs:
+                return False
+        return True
     ###
-    # It return a dictionary of the keys and values that are different in the quote to be compared.
-    # It the all the keys and value are equals then the return a empty list.
-    # -params opp(quote): It is the quote to be compared
-    # -return(dictionary): It is the dictionary with the keys and values that are different in the quote to be compared.
+    # It return a dictionary of the attributes and values that are different in the quote to be compared.
+    # It the all the attributes and value are equals then the return a empty list.
+    # -params target(quote): It is the quote to be compared
+    # -return(dictionary): It is the dictionary with the attributes and values that are different in the quote to be compared.
     ###
-    def get_different_values( self, opp):
+    def get_different_values( self, target):
         res = {}
-        if opp == None:
+        if target == None:
             return self.mAttrs.keys()
-        attrs = opp.mAttrs
+        attrs = target.mAttrs
         for key in self.mAttrs:
             if not key in attrs:
                 res[ key ] = None

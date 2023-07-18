@@ -84,17 +84,23 @@ Create from
 ###
 Exists by ID
     [Arguments]  ${oppID}
+    GlobalAPI.Action  Exists by ID [${oppID}]
     ${response}=  GET request  ${oppID}
     ${status_code}=  Convert to string  ${response.status_code}
     ${res}=  Set Variable  True
     ${content}=  Convert to string   ${response.content}
     IF  ${status_code} != ${http_success}
+        GlobalAPI.Write  The [${oppID}] opportunity not exists. The status code is [${status_code}] when should be [${http_success}].
         ${res}=  Set Variable  False
     END
     ${flag}=  GlobalAPI.String contains string  ${content}  "opportunity":null
     IF  ${flag} == True
+        GlobalAPI.Write  The opportunity [${oppID}] not exists.
         ${res}=  Set Variable  False
+    ELSE:
+        GlobalAPI.Write  The opportunity [${oppID}] exists.
     END
+    
     [return]  ${res}    
 ###
 # It return the data related to a çn opportunity.
@@ -222,6 +228,7 @@ Delete
 ###
 Compare
     [Arguments]  ${oppA}  ${oppB}
+    Acation  Compare opportunities
     GlobalAPI.Action  Compare Opportunities
     GlobalAPI.WriteBox  Opportunity A  ${oppA}
     GlobalAPI.WriteBox  Opportunity B  ${oppB}
