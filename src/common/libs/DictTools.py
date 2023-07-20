@@ -149,6 +149,43 @@ class DictTools:
         value = obj.get( attr )
         self.mGlobal.write( "Getting attribute: " + str( attr) + " = " + str( value ) )
         return value
+    ####
+    # It verify is an attribute exists in an object, the attribute is capitalized to verify if the object exists.
+    # -param obj(BaseObj): It is the object where the attribute will be verified.
+    # -param attr(string): It is the attribute to be search.
+    # -return(bool): It is true if the attribute exists.
+    ###
+    @keyword
+    def object_attribute_exists( self, obj, attr ):
+        if obj == None:
+            self.mGlobal.warning("It is not possible know if an attribute exist if the object is NULL.")
+            return None
+        if attr == None:
+            self.mGlobal.warning("It is not possible if an NULL attribute exists in açn object.")
+            return None
+        attr = attr.capitalize()
+        res = obj.exists( attr )
+        if res == False:
+            self.mGlobal.error('The [' + attr + '] attribute not exists. In the object: ' + str( obj ) )
+        return res
+    ####
+    # It verify is an attribute exists in an object, the attribute is capitalized to verify if the object exists.
+    # It the attribute not exists then a FAIL exception is raised and stop the execution.
+    # -param obj(BaseObj): It is the object where the attribute will be verified.
+    # -param attr(string): It is the attribute to be search.
+    ###
+    @keyword
+    def object_attribute_should_exists( self, obj, attr ):
+        if obj == None:
+            self.mGlobal.warning("It is not possible know if an attribute exist if the object is NULL.")
+            return None
+        if attr == None:
+            self.mGlobal.warning("It is not possible if an NULL attribute exists in an object.")
+            return None
+        attr = attr.capitalize()
+        res = obj.exists( attr )
+        if res == False:
+            self.mGlobal.failed('The [' + attr + '] attribute not exists. In the object: ' + str( obj ) )
     ###
     # It call a write() method to raise a message-
     # -param toShow( Logger ): It is th elog object ot raise message.

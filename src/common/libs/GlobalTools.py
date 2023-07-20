@@ -240,7 +240,7 @@ class GlobalTools:
     ###
     @keyword
     def info( self, text ):
-        self.display( "INFO: " + str( text ) )
+        self.display( "\t\tINFO: " + str( text ) )
     ###
     # It display a step message with a speific text.
     # -param text(String): It is the message to be displayed with the pass message.
@@ -283,6 +283,7 @@ class GlobalTools:
     @keyword
     def failed( self, text ):
         self.display( "FAIL:" + str( text ) )
+        raise Exception( str( text ) )
 
     ######################### Response Verification code ###########################
     ###
@@ -292,6 +293,8 @@ class GlobalTools:
     ###
     def evaluation_response_code( self,code_name, code):
         exp = self.mContext.get_code( code_name)
+        exp = str( exp )
+        code = str( code )
         if code == None:
             self.error('( GlobalTools - evaluetion_code_' + code_name + ' ): It is not possible verify a code for a NULL value.')
             return False
@@ -300,7 +303,10 @@ class GlobalTools:
             return False
         code = str( code )
         exp = str( exp )
-        return code == exp
+        if not code == exp:
+            self.error('The current response code is not the same that expected code. exp[' + exp + '] vs cur[' + code + ']')
+            return False
+        return True
     ###
     # It verify the code is the same than the expected code. If the code is not the expected
     # then a FAIL exception is raised to stop the execution of the step.
@@ -308,10 +314,10 @@ class GlobalTools:
     ###
     def verification_response_code( self, code_name, code ):
         flag = self.evaluation_response_code( code_name, code )
+        code = str( code )
         if flag == False:
             msg = code_name +" - The current code is not the expected code. Currrent code [" + code + "]"
             self.failed( msg)
-            self.mBI.fail( msg )
 
 
 

@@ -44,15 +44,15 @@ Unsuccess
 
 Warning
     [Arguments]  ${text}
-    Display.Warning  ${text}
+    GlobalTools.Warning  ${text}
 
 Info
     [Arguments]  ${text}
-    GlobalTools.Display  ${text}
+    GlobalTools.Info  ${text}
 
 Step
     [Arguments]  ${text}
-    GlobalTools.Info  ${text}
+    GlobalTools.Step  ${text}
 
 Action
     [Arguments]  ${text}
@@ -177,12 +177,12 @@ Generate number wiht text
 # It verify the code status is equals to the pass code
 # -param status_code(int): It is the nuber of the status code.
 ###
-Pass verification code
-    [Arguments]  ${status_code}
-    # Verification of the 
-    ${code}=  Convert To String  ${status_code}
-    Write  Verifiying the PASS code (${code}) with ${status_code}
-    Should be equal  ${code}  ${http_success}
+#Pass verification code
+#    [Arguments]  ${status_code}
+#    # Verification of the 
+#    ${code}=  Convert To String  ${status_code}
+#    Write  Verifiying the PASS code (${code}) with ${status_code}
+#    Should be equal  ${code}  ${http_success}
 
 ###########################  OBJECTS #######################################
 ###
@@ -204,6 +204,25 @@ Object get attribute
     [Arguments]  ${object}  ${attribute}
     ${value}=  DictTools.Object Get Attribute  ${object}  ${attribute}
     [Return]  ${value}
+###
+# It returnt the vaue of attribute from an object. If the attribute not exist then return None.
+# -param object(DataObj): It is the object where get the atribute value.
+# -param attr(string): It is the name of the attribute.
+# -return(any): It is the value of the aattribute.
+###
+Object attribute exists
+    [Arguments]  ${object}  ${attribute}
+    ${res}=  DictTools.Object attribute exists  ${object}  ${attribute}
+    [Return]  ${res}
+###
+# It verify is an attribute exists in an object, the attribute is capitalized to verify if the object exists.
+# It the attribute not exists then a FAIL exception is raised and stop the execution.
+# -param object(DataObj): It is the object where get the atribute value.
+# -param attr(string): It is the name of the attribute.
+###
+Object attribute should exists
+    [Arguments]  ${object}  ${attribute}
+    ${res}=  DictTools.Object attribute should exists  ${object}  ${attribute}
 
 ###
 # It compare two Opportunity object and return the list of fields that are differents
@@ -233,11 +252,9 @@ Object show attributes
 ###
 Verify the data exists for
     [Arguments]  ${response}  ${field}
-    #WriteBox  Response data  ${response.content}
-    Pass verification code  ${response.status_code}
     # It verify the data of the opportunity exists
     ${content}=  Convert to string   ${response.content}
-    Should Not Contain  ${content}  "${field}":null
+    Should Not Contain  ${content}  '${field}'
 ###
 # It verify if a string conatains another string.
 # -param str(String): It is the string to searach the string.

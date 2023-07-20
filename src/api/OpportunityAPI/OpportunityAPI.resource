@@ -89,10 +89,7 @@ Exists by ID
     ${status_code}=  Convert to string  ${response.status_code}
     ${res}=  Set Variable  True
     ${content}=  Convert to string   ${response.content}
-    IF  ${status_code} != ${http_success}
-        GlobalAPI.Write  The [${oppID}] opportunity not exists. The status code is [${status_code}] when should be [${http_success}].
-        ${res}=  Set Variable  False
-    END
+    GlobalAPI.Verification GET success  ${status_code} 
     ${flag}=  GlobalAPI.String contains string  ${content}  "opportunity":null
     IF  ${flag} == True
         GlobalAPI.Write  The opportunity [${oppID}] not exists.
@@ -107,23 +104,16 @@ Exists by ID
 # -param opportunityID(string): it is the ID of the opportunity.
 # -return(dictionary): It return a dicttionary related to the opportunity.
 Get Info
-    [Arguments]  ${opportunityID}  ${exp_code}=None
-    IF  ${exp_code} == None
-        ${exp_code}=  Set Variable  ${http_success}
-    END
+    [Arguments]  ${opportunityID}
     GlobalAPI.Action  GETTING OPPORTUNITY ----------------
     GlobalAPI.Write  Get data of the opportunity ID: ${opportunityID}
     ${response}=  GET request  ${opportunityID}
-    IF  ${response.status_code} != ${exp_code}
-        ${msg}=  Set Variable  Wrong expected code. Expectected code ${exp_code}, but the current code is ${response.status_code}
-        GlobalAPI.Failed  ${msg}
-    END
-    ${strContent}=  Convert To String  ${response.content}
-    Should Contain  ${strContent}  "id":
+    GlobalAPI.Verification GET success  ${response.status_code} 
     ${dictBody}=  Convert to dictionary  ${response.content}
+    GlobalAPI.WriteBox  Opportunity data getted  ${dictBody}
     ${res}=  Get From Dictionary  ${dictBody}  data
-    ${res}=  Get From Dictionary  ${res}  opportunity
-    ${res}=  OpportunityAPI_ext.create from data  ${res}
+    ${res}=  OpportunityAPI_ext.Create from data  ${res}
+    GlobalAPI.Object attribute should exists  ${res}  id
     [Return]  ${res}
 ###
 # It verify the the response has the correct code and the data of the opbject in attribute. If the status code of the content
@@ -133,7 +123,7 @@ Get Info
 ###
 Verify the data exists for
     [Arguments]  ${response}  ${field}
-    Pass verification code  ${response.status_code}
+    
     # It verify the data of the opportunity exists
     ${content}=  Convert to string   ${response.content}
     Should Not Contain  ${content}  "${field}":null
@@ -142,20 +132,14 @@ Verify the data exists for
 # It add a new opportunity it have as parameter a dictionary wiht the data for the opportunity
 # -param dictData(dictionary): It is a dictionary with the data of the new oppportunity
 #        Ex:  ${dictData}=  Create Dictionary  name=Jazz Test  description=Test Opportunity  currencyIsoCode=USD
-# -param exp_code(String)= It is the expected code of the requests, if the expected request is different to this a fail is reqised, the default response code is 200.
+# -return(OpportunityObj): It is the opportunity related to the data of the response.
 ###
 Create
-    [Arguments]  ${dictData}  ${exp_code}=None
-    IF  ${exp_code} == None
-        ${exp_code}=  Set Variable  ${http_success}
-    END
+    [Arguments]  ${dictData}
     GlobalAPI.Action  CREATING OPPORTUNITY ----------------
     GlobalAPI.WriteBox  Data for the new opportunity  ${dictData}
     ${response}=  POST request  ${dictData}
-    IF  ${response.status_code} != ${exp_code}
-        ${msg}=  Set Variable  Wrong expected code. Expectected code ${exp_code}, but the current code is ${response.status_code}
-        GlobalAPI.Failed  ${msg}
-    END
+    GlobalAPI.Verification POST success  ${response.status_code} 
     GlobalAPI.Verify the data exists for  ${response}  data
     # It convert the response body in a dictionary
     ${dictBody}=  Convert to dictionary  ${response.content}
@@ -171,50 +155,34 @@ Create
 # It modify an opportunity using a dictionary to specify the data that will be modified.
 # -param opportunityID(String): It is the id of the opportunity to be modified.
 # -param dictData(dictionary): It is the dictionary with the attributes and values to be modified.
-# -param exp_code(String)= It is the expected code of the requests, if the expected request is different to this a fail is reqised, the default response code is 200.
 # -return(OpportunityOjct): It is the data of the request modified.
 ###
 Modify
-    [Arguments]  ${opportunityID}  ${dictData}  ${exp_code}=None
-    IF  ${exp_code} == None
-        ${exp_code}=  Set Variable  ${http_success}
-    END
+    [Arguments]  ${opportunityID}  ${dictData}
     GlobalAPI.Action  MODIFYING OPPORTUNITY ---------------
     GlobalAPI.WriteBox  New Opportunity data  ${dictData}
     ${body}=  Set Variable  ${dictData}
     ${response}=  PUT request  ${opportunityID}  ${dictData}
-    IF  ${response.status_code} != ${exp_code}
-        ${msg}=  Set Variable  Wrong expected code. Expectected code ${exp_code}, but the current code is ${response.status_code}
-        GlobalAPI.Failed  ${msg}
-    END
-    GlobalAPI.Verify the data exists for  ${response}  opportunity
+    GlobalAPI.Verification PUT success  ${response.status_code}
+    GlobalAPI.WriteBox  Opportunity Modify Response  ${response.content}
+    GlobalAPI.Verify the data exists for  ${response}  description
     ${dictBody}=  Convert to dictionary  ${response.content}
     ${res}=  Get From Dictionary  ${dictBody}  data
-    ${res}=  Get From Dictionary  ${res}  opportunity
     ${res}=  OpportunityAPI_ext.create from data  ${res}
-    GlobalAPI.WriteBox  OPPORTUNITY MODIFIED  ${res}
     [Return]  ${res}
 ###
 # It delete an opportunity.
 # -param oppID(String): It is the id of the opportunity to be deleted.
-# -param exp_code(String)= It is the expected code of the requests, if the expected request is different to this a fail is reqised, the default response code is 200.
+# -return(Dictionary): It is the data of the request.
 ###
 Delete 
-    [Arguments]  ${oppID}  ${exp_code}=None
-    IF  ${exp_code} == None
-        ${exp_code}=  Set Variable  ${http_success}
-    END
+    [Arguments]  ${oppID}
     GlobalAPI.Action  DELETING OPPORTUNITY ---------------
     GlobalAPI.Write  Deleting opportunity for: ${oppID}
     ${response}=  DELETE request  ${oppID}
-    IF  ${response.status_code} != ${exp_code}
-        ${msg}=  Set Variable  Wrong expected code. Expectected code ${exp_code}, but the current code is ${response.status_code}
-        GlobalAPI.Failed  ${msg}
-    END
-    IF  ${response.status_code} == 200
-        ${content}=  Convert to string   ${response.content}
-        Should Not Contain  ${content}  "success": true
-    END
+    GlobalAPI.Verification DELETE success  ${response.status_code} 
+    ${content}=  Convert to string   ${response.content}
+    Should Not Contain  ${content}  "success": true
     ${strContent}=  Convert To String  ${response.content}
     ${res}=  Convert to dictionary  ${response.content}
     [Return]  ${res}
@@ -228,7 +196,6 @@ Delete
 ###
 Compare
     [Arguments]  ${oppA}  ${oppB}
-    Acation  Compare opportunities
     GlobalAPI.Action  Compare Opportunities
     GlobalAPI.WriteBox  Opportunity A  ${oppA}
     GlobalAPI.WriteBox  Opportunity B  ${oppB}

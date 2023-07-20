@@ -46,18 +46,35 @@ class BaseObj:
     def set( self, key, value ):
         self.mAttrs[ key ] = value
     ###
+    # It evaluate est on format the to be used on the attributes of the current object.
+    # -param key(string): It is the key to set on format.
+    # -return(string): It is the key with format.
+    def formatKey( self, key):
+        key = str( key )
+        key = key.strip()
+        key = key.capitalize()
+        return key
+        
+    ###
     # It return the value of an attribute or a key. If the value not exists then return None.
     # -param key(str): It is the name of the atrubue or the key
     # -return(any): It is the value of the atribute or the key
     def get( self, key ):
-        if self.exits( key ):
+        if key == None:
+            return None
+        key = self.formatKey( key )
+        
+        if self.exists( key ):
             return self.mAttrs[ key ]
         return None
     ###
     # It return true if a key exists in the attributes of the quote.
     # -param key(str): It is the attribute name or the key.
     # -return(bool): It is True id the key exists
-    def exits( self, key):
+    def exists( self, key):
+        if key == None:
+            return None
+        key = self.formatKey( key )
         if key in self.mAttrs:
             return True
         return False
@@ -123,17 +140,17 @@ class BaseObj:
    # It compare the attributes and sexi of each object,  but not the values of the attributes.
    # -param target(Object): It is the object to comkpare.
    # -return(bool): It is true if both objects has the samñe number of attributes and attributes.
-   def compare_attrs( self, target):
-        if(  target == None ):
+    def compare_attrs( self, target):
+       if(  target == None ):
             return False
-        if not self.size() == target.size():
+       if not self.size() == target.size():
             return False
-        attrs = target.mAttrs
-        my_attrs = self.mAttrs
-        for key in my_attrs:
+       attrs = target.mAttrs
+       my_attrs = self.mAttrs
+       for key in my_attrs:
             if not key in attrs:
                 return False
-        return True
+       return True
     ###
     # It return a dictionary of the attributes and values that are different in the quote to be compared.
     # It the all the attributes and value are equals then the return a empty list.
