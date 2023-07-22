@@ -29,7 +29,7 @@ ${recordPath_opp}  /resources/records/opportunities_created.dat
 GET request
     [Arguments]  ${opportunityID}
     ${headers}=  Create Dictionary  Authorization=${token}
-    ${response}=  GET On Session  ${SessionAPI}  ${endPoint_opp}/${opportunityID}  headers=${headers}
+    ${response}=  GET On Session  ${SessionAPI}  ${endPoint_opp}/${opportunityID}  headers=${headers}  expected_status=any
     #GlobalAPI.WriteBox  OPPORTUNITY GET Response  ${response.content }
     [Return]  ${response}
 
@@ -41,7 +41,7 @@ GET request
 POST request
     [Arguments]  ${dictData}
     &{headers}=  Create Dictionary  Content-Type=${content_type}  Application=${application}  Authorization=${token}    # It does a POST request
-    ${response}=  POST On Session  ${SessionAPI}  ${endPoint_opp}  headers=${headers}  json=${dictData}
+    ${response}=  POST On Session  ${SessionAPI}  ${endPoint_opp}  headers=${headers}  json=${dictData}  expected_status=any
     [Return]  ${response}
 ###
 # It is the execution of a PUT request to the opportunity endpoint.
@@ -52,7 +52,7 @@ POST request
 PUT request
     [Arguments]  ${oppID}  ${dictData}
     &{headers}=  Create Dictionary  Content-Type=${content_type}  Application=${application}  Authorization=${token}
-    ${response}=  PUT On Session  ${SessionAPI}  url=${endPoint_opp}/${oppID}  headers=${headers}  json=${dictData}
+    ${response}=  PUT On Session  ${SessionAPI}  url=${endPoint_opp}/${oppID}  headers=${headers}  json=${dictData}  expected_status=any
     #GlobalAPI.WriteBox  OPPORTUNITY PUT Response  ${response.content }
     [Return]  ${response}
 ###
@@ -62,8 +62,9 @@ PUT request
 ###
 DELETE request
     [Arguments]  ${oppID}
+    GlobalAPI.Write  Delete Opportunity ID: ${oppID}
     &{headers}=  Create Dictionary  Content-Type=${content_type}  Application=${application}  Authorization=${token}
-    ${response}=  DELETE On Session  ${SessionAPI}  ${endPoint_opp}/${oppID}  headers=${headers}
+    ${response}=  DELETE On Session  ${SessionAPI}  ${endPoint_opp}/${oppID}  headers=${headers}  expected_status=any
     #GlobalAPI.WriteBox  OPPORTUNITY DELETE Response  ${response.content}
     [Return]  ${response}
 
@@ -89,18 +90,15 @@ Exists by ID
     ${status_code}=  Convert to string  ${response.status_code}
     ${res}=  Set Variable  True
     ${content}=  Convert to string   ${response.content}
-    GlobalAPI.Verification GET success  ${status_code} 
-    ${flag}=  GlobalAPI.String contains string  ${content}  "opportunity":null
-    IF  ${flag} == True
-        GlobalAPI.Write  The opportunity [${oppID}] not exists.
-        ${res}=  Set Variable  False
-    ELSE
-        GlobalAPI.Write  The opportunity [${oppID}] exists.
+    ${flag}=  GlobalAPI.Validate code  ${status_code}
+    IF  ${flag} == False
+        GlobalAPI.Warning  The [${status_code}] response code is not a valid code.
+        [Return]  False
     END
-    
-    [return]  ${res}    
+    ${flag}=  GlobalAPI.Evaluate GET success  ${status_code}
+    [Return]  ${res}    
 ###
-# It return the data related to a çn opportunity.
+# It return the data related to an opportunity.
 # -param opportunityID(string): it is the ID of the opportunity.
 # -return(dictionary): It return a dicttionary related to the opportunity.
 Get Info
@@ -176,9 +174,9 @@ Modify
 # -return(Dictionary): It is the data of the request.
 ###
 Delete 
-    [Arguments]  ${oppID}
+    [Arguments]  ${opp}
     GlobalAPI.Action  DELETING OPPORTUNITY ---------------
-    GlobalAPI.Write  Deleting opportunity for: ${oppID}
+    ${oppID}=  GlobalAPI.Object get attribute  ${opp}  Id
     ${response}=  DELETE request  ${oppID}
     GlobalAPI.Verification DELETE success  ${response.status_code} 
     ${content}=  Convert to string   ${response.content}
@@ -199,7 +197,7 @@ Compare
     GlobalAPI.Action  Compare Opportunities
     GlobalAPI.WriteBox  Opportunity A  ${oppA}
     GlobalAPI.WriteBox  Opportunity B  ${oppB}
-    ${flag}=  OpportunityAPI_ext.Compare  ${oppA}  ${oppB}
+    ${flag}=  GlobalAPI.Objects Compare  ${oppA}  ${oppB}
     [Return]  ${flag}
 ###
 # It is a strict comparison. Both objects should have the same number of attributes,
@@ -212,7 +210,7 @@ Equal
     GlobalAPI.Action  Verify if are equals
     GlobalAPI.WriteBox  Opportunity A  ${oppA}
     GlobalAPI.WriteBox  Opportunity B  ${oppB}
-    ${flag}=  OpportunityAPI_ext.Equal  ${oppA}  ${oppB}
+    ${flag}=  GlobalAPI.Objects Should be equals  ${oppA}  ${oppB}
     [Return]  ${flag}
 ###
 # It return the list of quotes related to the current opportunity.

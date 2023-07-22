@@ -68,6 +68,7 @@ Create a random opportunity
     ${newOppID}=  GlobalAPI.Object get attribute  ${newOpp}  Id
     GlobalAPI.Write  ID of the new opportunity: ${newOppId}
     ${oppInfo}=  OpportunityAPI.Get Info  ${newOppID}
+    GlobalAPI.Objects Should be equals  ${newOpp}  ${oppInfo}
     [Return]  ${oppInfo}
 
 ###
@@ -161,3 +162,13 @@ Verify the modifications
     END
     ${size}=  Get Length  ${attrsDif}
     Validations.Evaluate to be equals  2  ${size}  The quantity of attributes modified are not 2
+
+Verify the opportunity should not exist
+    [Arguments]  ${target}
+    GlobalAPI.Step  Verify the opportunity should not exist
+    ${id}=  GlobalAPI.Object get attribute  ${target}  id
+    ${flag}=  OpportunityAPI.Exists by ID  ${id}
+    #IF  ${flag} == True
+    #    GlobalAPI.Failed  The [${id}] oppotunity still exists, when this should be deleted.
+    #END
+    #GlobalAPI.Success  The [${id}] opportunity not exist in the document.

@@ -1,4 +1,14 @@
 import json
+import sys
+import os
+
+dir = os.path.dirname( __file__ )
+src_pos = dir.index('src')
+src_path = dir[:src_pos] + os.path.join('src','comon','libs')
+sys.path.append( src_path )
+
+from GlobalTools import GlobalTools
+
 ###
 # It is the base object of the ojcts for that and contains the commons methods.
 ###
@@ -8,6 +18,7 @@ class BaseObj:
     # -params dictData(dictionary): It is the data used by the quote, by default is empty.
     ###
     def __init__(self, dictData = {}) -> None:
+        self.mGlobalTools = GlobalTools()
         self.set_data( dictData )
         if self.mAttrs == None :
             self.mAttrs = {}
@@ -98,6 +109,30 @@ class BaseObj:
             return False
         return local_id == target_id
     ###
+    # It compare the current object with another object. 
+    # This is a strict comparison, the values, attributes and numbers of attributes.
+    # This method return true if the attributes and the value are the same.
+    # -param target(quote): It is the object to be compared.
+    # -return(bool): It is true both objects are the same.
+    ###
+    def equal( self, target ):
+       if(  target == None ):
+           self.mGlobalTools.warning('It is not possible compare the current object wit a NULL object.')
+           return False 
+       if not self.size() == target.size():
+           self.mGlobalTools.warning('The quantity of atributes are differents.')
+           return False
+       attrs = target.mAttrs
+       my_attrs = self.mAttrs
+       res = True
+       for key in my_attrs:
+           if not key in attrs:
+               res = False
+               self.warning('The [' + key + '] key the attribute is not present in the second object.')
+           if not my_attrs[ key ] == attrs[ key ]:
+               res = False
+       return res
+    ###
     # It compare the current object with another object. It is a flexible comparison ( keys and values ).
     # This method return true if the keys and the value are the same, It is possible that
     # the target object have more attributes, these are not covered, only the attriutes of
@@ -116,28 +151,9 @@ class BaseObj:
            if not my_attrs[ key ] == attrs[ key ]:
                return False
        return True
-    ###
-    # It compare the current object with another object. This is a strict comparizon, the values, attributes and numbers of attributes.
-    # This method return true if the attributes and the value are the same.
-    # -param target(quote): It is the object to be compared.
-    # -return(bool): It is true both objects are the same.
-    ###
-    def equal( self, target ):
-       if(  target == None ):
-           return False
-       if not self.size() == target.size():
-           return False
-       attrs = target.mAttrs
-       my_attrs = self.mAttrs
-       for key in my_attrs:
-           if not key in attrs:
-               return False
-           if not my_attrs[ key ] == attrs[ key ]:
-               return False
-       return True
    ###
    # It compare two object, It is a key evaluation.
-   # It compare the attributes and sexi of each object,  but not the values of the attributes.
+   # It compare the attributes of each object,  but not the values of the attributes.
    # -param target(Object): It is the object to comkpare.
    # -return(bool): It is true if both objects has the samñe number of attributes and attributes.
     def compare_attrs( self, target):

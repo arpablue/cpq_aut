@@ -73,7 +73,6 @@ Error
 Failed
     [Arguments]  ${text}
     GlobalTools.Failed  ${text}
-    #FAIL  ${text}
     
 ###
 # It write a message in the console delimeted buy lines
@@ -131,6 +130,40 @@ Convert to dictionary
     # It convert the response body in a dictionary
     ${result}=  Evaluate  json.loads('''${strTarget}''')
     [Return]  ${result}
+###
+# It verify if two objects are equals. This compare the attributes and the values.
+# -param objA(DataObj): It is the first in base to be comparated.
+# -param objB(DataObj): it is the second object to be compared.
+# -return(Bool): It is True then the second object have the same elements that the forst element.
+####
+Objects Should be equals
+    [Arguments]  ${objA}  ${objB}
+    ${res}=  GlobalTools.objects are equals  ${objA}  ${objB}
+    [Return]  ${res}
+###
+# It cpmpare the first attribute with the second object.
+# It compare the attributes and the values of the firts object and verify is these have the same attributes
+# and the same values in the second object.
+# -param objA(DataObj): It is the first in base to be comparated.
+# -param objB(DataObj): it is the second object to be compared.
+# -return(Bool): It is True then the second object have the same elements that the forst element.
+####
+Object compare
+    [Arguments]  ${objA}  ${objB}
+    ${res}=  GlobalTools.Object Compare  ${objA}  ${objB}
+    [Return]  ${res}
+###
+# It verify if two objects are equals. This compare the attributes of the first object and veify 
+# verify if these exist in the second object.
+# -param objA(DataObj): It is the first in base to be comparated.
+# -param objB(DataObj): it is the second object to be compared.
+# -return(Bool): It is True then the second object have the same elements that the forst element.
+####
+Object compare attrs
+    [Arguments]  ${objA}  ${objB}
+    ${res}=  GlobalTools.Object Compare Attrs  ${objA}  ${objB}
+    [Return]  ${res}
+
 ###
 # It verify if a key exits in dictionary,
 # -param dict(dictionary): It is the dictionary used to verify if a key exists.
@@ -259,7 +292,7 @@ Verify the data exists for
 # It verify if a string conatains another string.
 # -param str(String): It is the string to searach the string.
 # -param substr(String): It is the substring to search in the string.
-# -return[bool]: It is True if the string contains the substring.
+# -return(bool): It is True if the string contains the substring.
 ###
 String contains string
     [Arguments]  ${str}  ${substr}
@@ -268,6 +301,15 @@ String contains string
 
 
 ################  Http request library  #########################
+Validate code
+    [Arguments]  ${code}
+    ${res}=  GlobalTools.Is valid code  ${code}
+    [Return]  ${res}
+
+Get code for
+    [Arguments]  ${code_name}
+    ${res} = GlobalTools.Get code for  ${code_name}
+    [return]  ${res}
 Verification GET success
     [Arguments]  ${code}
     GlobalTools.Verification Success Get  ${code}
@@ -321,6 +363,72 @@ Verification Forbidden
     [Arguments]  ${code}
     GlobalTools.Verification Forbidden  ${code}
 
+Verification NotFound
+    [Arguments]  ${code}
+    GlobalTools.Verification NotFound  ${code}
+
 Verification Server Error 
     [Arguments]  ${code}
     GlobalTools.Verification Server Error  ${code}
+
+########## evaluation methods ################
+Evaluate GET success
+    [Arguments]  ${code}
+    GlobalTools.Evaluate Success Get  ${code}
+
+Evaluate GET NoContent
+    [Arguments]  ${code}
+    GlobalTools.Evaluate Success Get NoContent  ${code}
+
+
+Evaluate POST Success
+    [Arguments]  ${code}
+    GlobalTools.Evaluate Success POST  ${code}
+
+Evaluate POST Success NoContent
+    [Arguments]  ${code}
+    GlobalTools.Evaluate Success POST NoContent  ${code}
+
+Evaluate PUT Success
+    [Arguments]  ${code}
+    GlobalTools.Evaluate Success PUT  ${code}
+
+Evaluate PUT Success NoContent
+    [Arguments]  ${code}
+    GlobalTools.Evaluate Success PUT NoContent  ${code}
+
+Evaluate DELETE Success
+    [Arguments]  ${code}
+    GlobalTools.Evaluate Success DELETE  ${code}
+
+Evaluate DELETE Success NoContent
+    [Arguments]  ${code}
+    GlobalTools.Evaluate Success DELETE NoContent  ${code}
+
+Evaluate PATCH Success
+    [Arguments]  ${code}
+    GlobalTools.Evaluate Success PATCH  ${code}
+
+Evaluate PATCH Success NoContent
+    [Arguments]  ${code}
+    GlobalTools.Evaluate Success PATCH NoContent  ${code}
+
+Evaluate NoUser
+    [Arguments]  ${code}
+    GlobalTools.Evaluate NoUser  ${code}
+
+Evaluate Unauthorized Access
+    [Arguments]  ${code}
+    GlobalTools.Evaluate Unauthorized Access  ${code}
+
+Evaluate Forbidden
+    [Arguments]  ${code}
+    GlobalTools.Evaluate Forbidden  ${code}
+
+Evaluate NotFound
+    [Arguments]  ${code}
+    GlobalTools.Evaluate NotFound  ${code}
+
+Evaluate Server Error 
+    [Arguments]  ${code}
+    GlobalTools.Evaluate Server Error  ${code}

@@ -17,6 +17,7 @@
                 "No_User":400,
                 "Unauthorized_Access":401,
                 "Forbidden":403,
+                "NotFound":404,
                 "Server_Error":500
             }
         },
@@ -37,6 +38,7 @@
                 "No_User":400,
                 "Unauthorized_Access":401,
                 "Forbidden":403,
+                "NotFound":404,
                 "Server_Error":500
             }
         },
@@ -57,6 +59,7 @@
                 "No_User":400,
                 "Unauthorized_Access":401,
                 "Forbidden":403,
+                "NotFound":404,
                 "Server_Error":500
             }
         }

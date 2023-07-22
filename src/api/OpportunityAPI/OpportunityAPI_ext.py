@@ -12,8 +12,6 @@ src_path = dir[:src_pos] + os.path.join('src','obj','OpportunityObj')
 sys.path.append( src_path )
 from OpportunityObj import OpportunityObj
 
-# sys.path.append('../../../src/obj/OpportunityObj')
-
 ###
 # It is extencion of the methods used to manage the data of the opportunity.
 ###
