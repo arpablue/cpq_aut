@@ -18,10 +18,10 @@ Resource    ../../../src/api/QuoteAPI/QuoteAPI.resource
 Create a new quote
     [Arguments]  ${name}  ${description}  ${opp}
     GlobalAPI.Action  Create a new quote
-    ${oppID}=  GlobalAPI.Object get attribute  ${opp}  id
+    ${oppID}=  GlobalAPI.Object get attribute  ${opp}  Id
     ${name}=  Set Variable  ${name}_${oppID}
     ${description}=  Set Variable  ${name} : ${description}
-    ${data}=  Create Dictionary  name=${name}  description=${description}  opportunityId=${oppID}
+    ${data}=  Create Dictionary  Name=${name}  Description=${description}  OpportunityId=${oppID}
     ${quote}=  QuoteAPI.Create  ${data}
     [Return]  ${quote}
     
@@ -40,8 +40,8 @@ Quote should be different
     # Verify if the target attribute exists in the attributes with differents values
     ${flag}=  GlobalAPI.Dictionary key exists  ${attrsDif}  ${attr}
     Should Be True  ${flag}
-    # It verify the modified_time field is one of the attributes modified
-    ${flag}=  GlobalAPI.Dictionary key exists  ${attrsDif}  modified_time
+    # It verify the ModifiedTime field is one of the attributes modified
+    ${flag}=  GlobalAPI.Dictionary key exists  ${attrsDif}  ModifiedTime
     Should Be True  ${flag}
     # Veirfying the values of the target values are differents
     ${valueA}=  GlobalAPI.Object get attribute  ${objA}  ${attr}
@@ -62,7 +62,7 @@ Quote should be different
 Modify a quote
     [Arguments]  ${quoteObj}  ${attr}  ${value}
     GlobalAPI.Step  Modify a quote
-    ${id}=  GlobalAPI.Object get attribute  ${quoteObj}  id
+    ${id}=  GlobalAPI.Object get attribute  ${quoteObj}  Id
     ${random}=  GlobalAPI.Generate number
     ${value}=  Replace String  ${value}  <value>  ${random}
     &{data}=  Create Dictionary  ${attr}=${value}
@@ -76,13 +76,13 @@ Modify a quote
 Verify if the quote has been created
     [Arguments]  ${quote}
     GlobalAPI.Step  Verify if the quote has been created
-    ${id}=  GlobalAPI.Object get attribute  ${quote}  id
+    ${id}=  GlobalAPI.Object get attribute  ${quote}  Id
     ${flag}=  QuoteAPI.Exists by ID  ${id}
     ${oppInf}=  QuoteAPI.Get Info  ${id}
-    Validations.Verify it is true  ${flag}  The quote[${id}] has not been created in the system
+    Validations.Verify it is true  ${flag}  the quote[${id}] has not been created in the system
     ${flag}=  QuoteAPI.Compare  ${quote}  ${oppInf}
-    Validations.Verify it is true  ${flag}  The quotes[${id}] created and the quote that exists in teh system are not the same
-    GlobalAPI.Success  The quote [${id}] exists in teh system
+    Validations.Verify it is true  ${flag}  the quotes[${id}] created and the quote that exists in the system are not the same
+    GlobalAPI.Success  the quote [${id}] exists in the system
 
 ###
 # It verify that a opportuninty is created
@@ -91,13 +91,13 @@ Verify if the quote has been created
 Verify if the quote exists
     [Arguments]  ${quote}
     GlobalAPI.Step  Verify if the quote has been created
-    ${id}=  GlobalAPI.Object get attribute  ${quote}  id
+    ${id}=  GlobalAPI.Object get attribute  ${quote}  Id
     ${flag}=  QuoteAPI.Exists by ID  ${id}
     ${oppInf}=  QuoteAPI.Get Info  ${id}
-    Validations.Verify it is true  ${flag}  Teh quote [${id}] exists in teh system
+    Validations.Verify it is true  ${flag}  The quote [${id}] exists in the system
     ${flag}=  QuoteAPI.Compare  ${quote}  ${oppInf}
-    Validations.Verify it is true  ${flag}  The quotes created and the quote that exists in teh system are not the same
-    GlobalAPI.Success  The quote [${id}] exists in teh system
+    Validations.Verify it is true  ${flag}  The quotes created and the quote that exists in the system are not the same
+    GlobalAPI.Success  The quote [${id}] exists in the system
 
 ###
 # It verify that a opportuninty is created
@@ -106,11 +106,11 @@ Verify if the quote exists
 Verify if the quote not exist
     [Arguments]  ${quote}
     GlobalAPI.Step  Verify if the quote not exist
-    ${id}=  GlobalAPI.Object get attribute  ${quote}  id
+    ${id}=  GlobalAPI.Object get attribute  ${quote}  Id
     ${flag}=  QuoteAPI.Exists by ID  ${id}
     ${oppInf}=  QuoteAPI.Get Info  ${id}
     Validations.Verify it is false  ${flag}  The quote exists in the system when should not exist
-    GlobalAPI.Success  The quote [${id}] not exist
+    GlobalAPI.Success  the quote [${id}] not exist
 
 
 ###
@@ -125,14 +125,14 @@ Verify modifications
     ${attrsDif}=  GlobalAPI.Object get differences  ${quoteInfo}  ${quoteEdit}
     GlobalAPI.WriteBox  Attributes with differences  ${attrsDif}
     GlobalAPI.Object show attributes  ${quoteInfo}  ${quoteEdit}  ${attrsDif}
-    ${flag}=  GlobalAPI.Dictionary key exists  ${attrsDif}  modified_time
+    ${flag}=  GlobalAPI.Dictionary key exists  ${attrsDif}  ModifiedTime
     IF  ${flag} == False
         GlobalAPI.WriteBox  Attributes modified   ${attrsDif}
-        GlobalAPI.Failed  The [modified_time] attribute not exist in the when should exists.
-        Fail  The modified_time it is not present in the attributes modified when should be it.
+        GlobalAPI.Failed  the [ModifiedTime] attribute not exist in the when should exists.
+        Fail  the ModifiedTime it is not present in the attributes modified when should be it.
     END
     ${size}=  Get Length  ${attrsDif}
-    Validations.Evaluate to be equals  2  ${size}  The quantity of attributes modified are not 2
+    Validations.Evaluate to be equals  2  ${size}  the quantity of attributes modified are not 2
 
 ###
 # It delete an opportunity
@@ -141,7 +141,7 @@ Verify modifications
 Delete a Quote
     [Arguments]  ${quoteInfo}
     GlobalAPI.Step  Delete an opportunity
-    ${oppID}=  GlobalAPI.Object get attribute  ${quoteInfo}  id
+    ${oppID}=  GlobalAPI.Object get attribute  ${quoteInfo}  Id
     ${quoteEdit}=  QuoteAPI.Delete  ${oppID}
     [Return]  ${quoteEdit}
 
@@ -150,6 +150,6 @@ Delete a Quote
 ###
 Verify the Quote not exists  
     [Arguments]  ${quote}
-    ${id}=  GlobalAPI.Object get attribute  ${quote}  id
+    ${id}=  GlobalAPI.Object get attribute  ${quote}  Id
     ${flag}=  QuoteAPI.Exists by ID  ${id}
-    Validations.Evaluate to be equals  False  ${flag}  The QuoteLine still exists when it should be delete.
+    Validations.Evaluate to be equals  False  ${flag}  the QuoteLine still exists when it should be delete.

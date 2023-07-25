@@ -39,7 +39,7 @@ GET request
 ###
 POST request
     [Arguments]  ${dictData}
-    &{headers}=  Create Dictionary  Content-Type=${content_type}  Application=${application}  Authorization=${token}    # It does a POST request
+    &{headers}=  Create Dictionary  Content-Type=${content_type}  Application=${application}  Authorization=${token}
     ${response}=  POST On Session  ${SessionAPI}  ${endPoint_quote}  headers=${headers}  json=${dictData}
     #GlobalAPI.WriteBox  QUOTE POST Response  ${response.content }
     [Return]  ${response}
@@ -69,6 +69,15 @@ DELETE request
     #GlobalAPI.WriteBox  QUOTE DELETE Response  ${response.content }
     [Return]  ${response}
 ####################################################### ACTIONS #######################################################
+###
+# It create a opportunity from a dictionary.
+# -param dataDict(Dictionary):
+# -return(OpportunityObj): It is the Opportunity object created with the dictionary.
+###
+Create from
+    [Arguments]  ${dataDict}
+    ${res}=  QuoteAPI_ext.create from data  ${dataDict}
+    [Return]  ${res}
 ###
 # It return the data related to a quote.
 # -param quoteID(string): it is the ID of the quote.

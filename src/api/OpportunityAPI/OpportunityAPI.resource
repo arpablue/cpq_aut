@@ -93,9 +93,10 @@ Exists by ID
     ${flag}=  GlobalAPI.Validate code  ${status_code}
     IF  ${flag} == False
         GlobalAPI.Warning  The [${status_code}] response code is not a valid code.
-        [Return]  False
+        ${res}=  Set Variable  False
+    ELSE
+        ${res}=  GlobalAPI.Evaluate GET success  ${status_code}
     END
-    ${flag}=  GlobalAPI.Evaluate GET success  ${status_code}
     [Return]  ${res}    
 ###
 # It return the data related to an opportunity.
