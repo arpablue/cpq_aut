@@ -22,14 +22,13 @@ ${recordPath_quotes}  resources/records/quotes_created.dat
 ####################################################### HTTP REQUESTS #######################################################
 ###
 # It made a GET reques to the REST api service and return the response of the request.
-# -param quoteID(String): It is the id of the quote to get the data.
+# -param id(String): It is the id of the quote to get the data.
 # -return(response): TI is the response of the request.
 ###
 GET request
-    [Arguments]  ${quoteID}
+    [Arguments]  ${id}
     ${headers}=  Create Dictionary  Authorization=${token}
-    ${response}=  GET On Session  ${SessionAPI}  ${endPoint_quote}/${quoteID}  ${headers}
-    #GlobalAPI.WriteBox  QUOTE GET Response  ${response.content }
+    ${response}=  GET On Session  ${SessionAPI}  ${endPoint_quote}/${id}  headers=${headers}
     [Return]  ${response}
 
 ###
@@ -70,34 +69,21 @@ DELETE request
     [Return]  ${response}
 ####################################################### ACTIONS #######################################################
 ###
-# It create a opportunity from a dictionary.
-# -param dataDict(Dictionary):
-# -return(OpportunityObj): It is the Opportunity object created with the dictionary.
-###
-Create from
-    [Arguments]  ${dataDict}
-    ${res}=  QuoteAPI_ext.create from data  ${dataDict}
-    [Return]  ${res}
-###
 # It return the data related to a quote.
-# -param quoteID(string): it is the ID of the quote.
+# -param id(string): it is the ID of the quote.
 # -param exp_code(String)= It is the expected code of the requests, if the expected request is different to this a fail is reqised, the default response code is 200.
 # -return(dictionary): It return a dicttionary related to the quote.
 Get Info
-    [Arguments]  ${quoteID}  ${exp_code}=200
-    GlobalAPI.Write  QUOTE GET INFO ----------------
-    GlobalAPI.Write  Getting data for Quote ID: ${quoteID}
-    ${response}=  GET request  ${quoteID}
-    IF  ${response.status_code} != ${exp_code}
-        ${msg}=  Set Variable  Wrong expected code. Expectected code ${exp_code}, but the current code is ${response.status_code}
-        GlobalAPI.Failed  ${msg}
-    END
-    ${strContent}=  Convert To String  ${response.content}
-    Should Contain  ${strContent}  "id":
+    [Arguments]  ${id}
+    GlobalAPI.Action  GETTING OPPORTUNITY ----------------
+    GlobalAPI.Write  Get data of the opportunity ID: ${id}
+    ${response}=  GET request  ${id}
+    GlobalAPI.Verification GET success  ${response.status_code} 
     ${dictBody}=  Convert to dictionary  ${response.content}
+    GlobalAPI.WriteBox  Opportunity data getted  ${dictBody}
     ${res}=  Get From Dictionary  ${dictBody}  data
-    ${res}=  Get From Dictionary  ${res}  quote
-    ${res}=  QuoteAPI_ext.create from data  ${res}
+    ${res}=  OpportunityAPI_ext.Create from data  ${res}
+    GlobalAPI.Object attribute should exists  ${res}  id
     [Return]  ${res}
 ###
 # It add a new opportunity it have as parameter a dictionary wiht the data for the opportunity
@@ -108,21 +94,18 @@ Get Info
 Create
     [Arguments]  ${dictData}  ${exp_code}=200
     GlobalAPI.Write  CREATING QUOTE ----------------
+    GlobalAPI.WriteBox  Data for the new quote  ${dictData}
     ${response}=  POST request  ${dictData}
-    IF  ${response.status_code} != ${exp_code}
-        ${msg}=  Set Variable  Wrong expected code. Expectected code ${exp_code}, but the current code is ${response.status_code}
-        GlobalAPI.Failed  ${msg}
-    END    
-    GlobalAPI.Verify the data exists for  ${response}  quote
+    GlobalAPI.Verification POST success  ${response.status_code} 
+    GlobalAPI.Verify the data exists for  ${response}  data
     # It convert the response body in a dictionary
     ${dictBody}=  Convert to dictionary  ${response.content}
     ${res}=  Get From Dictionary  ${dictBody}  data
-    ${res}=  Get From Dictionary  ${res}  quote
     ${res}=  QuoteAPI_ext.create from data  ${res}
-    ${id}=  GlobalAPI.Object get attribute  ${res}  id
-    ${path}=  GlobalAPI.Get Path  ${recordPath_quotes}
+    ${id}=  GlobalAPI.Object get attribute  ${res}  Id
+    ${path}=  GlobalAPI.Get Path  ${recordPath_opp}
     DataRecorder.Register in file  ${path}  ${id}
-    GlobalAPI.WriteBox  NEW QUOTE  ${res}
+    GlobalAPI.WriteBox  QUOTE CREATED  ${res}
     [Return]  ${res}
 
 ###
@@ -133,23 +116,17 @@ Create
 # -return(QuotesOjct): It is the data of the request modified.
 ###
 Modify
-    [Arguments]  ${quoteID}  ${dictData}  ${exp_code}=200
-    GlobalAPI.Write  MODIFYING QUOTE ---------------
-    GlobalAPI.WriteBox  New data  ${dictData}
+    [Arguments]  ${id}  ${dictData}
+    GlobalAPI.Action  MODIFYING QUOTE ---------------
+    GlobalAPI.WriteBox  New Opportunity data  ${dictData}
     ${body}=  Set Variable  ${dictData}
-    ${response}=  PUT request  ${quoteID}  ${dictData}
-    ${response}=  DELETE request  ${oppID}
-    IF  ${response.status_code} != ${exp_code}
-        ${msg}=  Set Variable  Wrong expected code. Expectected code ${exp_code}, but the current code is ${response.status_code}
-        GlobalAPI.Failed  ${msg}
-    END
-    GlobalAPI.Verify the data exists for  ${response}  quote
-    # It convert the response body in a dictionary
+    ${response}=  PUT request  ${id}  ${dictData}
+    GlobalAPI.Verification PUT success  ${response.status_code}
+    GlobalAPI.WriteBox  Quote Modified Response  ${response.content}
+    GlobalAPI.Verify the data exists for  ${response}  description
     ${dictBody}=  Convert to dictionary  ${response.content}
     ${res}=  Get From Dictionary  ${dictBody}  data
-    ${res}=  Get From Dictionary  ${res}  quote
     ${res}=  QuoteAPI_ext.create from data  ${res}
-    GlobalAPI.WriteBox  QUOTE MODIFIED  ${res}
     [Return]  ${res}
 ###
 # It delete an quote.
@@ -201,20 +178,19 @@ Create from
     [Return]  ${res}
 ### 
 # It verify if a quote exists in the system.
-# -param  quoteID(String): It is the ID of the quote.
+# -param  id(String): It is the ID of the quote.
 # -return(bool): It is true if the quote exist in the system.
 ###
 Exists by ID
-    [Arguments]  ${quoteID}
-    ${response}=  GET request  ${quoteID}
-    ${status_code}=  Convert to string  ${response.status_code}
-    ${res}=  Set Variable  True
-    ${content}=  Convert to string   ${response.content}
-    IF  ${status_code} != ${http_success}
-        ${res}=  Set Variable  False
-    END
-    ${flag}=  GlobalAPI.String contains string  ${content}  "quote":null
-    IF  ${flag} == True
-        ${res}=  Set Variable  False
-    END
-    [Return]  ${res}    
+    [Arguments]  ${id}
+    GlobalAPI.Action  GETTING QUOTE ----------------
+    GlobalAPI.Write  Get data of the quote ID: ${id}
+    ${response}=  GET request  ${id}
+    GlobalAPI.Verification GET success  ${response.status_code} 
+    ${dictBody}=  Convert to dictionary  ${response.content}
+    GlobalAPI.WriteBox  Quote data getted  ${dictBody}
+    ${res}=  Get From Dictionary  ${dictBody}  data
+    ${res}=  QuoteAPI_ext.Create from data  ${res}
+    GlobalAPI.Object attribute should exists  ${res}  id
+    [Return]  ${res}
+

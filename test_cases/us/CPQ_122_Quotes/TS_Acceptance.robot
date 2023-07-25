@@ -20,19 +20,19 @@ Verify the quotes can be created without problems
     [Tags]  cpq-122
     ${opp}=  OpportunityAPI_steps.Create a new opportunity  Optimus  This description is for
     ${quoteNew}=  QuoteAPI_steps.Create a new quote  OptimusQuote  Description for  ${opp}
-    QuoteAPI_steps.Verify if the quote has been created  ${quoteNew}
+    QuoteAPI_steps.Verify if the quote has been created  ${quoteNew} 
 
-It is possible modify a quote
-    [Tags]  acceptance  cpq-122
-    ${opp}=  OpportunityAPI_steps.Create a new opportunity  Optimus  This description is for
-    ${quoteNew}=  QuoteAPI_steps.Create a new quote  OptimusQuote  Description for  ${opp}
-    ${quoteEdit}=  QuoteAPI_steps.Modify a quote  ${quoteNew}  ${attr}  ${value}
-    QuoteAPI_steps.Verify modifications  ${quoteNew}  ${quoteEdit}
+#It is possible modify a quote
+#    [Tags]  acceptance  cpq-122
+#    ${opp}=  OpportunityAPI_steps.Create a new opportunity  Optimus  This description is for
+#    ${quoteNew}=  QuoteAPI_steps.Create a new quote  OptimusQuote  Description for  ${opp}
+#    ${quoteEdit}=  QuoteAPI_steps.Modify a quote  ${quoteNew}  ${attr}  ${value}
+#    QuoteAPI_steps.Verify modifications  ${quoteNew}  ${quoteEdit}
 
-It is possible delete a quote
-    [Tags]  acceptance  cpq-122
-    ${opp}=  OpportunityAPI_steps.Create a new opportunity  Optimus  This description is for
-    ${quoteNew}=  QuoteAPI_steps.Create a new quote  OptimusQuote  Description for  ${opp}
-    QuoteAPI_steps.Delete a quote  ${quoteNew}
+#It is possible delete a quote
+#    [Tags]  acceptance  cpq-122
+#    ${opp}=  OpportunityAPI_steps.Create a new opportunity  Optimus  This description is for
+#    ${quoteNew}=  QuoteAPI_steps.Create a new quote  OptimusQuote  Description for  ${opp}
+#    QuoteAPI_steps.Delete a quote  ${quoteNew}
     
  

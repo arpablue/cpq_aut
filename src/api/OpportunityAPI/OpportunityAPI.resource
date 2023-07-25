@@ -30,7 +30,6 @@ GET request
     [Arguments]  ${opportunityID}
     ${headers}=  Create Dictionary  Authorization=${token}
     ${response}=  GET On Session  ${SessionAPI}  ${endPoint_opp}/${opportunityID}  headers=${headers}  expected_status=any
-    #GlobalAPI.WriteBox  OPPORTUNITY GET Response  ${response.content }
     [Return]  ${response}
 
 ###
@@ -100,13 +99,13 @@ Exists by ID
     [Return]  ${res}    
 ###
 # It return the data related to an opportunity.
-# -param opportunityID(string): it is the ID of the opportunity.
+# -param id(string): it is the ID of the opportunity.
 # -return(dictionary): It return a dicttionary related to the opportunity.
 Get Info
-    [Arguments]  ${opportunityID}
+    [Arguments]  ${id}
     GlobalAPI.Action  GETTING OPPORTUNITY ----------------
-    GlobalAPI.Write  Get data of the opportunity ID: ${opportunityID}
-    ${response}=  GET request  ${opportunityID}
+    GlobalAPI.Write  Get data of the opportunity ID: ${id}
+    ${response}=  GET request  ${id}
     GlobalAPI.Verification GET success  ${response.status_code} 
     ${dictBody}=  Convert to dictionary  ${response.content}
     GlobalAPI.WriteBox  Opportunity data getted  ${dictBody}
@@ -151,18 +150,18 @@ Create
     [Return]  ${res}
 ###
 # It modify an opportunity using a dictionary to specify the data that will be modified.
-# -param opportunityID(String): It is the id of the opportunity to be modified.
+# -param id(String): It is the id of the opportunity to be modified.
 # -param dictData(dictionary): It is the dictionary with the attributes and values to be modified.
 # -return(OpportunityOjct): It is the data of the request modified.
 ###
 Modify
-    [Arguments]  ${opportunityID}  ${dictData}
+    [Arguments]  ${id}  ${dictData}
     GlobalAPI.Action  MODIFYING OPPORTUNITY ---------------
     GlobalAPI.WriteBox  New Opportunity data  ${dictData}
     ${body}=  Set Variable  ${dictData}
-    ${response}=  PUT request  ${opportunityID}  ${dictData}
+    ${response}=  PUT request  ${id}  ${dictData}
     GlobalAPI.Verification PUT success  ${response.status_code}
-    GlobalAPI.WriteBox  Opportunity Modify Response  ${response.content}
+    GlobalAPI.WriteBox  Opportunity Modified Response  ${response.content}
     GlobalAPI.Verify the data exists for  ${response}  description
     ${dictBody}=  Convert to dictionary  ${response.content}
     ${res}=  Get From Dictionary  ${dictBody}  data
