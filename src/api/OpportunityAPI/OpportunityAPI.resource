@@ -142,7 +142,6 @@ Create
     # It convert the response body in a dictionary
     ${dictBody}=  Convert to dictionary  ${response.content}
     ${res}=  Get From Dictionary  ${dictBody}  data
-    #${res}=  Get From Dictionary  ${res}  opportunity
     ${res}=  OpportunityAPI_ext.create from data  ${res}
     ${id}=  GlobalAPI.Object get attribute  ${res}  Id
     ${path}=  GlobalAPI.Get Path  ${recordPath_opp}
@@ -200,6 +199,20 @@ Compare
     ${flag}=  GlobalAPI.Objects Compare  ${oppA}  ${oppB}
     [Return]  ${flag}
 ###
+# It is a flexible comparison. Both objects could have differents numbers of atributes,
+# but all attributes of the first object should be exists in the second object and they 
+# they should have the same values.
+# -param oppA(OpportunityObj) : It is the first opportunities to be compared.
+# -param oppB(OpportunityObj) :It is the second opportunity to be compared.
+###
+Compare attrs
+    [Arguments]  ${oppA}  ${oppB}
+    GlobalAPI.Action  Compare Opportunities
+    GlobalAPI.WriteBox  Opportunity A  ${oppA}
+    GlobalAPI.WriteBox  Opportunity B  ${oppB}
+    ${flag}=  GlobalAPI.Objects Compare attrs  ${oppA}  ${oppB}
+    [Return]  ${flag}
+###
 # It is a strict comparison. Both objects should have the same number of attributes,
 # the same attributes and the same values.
 # -param oppA(OpportunityObj) : It is the first opportunities to be compared.
@@ -228,5 +241,5 @@ Get quotes from
 ###
 Get quotes quantity from
     [Arguments]  ${opp}
-    ${res}=  OpportunityAPI_ext.Get quote quantity  ${opp}
+    ${res}=  OpportunityAPI_ext.Get quotes quantity  ${opp}
     [Return]  ${res}

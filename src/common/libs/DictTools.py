@@ -137,7 +137,6 @@ class DictTools:
     ###
     @keyword
     def object_get_attribute( self, obj, attr):
-        
         if obj == None:
             self.mGlobal.warning("It is not possible get a value of an attribute for a None object.")
             return None
@@ -149,6 +148,19 @@ class DictTools:
         value = obj.get( attr )
         self.mGlobal.write( "Getting attribute: " + str( attr) + " = " + str( value ) )
         return value
+    @keyword
+    def object_set_attribute( self, obj, attr, value):
+        if obj == None:
+            self.mGlobal.warning("It is not possible get a value of an attribute for a None object.")
+            return None
+        if attr == None:
+            self.mGlobal.warning("It is not poissible get an attribute when this attribute is none value.")
+            return None
+        
+        attr = attr.capitalize()
+        obj.set( attr , value)
+        self.mGlobal.write( "Setting attribute: " + str( attr) + " = " + str( value ) )
+        
     ####
     # It verify is an attribute exists in an object, the attribute is capitalized to verify if the object exists.
     # -param obj(BaseObj): It is the object where the attribute will be verified.

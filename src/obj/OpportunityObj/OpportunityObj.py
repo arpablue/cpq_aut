@@ -23,6 +23,7 @@ class OpportunityObj( BaseObj ):
     # -params dictData(dictionary): It is the data used by the quote, by default is empty.
     ###
     def __init__(self, dictData = {}) -> None:
+        super().__init__( dictData )
         self.mAttrs = dictData
         if self.mAttrs == None :
             self.mAttrs = {}

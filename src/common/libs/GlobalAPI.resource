@@ -136,7 +136,7 @@ Convert to dictionary
 # -param objB(DataObj): it is the second object to be compared.
 # -return(Bool): It is True then the second object have the same elements that the forst element.
 ####
-Objects Should be equals
+Objects should be equals
     [Arguments]  ${objA}  ${objB}
     ${res}=  GlobalTools.objects are equals  ${objA}  ${objB}
     [Return]  ${res}
@@ -148,7 +148,7 @@ Objects Should be equals
 # -param objB(DataObj): it is the second object to be compared.
 # -return(Bool): It is True then the second object have the same elements that the forst element.
 ####
-Object compare
+Objects compare
     [Arguments]  ${objA}  ${objB}
     ${res}=  GlobalTools.Object Compare  ${objA}  ${objB}
     [Return]  ${res}
@@ -159,7 +159,7 @@ Object compare
 # -param objB(DataObj): it is the second object to be compared.
 # -return(Bool): It is True then the second object have the same elements that the forst element.
 ####
-Object compare attrs
+Objects compare attrs
     [Arguments]  ${objA}  ${objB}
     ${res}=  GlobalTools.Object Compare Attrs  ${objA}  ${objB}
     [Return]  ${res}
@@ -237,6 +237,10 @@ Object get attribute
     [Arguments]  ${object}  ${attribute}
     ${value}=  DictTools.Object Get Attribute  ${object}  ${attribute}
     [Return]  ${value}
+
+Object set attribute
+    [Arguments]  ${object}  ${attribute}  ${value}
+     DictTools.Object Set Attribute  ${object}  ${attribute}  ${value}
 ###
 # It returnt the vaue of attribute from an object. If the attribute not exist then return None.
 # -param object(DataObj): It is the object where get the atribute value.

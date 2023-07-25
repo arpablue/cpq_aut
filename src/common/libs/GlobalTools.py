@@ -42,7 +42,7 @@ class GlobalTools:
         contexts = ContextList()
         self.mContext = contexts.get_context( self.mExeutionContext )
     ###
-    #
+    # It load the globals var of the projects in the config.yml file.
     ##
     def load_global_vars( self ):
         pathFile = self.get_prj_folder('config.yml')
@@ -69,7 +69,7 @@ class GlobalTools:
     # -param target(any): It is the a variable.
     # -return(string): It is the string with type of the variable.
     @keyword
-    def Get_type(self, target ):
+    def get_type(self, target ):
         return type( target ) 
     ###
     # It return a value of an attribute of an object, if the attribute not exists then return None.

@@ -83,7 +83,7 @@ class OpportunityAPI_ext:
     # -return(Int): It is the quantity of quotes related to the current opportunity.
     ###
     @keyword
-    def  get_quote_quantity(self, opp):
+    def  get_quotes_quantity(self, opp):
         if opp == None:
             return 0
         return opp.quotes_quantity()

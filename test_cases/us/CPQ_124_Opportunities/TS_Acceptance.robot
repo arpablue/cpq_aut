@@ -24,26 +24,26 @@ It is possible creating a new opportunity
     [Tags]  cpq-124
     OpportunityAPI_steps.Prepare requierements
     ${oppNew}=  OpportunityAPI_steps.Create a random opportunity
-    #OpportunityAPI_steps.Verify if the opportunity has been created  ${oppNew}
+    OpportunityAPI_steps.Verify if the opportunity has been created  ${oppNew}
 
 ###
 # It verify that is that a opportunity can be modified.
 ###
-#It is possible modify an opportunity
-#    [Tags]  acceptance  cpq-124
-#    OpportunityAPI_steps.Prepare requierements
-#    ${oppNew}=  OpportunityAPI_steps.Create a random opportunity
-#    ${oppEdit}=  OpportunityAPI_steps.Modify an opportunity  ${oppNew}
-#    OpportunityAPI_steps.Verify the modifications  ${oppNew}  ${oppEdit}
+It is possible modify an opportunity
+    [Tags]  acceptance  cpq-124
+    OpportunityAPI_steps.Prepare requierements
+    ${oppNew}=  OpportunityAPI_steps.Create a random opportunity
+    ${oppEdit}=  OpportunityAPI_steps.Modify an opportunity  ${oppNew}
+    OpportunityAPI_steps.Verify the modifications  ${oppNew}  ${oppEdit}
 
 ###
 # It create an an opportunity and verify that it is possible ddelete.
 # The opportunity created doesn't have relation with another modules.
 ###
-#It is possible delete an opportunity
-#    [Tags]  acceptance  cpq-124
-#    OpportunityAPI_steps.Prepare requierements
-#    ${oppNew}=  OpportunityAPI_steps.Create a random opportunity
-#    OpportunityAPI.Delete  ${oppNew}
-#    OpportunityAPI_steps.Verify the opportunity should not exist  ${oppNew}
+It is possible delete an opportunity
+    [Tags]  acceptance  cpq-124
+    OpportunityAPI_steps.Prepare requierements
+    ${oppNew}=  OpportunityAPI_steps.Create a random opportunity
+    OpportunityAPI.Delete  ${oppNew}
+    OpportunityAPI_steps.Verify the opportunity should not exist  ${oppNew}
 

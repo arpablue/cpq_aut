@@ -42,7 +42,7 @@ It is not possible delete opportunity with is associated with one quote
 Create an opportunity
     [Arguments]  ${text}
     GlobalAPI.Step  Create an text
-    &{data}=  Create Dictionary  name=Optimus_${text}  description=Description for Optimus_${text}
+    &{data}=  Create Dictionary  name=Optimus_${text}  Description=Description for Optimus_${text}
     ${obj}=  OpportunityAPI.Create  ${data}
     [Return]  ${obj}
 ###
@@ -73,7 +73,7 @@ Quote - verify been delete for the opportunity
     GlobalAPI.Step  Quote - verify been delete for the opportunity
     ${isPassed}=  Set Variable  True
     FOR  ${quote}  IN  @{quoteList}
-        ${id}=  GlobalAPI.Object get attribute  ${quote}  id
+        ${id}=  GlobalAPI.Object get attribute  ${quote}  Id
         ${flag}=  QuoteAPI.Exists by ID  ${id}
         IF  ${flag} == False
             GlobalAPI.Success  The Quote[${id}] has been deleted.
@@ -95,7 +95,7 @@ Quote - Create quotes for opportunity
     IF  ${qty} < 1
         GlobalAPI.Failed  It is not possible create quotes for an opportunity, because the quantity is [${qty}]
     END
-    ${id}=  GlobalAPI.Object get attribute  ${opp}  id
+    ${id}=  GlobalAPI.Object get attribute  ${opp}  Id
     ${quotes}=  Create List
     FOR  ${pos}  IN RANGE  ${qty}
         GlobalAPI.Step  +++ ${pos}) Creating quote for the opportunity[${id}]
@@ -117,7 +117,7 @@ QuoteLine - Create QuoteLines for a quote
     IF  ${qty} < 1
         GlobalAPI.Failed  It is not possible create QuoteLines for a quote, because the quantity is [${qty}]
     END
-    ${id}=  GlobalAPI.Object get attribute  ${quote}  id
+    ${id}=  GlobalAPI.Object get attribute  ${quote}  Id
     ${qls}=  Create List
     FOR  ${pos}  IN RANGE  ${qty}
         GlobalAPI.Step  +++ ${pos}) Creating QuoteLines for the quote[${id}]
