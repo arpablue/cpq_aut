@@ -140,12 +140,10 @@ Modify an opportunity
 # -param oppInfo(QuoteObj): It is the opportunity to be delete.
 ###
 Delete an opportunity
-    [Arguments]  ${oppInfo}
+    [Arguments]  ${obj}
     GlobalAPI.Step  Delete an opportunity
-    ${oppID}=  GlobalAPI.Object get attribute  ${oppInfo}  Id
-    #### Upate Opportunity
-    ${oppEdit}=  OpportunityAPI.Delete  ${oppID}
-    [Return]  ${oppEdit}
+    ${res}=  OpportunityAPI.Delete  ${obj}
+    [Return]  ${res}
 
 ###
 # It verify that a object has been modified.

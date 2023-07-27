@@ -56,12 +56,17 @@ class GlobalTools:
     # -param substr: It is string to search in another string.
     # -return(bool): It is true if the str contains the substr.
     @keyword
-    def string_contains_substr( self, str, substr):
-        if str == None:
+    def string_contains_substr( self, strg, substrg):
+        if strg == None:
             return False
-        if substr == None:
+        if substrg == None:
             return False
-        if str.find( substr ) > 0 :
+        strg = str( strg )
+        substrg = str( substrg )
+        substrg = substrg.strip()
+        flag =  strg.find( strg )
+        flag = flag > -1
+        if  flag  :
             return True
         return False
     ###

@@ -80,7 +80,8 @@ Failed
 ###
 WriteBox
     [Arguments]  ${title}  ${text}
-    Write  ================ ${title} ================
+    ${kind}=  Type of  ${text}
+    Write  ================ ${title}(${kind}) ================
     Write  ${text}
     Write  =========================================
 ############################## eneral methods ######################
@@ -312,7 +313,7 @@ Validate code
 
 Get code for
     [Arguments]  ${code_name}
-    ${res} = GlobalTools.Get code for  ${code_name}
+    ${res}=  GlobalTools.Get code for  ${code_name}
     [return]  ${res}
 Verification GET success
     [Arguments]  ${code}

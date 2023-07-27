@@ -130,22 +130,25 @@ Modify
     [Return]  ${res}
 ###
 # It delete an quote.
-# -param quoteID(String): It is the id of the quote to be deleted.
-# -param exp_code(String)= It is the expected code of the requests, if the expected request is different to this a fail is reqised, the default response code is 200.
+# -param quoteID(QuoteObj): It is the id of the quote to be deleted.
+# -param exp_code(String): It is the expected code of the requests, if the expected request is different to this a fail is reqised, the default response code is 200.
+# -return(Bool): It is True if the quote has been deleted.
 ###
 Delete 
-    [Arguments]  ${quoteID}  ${exp_code}=200
-    GlobalAPI.Write  DELETING QUOTE ---------------
-    GlobalAPI.Write  Deleting quote for: ${quoteID}
-    ${response}=  DELETE request  ${quoteID}
-    ${response}=  DELETE request  ${oppID}
-    IF  ${response.status_code} != ${exp_code}
-        ${msg}=  Set Variable  Wrong expected code. Expectected code ${exp_code}, but the current code is ${response.status_code}
-        GlobalAPI.Failed  ${msg}
+    [Arguments]  ${obj}
+    GlobalAPI.Action  DELETING OPPORTUNITY ---------------
+    ${id}=  GlobalAPI.Object get attribute  ${obj}  Id
+    ${response}=  DELETE request  ${id}
+    GlobalAPI.Verification DELETE success  ${response.status_code} 
+    ${content}=  Convert to string   ${response.content}
+    ${flag}=  GlobalAPI.String contains string  ${content}  "success": true
+    IF  ${flag} == False
+        GlobalAPI.WriteBox  DELETE Response  ${content}
+        GlobalAPI.Error   The ${id} has not been deleted.
     END
-    ${dictBody}=  Convert to dictionary  ${response.content}
-    ${res}=  Get From Dictionary  ${dictBody}  data
-    [Return]  ${res}
+    #${strContent}=  Convert To String  ${response.content}
+    #${res}=  Convert to dictionary  ${response.content}
+    [Return]  ${flag}
 ###
 # It is a flexible comparison. Both objects could have differents numbers of attributes,
 # but all attributes of the first object should be exists in the second object and they 

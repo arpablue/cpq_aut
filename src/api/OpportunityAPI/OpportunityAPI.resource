@@ -173,10 +173,10 @@ Modify
 # -return(Dictionary): It is the data of the request.
 ###
 Delete 
-    [Arguments]  ${opp}
+    [Arguments]  ${obj}
     GlobalAPI.Action  DELETING OPPORTUNITY ---------------
-    ${oppID}=  GlobalAPI.Object get attribute  ${opp}  Id
-    ${response}=  DELETE request  ${oppID}
+    ${id}=  GlobalAPI.Object get attribute  ${obj}  Id
+    ${response}=  DELETE request  ${id}
     GlobalAPI.Verification DELETE success  ${response.status_code} 
     ${content}=  Convert to string   ${response.content}
     Should Not Contain  ${content}  "success": true

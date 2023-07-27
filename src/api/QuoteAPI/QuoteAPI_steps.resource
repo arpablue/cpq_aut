@@ -139,11 +139,10 @@ Verify modifications
 # -param quoteInfo(QuoteObj): It is the opportunity to be delete.
 ###
 Delete a Quote
-    [Arguments]  ${quoteInfo}
+    [Arguments]  ${obj}
     GlobalAPI.Step  Delete an opportunity
-    ${oppID}=  GlobalAPI.Object get attribute  ${quoteInfo}  Id
-    ${quoteEdit}=  QuoteAPI.Delete  ${oppID}
-    [Return]  ${quoteEdit}
+    ${res}=  QuoteAPI.Delete  ${obj}
+    [Return]  ${res}
 
 # It verify if a qUoteLine exists or not.
 # -params quote(QuoteObj): It is the QuoteLine object to verify if ecists.
