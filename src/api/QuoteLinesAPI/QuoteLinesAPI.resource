@@ -22,14 +22,13 @@ ${recordPath_QuoteLiness}  resources/records/QuoteLiness_created.dat
 ####################################################### HTTP REQUESTS #######################################################
 ###
 # It made a GET reques to the REST api service and return the response of the request.
-# -param QuoteLinesID(String): It is the id of the QuoteLines to get the data.
+# -param id(String): It is the id of the QuoteLines to get the data.
 # -return(response): TI is the response of the request.
 ###
 GET request
-    [Arguments]  ${QuoteLinesID}
+    [Arguments]  ${id}
     ${headers}=  Create Dictionary  Authorization=${token}
-    ${response}=  GET On Session  ${SessionAPI}  ${endPoint_QuoteLines}/${QuoteLinesID}  ${headers}
-    #GlobalAPI.WriteBox  QuoteLines GET Response  ${response.content }
+    ${response}=  GET On Session  ${SessionAPI}  ${endPoint_QuoteLines}/${id}  ${headers}
     [Return]  ${response}
 
 ###
@@ -41,31 +40,29 @@ POST request
     [Arguments]  ${dictData}
     &{headers}=  Create Dictionary  Content-Type=${content_type}  Application=${application}  Authorization=${token}    # It does a POST request
     ${response}=  POST On Session  ${SessionAPI}  ${endPoint_QuoteLines}  headers=${headers}  json=${dictData}
-    #GlobalAPI.WriteBox  QuoteLines POST Response  ${response.content }
     [Return]  ${response}
 
 ###
 # It is the execution of a PUT request to the QuoteLines endpoint.
-# -param quoteID(String): It is the id of the QuoteLines to be modified.
+# -param id(String): It is the id of the QuoteLines to be modified.
 # -param dictData(dictionary): It is the dictionary with the data to be modified, the atributes as keys and values.
 # -return(response): It is the response object from the PUT request.
 ###
 PUT request
-    [Arguments]  ${QuoteLinesID}  ${dictData}
+    [Arguments]  ${id}  ${dictData}
     &{headers}=  Create Dictionary  Content-Type=${content_type}  Application=${application}  Authorization=${token}
-    ${response}=  PUT On Session  ${SessionAPI}  url=${endPoint_QuoteLines}/${QuoteLinesID}  headers=${headers}  json=${dictData}
-    #GlobalAPI.WriteBox  QuoteLines PUT Response  ${response.content }
+    ${response}=  PUT On Session  ${SessionAPI}  url=${endPoint_QuoteLines}/${id}  headers=${headers}  json=${dictData}
     [Return]  ${response}
 
 ###
 # It excute the DELETE request to the QuoteLines endopoint.
-# -param quoteID(string): It is the id of the QuoteLines to be deleted.
+# -param id(string): It is the id of the QuoteLines to be deleted.
 # -return(response): It is the reponse of the DELETE request.
 ###
 DELETE request
-    [Arguments]  ${QuoteLinesID}
+    [Arguments]  ${id}
     &{headers}=  Create Dictionary  Content-Type=${content_type}  Application=${application}  Authorization=${token}
-    ${response}=  DELETE On Session  ${SessionAPI}  ${endPoint_QuoteLines}/${QuoteLinesID}  headers=${headers}
+    ${response}=  DELETE On Session  ${SessionAPI}  ${endPoint_QuoteLines}/${id}  headers=${headers}
     #GlobalAPI.WriteBox  QuoteLines DELETE Response  ${response.content }
     [Return]  ${response}
 ####################################################### ACTIONS #######################################################

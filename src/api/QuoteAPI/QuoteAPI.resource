@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  This manage the events relate to the endpoint related to the opportunities.
+Documentation  This manage the events relate to the endpoint related to the Quotes.
 
 Library    RequestsLibrary
 Library    Collections
@@ -40,32 +40,29 @@ POST request
     [Arguments]  ${dictData}
     &{headers}=  Create Dictionary  Content-Type=${content_type}  Application=${application}  Authorization=${token}
     ${response}=  POST On Session  ${SessionAPI}  ${endPoint_quote}  headers=${headers}  json=${dictData}
-    #GlobalAPI.WriteBox  QUOTE POST Response  ${response.content }
     [Return]  ${response}
 
 ###
 # It is the execution of a PUT request to the quote endpoint.
-# -param oppID(String): It is the id of the quote to be modified.
+# -param id(String): It is the id of the quote to be modified.
 # -param dictData(dictionary): It is the dictionary with the data to be modified, the atributes as keys and values.
 # -return(response): It is the response object from the PUT request.
 ###
 PUT request
-    [Arguments]  ${quoteID}  ${dictData}
+    [Arguments]  ${id}  ${dictData}
     &{headers}=  Create Dictionary  Content-Type=${content_type}  Application=${application}  Authorization=${token}
-    ${response}=  PUT On Session  ${SessionAPI}  url=${endPoint_quote}/${quoteID}  headers=${headers}  json=${dictData}
-    #GlobalAPI.WriteBox  QUOTE PUT Response  ${response.content }
+    ${response}=  PUT On Session  ${SessionAPI}  url=${endPoint_quote}/${id}  headers=${headers}  json=${dictData}
     [Return]  ${response}
 
 ###
 # It excute the DELETE request to the quote endopoint.
-# -param oppID(string): It is the id of the quote to be deleted.
+# -param id(string): It is the id of the quote to be deleted.
 # -return(response): It is the reponse of the DELETE request.
 ###
 DELETE request
-    [Arguments]  ${quoteID}
+    [Arguments]  ${id}
     &{headers}=  Create Dictionary  Content-Type=${content_type}  Application=${application}  Authorization=${token}
-    ${response}=  DELETE On Session  ${SessionAPI}  ${endPoint_quote}/${quoteID}  headers=${headers}
-    #GlobalAPI.WriteBox  QUOTE DELETE Response  ${response.content }
+    ${response}=  DELETE On Session  ${SessionAPI}  ${endPoint_quote}/${id}  headers=${headers}
     [Return]  ${response}
 ####################################################### ACTIONS #######################################################
 ###
@@ -75,24 +72,24 @@ DELETE request
 # -return(dictionary): It return a dicttionary related to the quote.
 Get Info
     [Arguments]  ${id}
-    GlobalAPI.Action  GETTING OPPORTUNITY ----------------
-    GlobalAPI.Write  Get data of the opportunity ID: ${id}
+    GlobalAPI.Action  GETTING QUOTE ----------------
+    GlobalAPI.Write  Get data of the QUOTE ID: ${id}
     ${response}=  GET request  ${id}
     GlobalAPI.Verification GET success  ${response.status_code} 
     ${dictBody}=  Convert to dictionary  ${response.content}
-    GlobalAPI.WriteBox  Opportunity data getted  ${dictBody}
+    GlobalAPI.WriteBox  QUOTE data getted  ${dictBody}
     ${res}=  Get From Dictionary  ${dictBody}  data
-    ${res}=  OpportunityAPI_ext.Create from data  ${res}
+    ${res}=  QUOTEAPI_ext.Create from data  ${res}
     GlobalAPI.Object attribute should exists  ${res}  id
     [Return]  ${res}
 ###
-# It add a new opportunity it have as parameter a dictionary wiht the data for the opportunity
-# -param dictData(dictionary): It is a dictionary with the data of the new oppportunity
-#        Ex:  ${dictData}=  Create Dictionary  name=Jazz Test  description=Test Opportunity  currencyIsoCode=USD
+# It add a new QUOTE it have as parameter a dictionary wiht the data for the QUOTE
+# -param dictData(dictionary): It is a dictionary with the data of the new quote.
+#        Ex:  ${dictData}=  Create Dictionary  name=Jazz Test  description=Test QUOTE  currencyIsoCode=USD
 # -param exp_code(String)= It is the expected code of the requests, if the expected request is different to this a fail is reqised, the default response code is 200.
 ###
 Create
-    [Arguments]  ${dictData}  ${exp_code}=200
+    [Arguments]  ${dictData}
     GlobalAPI.Write  CREATING QUOTE ----------------
     GlobalAPI.WriteBox  Data for the new quote  ${dictData}
     ${response}=  POST request  ${dictData}
@@ -103,7 +100,7 @@ Create
     ${res}=  Get From Dictionary  ${dictBody}  data
     ${res}=  QuoteAPI_ext.create from data  ${res}
     ${id}=  GlobalAPI.Object get attribute  ${res}  Id
-    ${path}=  GlobalAPI.Get Path  ${recordPath_opp}
+    ${path}=  GlobalAPI.Get Path  ${recordPath_quotes}
     DataRecorder.Register in file  ${path}  ${id}
     GlobalAPI.WriteBox  QUOTE CREATED  ${res}
     [Return]  ${res}
@@ -111,14 +108,14 @@ Create
 ###
 # It modify an quotes using a dictionary to specify the data that will be modified.
 # -param quotesID(String): It is the id of the quotes to be modified.
-# -param dictData(dictionary): It is the dictionary with the attributes and values to be modified.
+# -param dictData(Dictionary): It is the dictionary with the attributes and values to be modified.
 # -param exp_code(String)= It is the expected code of the requests, if the expected request is different to this a fail is reqised, the default response code is 200.
 # -return(QuotesOjct): It is the data of the request modified.
 ###
 Modify
     [Arguments]  ${id}  ${dictData}
     GlobalAPI.Action  MODIFYING QUOTE ---------------
-    GlobalAPI.WriteBox  New Opportunity data  ${dictData}
+    GlobalAPI.WriteBox  New Quote data  ${dictData}
     ${body}=  Set Variable  ${dictData}
     ${response}=  PUT request  ${id}  ${dictData}
     GlobalAPI.Verification PUT success  ${response.status_code}
@@ -130,13 +127,13 @@ Modify
     [Return]  ${res}
 ###
 # It delete an quote.
-# -param quoteID(QuoteObj): It is the id of the quote to be deleted.
+# -param obj(QuoteObj): It is the id of the quote to be deleted.
 # -param exp_code(String): It is the expected code of the requests, if the expected request is different to this a fail is reqised, the default response code is 200.
 # -return(Bool): It is True if the quote has been deleted.
 ###
 Delete 
     [Arguments]  ${obj}
-    GlobalAPI.Action  DELETING OPPORTUNITY ---------------
+    GlobalAPI.Action  DELETING QUOTE ---------------
     ${id}=  GlobalAPI.Object get attribute  ${obj}  Id
     ${response}=  DELETE request  ${id}
     GlobalAPI.Verification DELETE success  ${response.status_code} 
@@ -153,22 +150,22 @@ Delete
 # It is a flexible comparison. Both objects could have differents numbers of attributes,
 # but all attributes of the first object should be exists in the second object and they 
 # they should have the same values.
-# -param quoteA(QuoteObj) : It is the first quote to be compared.
-# -param quoteB(QuoteObj) :It is the second quote to be compared.
+# -param objA(QuoteObj) : It is the first quote to be compared.
+# -param objB(QuoteObj) :It is the second quote to be compared.
 ###
 Compare
-    [Arguments]  ${quoteA}  ${quoteB}
-    ${flag}=  QuoteAPI_ext.Compare  ${quoteA}  ${quoteB}
+    [Arguments]  ${objA}  ${objB}
+    ${flag}=  QuoteAPI_ext.Compare  ${objA}  ${objB}
     [Return]  ${flag}
 ###
 # It is a strict comparison. Both objects should have the same number of attributes,
 # the same attributes and the same values.
-# -param oppA(QuoteObj) : It is the first quote to be compared.
-# -param oppB(QuoteObj) :It is the second quote to be compared.
+# -param objA(QuoteObj) : It is the first quote to be compared.
+# -param objB(QuoteObj) :It is the second quote to be compared.
 ###
 Equal
-    [Arguments]  ${quoteA}  ${quoteB}
-    ${flag}=  QuoteAPI_ext.Equal  ${quoteA}  ${quoteB}
+    [Arguments]  ${objA}  ${objB}
+    ${flag}=  QuoteAPI_ext.Equal  ${objA}  ${objB}
     [Return]  ${flag}
 ###
 # It create a quote from a dictionary.
@@ -182,7 +179,7 @@ Create from
 ### 
 # It verify if a quote exists in the system.
 # -param  id(String): It is the ID of the quote.
-# -return(bool): It is true if the quote exist in the system.
+# -return(Bool): It is true if the quote exist in the system.
 ###
 Exists by ID
     [Arguments]  ${id}
