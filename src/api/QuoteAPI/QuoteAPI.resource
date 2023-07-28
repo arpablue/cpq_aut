@@ -158,6 +158,17 @@ Compare
     ${flag}=  QuoteAPI_ext.Compare  ${objA}  ${objB}
     [Return]  ${flag}
 ###
+# It is a flexible comparison. Both objects could have differents numbers of attributes,
+# but all attributes of the first object should be exists in the second object and they 
+# they should have the same values.
+# -param objA(QuoteObj) : It is the first quote to be compared.
+# -param objB(QuoteObj) :It is the second quote to be compared.
+###
+Compare attrs
+    [Arguments]  ${objA}  ${objB}
+    ${flag}=  QuoteAPI_ext.Compare attrs  ${objA}  ${objB}
+    [Return]  ${flag}
+###
 # It is a strict comparison. Both objects should have the same number of attributes,
 # the same attributes and the same values.
 # -param objA(QuoteObj) : It is the first quote to be compared.
