@@ -21,8 +21,8 @@ Resource    ../../../src/api/QuoteLinesAPI/QuoteLinesAPI.resource
 Created a QuoteLine
     [Arguments]  ${name}  ${quote}  ${productID}
     GlobalAPI.Step  Created a quote Lines
-    ${quoteID}=  GlobalAPI.Object get attribute  ${quote}  id
-    &{data}=  Create dictionary  name=${name}  parentQuoteId=${quoteID}  productId=${productID}
+    ${quoteID}=  GlobalAPI.Object get attribute  ${quote}  Id
+    &{data}=  Create dictionary  Name=${name}  ParentQuoteId=${quoteID}  ProductId=${productID}  Quantity=3
     ${qlNew}=  QuoteLinesAPI.Create  ${data}
     [Return]  ${qlNew}
 ###
@@ -32,7 +32,7 @@ Created a QuoteLine
 Verify if the QuoteLine has been created
     [Arguments]  ${quote}
     GlobalAPI.Step  Verify if the QuoteLines has been created
-    ${id}=  GlobalAPI.Object get attribute  ${quote}  id
+    ${id}=  GlobalAPI.Object get attribute  ${quote}  Id
     ${flag}=  QuoteLinesAPI.Exists by ID  ${id}
     Should Be True  ${flag}
     ${quoteInf}=  QuoteLinesAPI.Get Info  ${id}
@@ -53,7 +53,7 @@ Verify if the QuoteLine has been created
 Modify a QuoteLine
     [Arguments]  ${quoteLineObj}  ${attr}  ${value}
     GlobalAPI.Step  Modify a quote
-    ${id}=  GlobalAPI.Object get attribute  ${quoteLineObj}  id
+    ${id}=  GlobalAPI.Object get attribute  ${quoteLineObj}  Id
     ${random}=  GlobalAPI.Generate number
     ${value}=  Replace String  ${value}  <value>  ${random}
     &{data}=  Create Dictionary  ${attr}=${value}
@@ -71,11 +71,11 @@ Verify the QuoteLine modifications
     ${attrsDif}=  GlobalAPI.Object get differences  ${qlInfo}  ${qlEdit}
     GlobalAPI.WriteBox  Attributes with differences  ${attrsDif}
     GlobalAPI.Object show attributes  ${qlInfo}  ${qlEdit}  ${attrsDif}
-    ${flag}=  GlobalAPI.Dictionary key exists  ${attrsDif}  modified_time
+    ${flag}=  GlobalAPI.Dictionary key exists  ${attrsDif}  ModifiedTime
     IF  ${flag} == False
         GlobalAPI.WriteBox  Attributes modified   ${attrsDif}
-        GlobalAPI.Failed  The [modified_time] attribute not exist in the when should exists.
-        Fail  The modified_time it is not present in the attributes modified when should be it.
+        GlobalAPI.Failed  The [ModifiedTime] attribute not exist in the when should exists.
+        Fail  The ModifiedTime it is not present in the attributes modified when should be it.
     END
     ${size}=  Get Length  ${attrsDif}
     Validations.Evaluate to be equals  2  ${size}  The quantity of attributes modified are not 2
@@ -86,8 +86,8 @@ Verify the QuoteLine modifications
 ###
 Delete a QuoteLine
     [Arguments]  ${quoteline}
-    GlobalAPI.Step  Delete an opportunity
-    ${qlID}=  GlobalAPI.Object get attribute  ${quoteline}  id
+    GlobalAPI.Step  Delete an QuoteLine
+    ${qlID}=  GlobalAPI.Object get attribute  ${quoteline}  Id
     ${qlEdit}=  QuoteLinesAPI.Delete  ${qlID}
     [Return]  ${qlEdit}
 ###
@@ -96,7 +96,7 @@ Delete a QuoteLine
 ###
 Verify the QuoteLine not exists  
     [Arguments]  ${ql}
-    ${id}=  GlobalAPI.Object get attribute  ${ql}  id
+    ${id}=  GlobalAPI.Object get attribute  ${ql}  Id
     ${flag}=  QuoteLinesAPI.Exists by ID  ${id}
     Validations.Evaluate to be equals  False  ${flag}  The QuoteLine still exists when it should be delete.
 

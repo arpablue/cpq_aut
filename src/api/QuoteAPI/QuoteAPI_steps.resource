@@ -11,8 +11,8 @@ Resource    ../../../src/api/QuoteAPI/QuoteAPI.resource
 *** Keywords ***
 
 # It create a quote to create a new quote in base an Quote.
-# -param name(Text): It is the name assigned to the quote.
-# -param description(text): It is the description for the quote.
+# -param name(String): It is the name assigned to the quote.
+# -param description(String): It is the description for the quote.
 # -param obj(QuoteObj): It is the Quote to create the quote.
 ###
 Create a new quote

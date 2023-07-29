@@ -110,7 +110,7 @@ Create
 # -param quotesID(String): It is the id of the quotes to be modified.
 # -param dictData(Dictionary): It is the dictionary with the attributes and values to be modified.
 # -param exp_code(String)= It is the expected code of the requests, if the expected request is different to this a fail is reqised, the default response code is 200.
-# -return(QuotesOjct): It is the data of the request modified.
+# -return(QuotesObj): It is the data of the request modified.
 ###
 Modify
     [Arguments]  ${id}  ${dictData}
@@ -143,8 +143,6 @@ Delete
         GlobalAPI.WriteBox  DELETE Response  ${content}
         GlobalAPI.Error   The ${id} has not been deleted.
     END
-    #${strContent}=  Convert To String  ${response.content}
-    #${res}=  Convert to dictionary  ${response.content}
     [Return]  ${flag}
 ###
 # It is a flexible comparison. Both objects could have differents numbers of attributes,

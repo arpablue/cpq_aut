@@ -23,18 +23,18 @@ ${recordPath_QuoteLiness}  resources/records/QuoteLiness_created.dat
 ###
 # It made a GET reques to the REST api service and return the response of the request.
 # -param id(String): It is the id of the QuoteLines to get the data.
-# -return(response): TI is the response of the request.
+# -return(Response): It is the response of the request.
 ###
 GET request
     [Arguments]  ${id}
     ${headers}=  Create Dictionary  Authorization=${token}
-    ${response}=  GET On Session  ${SessionAPI}  ${endPoint_QuoteLines}/${id}  ${headers}
+    ${response}=  GET On Session  ${SessionAPI}  ${endPoint_QuoteLines}/${id}  headers=${headers}
     [Return]  ${response}
 
 ###
 # It excute the POST request to the QuoteLines endopoint.
 # -param dictData(Dictionaty): It is a dictionary with the data used to be created.
-# -return(response): It is the reponse of the PORT request.
+# -return(Response): It is the reponse of the PORT request.
 ###
 POST request
     [Arguments]  ${dictData}
@@ -45,8 +45,8 @@ POST request
 ###
 # It is the execution of a PUT request to the QuoteLines endpoint.
 # -param id(String): It is the id of the QuoteLines to be modified.
-# -param dictData(dictionary): It is the dictionary with the data to be modified, the atributes as keys and values.
-# -return(response): It is the response object from the PUT request.
+# -param dictData(Dictionary): It is the dictionary with the data to be modified, the atributes as keys and values.
+# -return(Response): It is the response object from the PUT request.
 ###
 PUT request
     [Arguments]  ${id}  ${dictData}
@@ -56,176 +56,149 @@ PUT request
 
 ###
 # It excute the DELETE request to the QuoteLines endopoint.
-# -param id(string): It is the id of the QuoteLines to be deleted.
-# -return(response): It is the reponse of the DELETE request.
+# -param id(String): It is the id of the QuoteLines to be deleted.
+# -return(Response): It is the reponse of the DELETE request.
 ###
 DELETE request
     [Arguments]  ${id}
     &{headers}=  Create Dictionary  Content-Type=${content_type}  Application=${application}  Authorization=${token}
     ${response}=  DELETE On Session  ${SessionAPI}  ${endPoint_QuoteLines}/${id}  headers=${headers}
-    #GlobalAPI.WriteBox  QuoteLines DELETE Response  ${response.content }
     [Return]  ${response}
 ####################################################### ACTIONS #######################################################
 ###
-# It return the data related to a QuoteLines.
-# -param QuoteLinesID(string): it is the ID of the QuoteLines.
-# -param exp_code(String)= It is the expected code of the requests, if the expected request is different to this a fail is reqised, the default response code is 200.
-# -return(dictionary): It return a dicttionary related to the QuoteLines.
+# It return the data related to a quote line.
+# -param id(String): it is the ID of the Quote Line.
+# -return(Dictionary): It return a dicttionary related to the quote line.
 Get Info
-    [Arguments]  ${QuoteLinesID}  ${exp_code}=None
-    GlobalAPI.Action  QuoteLines GET INFO
-    GlobalAPI.Write  Getting data for QuoteLines ID: ${QuoteLinesID}
-    ${response}=  GET request  ${QuoteLinesID}
-    ${response}=  DELETE request  ${oppID}
-    IF  ${exp_code} == None
-        ${exp_code}=  Set Variable  ${http_success}
-    END
-    IF  ${response.status_code} != ${exp_code}
-        ${msg}=  Set Variable  Wrong expected code. Expectected code ${exp_code}, but the current code is ${response.status_code}
-        GlobalAPI.Failed  ${msg}
-    END
-    ${strContent}=  Convert To String  ${response.content}
-    Should Contain  ${strContent}  "id":
+    [Arguments]  ${id}
+    GlobalAPI.Action  GETTING QUOTE LINES ----------------
+    GlobalAPI.Write  Get data of the QUOTE LINES ID: ${id}
+    ${response}=  GET request  ${id}
+    GlobalAPI.Verification GET success  ${response.status_code} 
     ${dictBody}=  Convert to dictionary  ${response.content}
+    GlobalAPI.WriteBox  QUOTE LINES data getted  ${dictBody}
     ${res}=  Get From Dictionary  ${dictBody}  data
-    ${res}=  Get From Dictionary  ${res}  quoteLine
     ${res}=  QuoteLinesAPI_ext.Create from data  ${res}
+    GlobalAPI.Object attribute should exists  ${res}  id
     [Return]  ${res}
 ###
-# It add a new opportunity it have as parameter a dictionary wiht the data for the opportunity
-# -param dictData(dictionary): It is a dictionary with the data of the new oppportunity
-#        Ex:  ${dictData}=  Create Dictionary  name=Jazz Test  description=Test Opportunity  currencyIsoCode=USD
+# It add a new QUOTE LINE it have as parameter a dictionary wiht the data for the QUOTE LINE
+# -param dictData(Dictionary): It is a dictionary with the data of the new quote.
+#        Ex:  ${dictData}=  Create Dictionary  name=Jazz Test  description=Test QUOTE LINES  currencyIsoCode=USD
 # -param exp_code(String)= It is the expected code of the requests, if the expected request is different to this a fail is reqised, the default response code is 200.
 ###
 Create
-    [Arguments]  ${dictData}  ${exp_code}=None
-    GlobalAPI.Action  QuoteLines CREATING QUOTE LINES
+    [Arguments]  ${dictData}
+    GlobalAPI.Write  CREATING QUOTE LINES ----------------
+    GlobalAPI.WriteBox  Data for the new QUOTE LINES  ${dictData}
     ${response}=  POST request  ${dictData}
-    ${response}=  DELETE request  ${oppID}
-    IF  ${exp_code} == None
-        ${exp_code}=  Set Variable  ${http_success}
-    END
-    IF  ${response.status_code} != ${exp_code}
-        ${msg}=  Set Variable  Wrong expected code. Expectected code ${exp_code}, but the current code is ${response.status_code}
-        GlobalAPI.Failed  ${msg}
-    END
-    GlobalAPI.Verify the data exists for  ${response}  quoteLine
+    GlobalAPI.Verification POST success  ${response.status_code} 
+    GlobalAPI.Verify the data exists for  ${response}  data
     # It convert the response body in a dictionary
     ${dictBody}=  Convert to dictionary  ${response.content}
     ${res}=  Get From Dictionary  ${dictBody}  data
-    ${res}=  Get From Dictionary  ${res}  quoteLine
-    ${res}=  QuoteLinesAPI_ext.Create from data  ${res}
-    ${id}=  GlobalAPI.Object get attribute  ${res}  id
+    ${res}=  QuoteLinesAPI_ext.create from data  ${res}
+    ${id}=  GlobalAPI.Object get attribute  ${res}  Id
     ${path}=  GlobalAPI.Get Path  ${recordPath_QuoteLiness}
     DataRecorder.Register in file  ${path}  ${id}
-    GlobalAPI.WriteBox  NEW QUOTE LINES  ${res}
+    GlobalAPI.WriteBox  QUOTE LINES CREATED  ${res}
     [Return]  ${res}
+
 ###
-# It modify an QuoteLiness using a dictionary to specify the data that will be modified.
-# -param QuoteLinessID(String): It is the id of the QuoteLiness to be modified.
-# -param dictData(dictionary): It is the dictionary with the attributes and values to be modified.
+# It modify an quotes using a dictionary to specify the data that will be modified.
+# -param quotesID(String): It is the id of the quotes to be modified.
+# -param dictData(Dictionary): It is the dictionary with the attributes and values to be modified.
 # -param exp_code(String)= It is the expected code of the requests, if the expected request is different to this a fail is reqised, the default response code is 200.
-# -return(QuoteLinessOjct): It is the data of the request modified.
+# -return(QuotesLinesObj): It is the data of the request modified.
 ###
 Modify
-    [Arguments]  ${QuoteLinesID}  ${dictData}  ${exp_code}=None
-    GlobalAPI.Action  QuoteLines MODIFYING QUOTE LINES
-    GlobalAPI.Write  Modiying the QuoteLine: ${QuoteLinesID}
-    GlobalAPI.WriteBox  New data  ${dictData}
-    IF  ${exp_code} == None
-        ${exp_code}=  Set Variable  ${http_success}
-    END
+    [Arguments]  ${id}  ${dictData}
+    GlobalAPI.Action  MODIFYING QUOTE LINES ---------------
+    GlobalAPI.WriteBox  New QUOTE LINES data  ${dictData}
     ${body}=  Set Variable  ${dictData}
-    ${response}=  PUT request  ${QuoteLinesID}  ${dictData}
-    ${response}=  DELETE request  ${oppID}
-    IF  ${response.status_code} != ${exp_code}
-        ${msg}=  Set Variable  Wrong expected code. Expectected code ${exp_code}, but the current code is ${response.status_code}
-        GlobalAPI.Failed  ${msg}
-    END
-    GlobalAPI.Verify the data exists for  ${response}  QuoteLines
-    # It convert the response body in a dictionary
+    ${response}=  PUT request  ${id}  ${dictData}
+    GlobalAPI.Verification PUT success  ${response.status_code}
+    GlobalAPI.WriteBox  QUOTE LINES Modified Response  ${response.content}
+    GlobalAPI.Verify the data exists for  ${response}  description
     ${dictBody}=  Convert to dictionary  ${response.content}
     ${res}=  Get From Dictionary  ${dictBody}  data
-    ${res}=  Get From Dictionary  ${res}  quoteLine
     ${res}=  QuoteLinesAPI_ext.create from data  ${res}
-    GlobalAPI.WriteBox  QUOTE LINES MODIFIED  ${res}
     [Return]  ${res}
 ###
-# It delete an QuoteLines.
-# -param QuoteLinesID(String): It is the id of the QuoteLines to be deleted.
-# -param exp_code(String)= It is the expected code of the requests, if the expected request is different to this a fail is reqised, the default response code is 200.
+# It delete an quote.
+# -param obj(QuoteLinesObj): It is the id of the QUOTE LINES to be deleted.
+# -param exp_code(String): It is the expected code of the requests, if the expected request is different to this a fail is reqised, the default response code is 200.
+# -return(Bool): It is True if the QUOTE LINES has been deleted.
 ###
 Delete 
-    [Arguments]  ${QuoteLinesID}  ${exp_code}=None
-    IF  ${exp_code} == None
-        ${exp_code}=  Set Variable  ${http_success}
+    [Arguments]  ${obj}
+    GlobalAPI.Action  DELETING QUOTE LINES ---------------
+    ${id}=  GlobalAPI.Object get attribute  ${obj}  Id
+    ${response}=  DELETE request  ${id}
+    GlobalAPI.Verification DELETE success  ${response.status_code} 
+    ${content}=  Convert to string   ${response.content}
+    ${flag}=  GlobalAPI.String contains string  ${content}  "success": true
+    IF  ${flag} == False
+        GlobalAPI.WriteBox  DELETE Response  ${content}
+        GlobalAPI.Error   The ${id} has not been deleted.
     END
-    GlobalAPI.Write  QuoteLines DELETING QUOTE LINES ---------------
-    GlobalAPI.Write  Deleting QuoteLines for: ${QuoteLinesID}
-    ${response}=  DELETE request  ${QuoteLinesID}
-    ${response}=  DELETE request  ${oppID}
-    IF  ${response.status_code} != ${exp_code}
-        ${msg}=  Set Variable  Wrong expected code. Expectected code ${exp_code}, but the current code is ${response.status_code}
-        GlobalAPI.Failed  ${msg}
-    END
-    GlobalAPI.WriteBox  Response of the DELETE  ${response}
-    ${dictBody}=  Convert to dictionary  ${response.content}
-    ${res}=  Get From Dictionary  ${dictBody}  data
-    [Return]  ${res}
+    [Return]  ${flag}
 ###
 # It is a flexible comparison. Both objects could have differents numbers of attributes,
 # but all attributes of the first object should be exists in the second object and they 
 # they should have the same values.
-# -param QuoteLinesA(QuoteLinesObj) : It is the first QuoteLines to be compared.
-# -param QuoteLinesB(QuoteLinesObj) :It is the second QuoteLines to be compared.
+# -param objA(QuoteLinesObj) : It is the first QUOTE LINES to be compared.
+# -param objB(QuoteLinesObj) :It is the second QUOTE LINES to be compared.
 ###
 Compare
-    [Arguments]  ${QuoteLinesA}  ${QuoteLinesB}
-    GLobalAPI.Action  Comparing QuoteLines
-    ${flag}=  QuoteLinesAPI_ext.Compare  ${QuoteLinesA}  ${QuoteLinesB}
-    IF  ${flag} == True
-        GlobalAPI.Success  Both objects are equals
-    ELSE
-        GlobalAPI.Write  QuoteLine A: ${QuoteLinesA}
-        GlobalAPI.Write  QuoteLine B: ${QuoteLinesB}
-        GlobalAPI.Unsuccess  The Quote Lines are different.
-    END
+    [Arguments]  ${objA}  ${objB}
+    ${flag}=  QuoteLinesAPI_ext.Compare  ${objA}  ${objB}
+    [Return]  ${flag}
+###
+# It is a flexible comparison. Both objects could have differents numbers of attributes,
+# but all attributes of the first object should be exists in the second object and they 
+# they should have the same values.
+# -param objA(QuoteLinesObj) : It is the first QUOTE LINES to be compared.
+# -param objB(QuoteLinesObj) :It is the second QUOTE LINES to be compared.
+###
+Compare attrs
+    [Arguments]  ${objA}  ${objB}
+    ${flag}=  QuoteLinesAPI_ext.Compare attrs  ${objA}  ${objB}
     [Return]  ${flag}
 ###
 # It is a strict comparison. Both objects should have the same number of attributes,
 # the same attributes and the same values.
-# -param quoteA(QuoteLinesObj) : It is the first QuoteLines to be compared.
-# -param quoteB(QuoteLinesObj) :It is the second QuoteLines to be compared.
+# -param objA(QuoteLinesObj) : It is the first QUOTE LINES to be compared.
+# -param objB(QuoteLinesObj) :It is the second QUOTE LINES to be compared.
 ###
 Equal
-    [Arguments]  ${QuoteLinesA}  ${QuoteLinesB}
-    ${flag}=  QuoteLinesAPI_ext.Equal  ${QuoteLinesA}  ${QuoteLinesB}
+    [Arguments]  ${objA}  ${objB}
+    ${flag}=  QuoteLinesAPI_ext.Equal  ${objA}  ${objB}
     [Return]  ${flag}
 ###
-# It create a QuoteLines from a dictionary.
+# It create a QUOTE LINES from a dictionary.
 # -param dataDict(Dictionary):
-# -return(QuoteLinesObj): It is the QuoteLines object created with the dictionary.
+# -return(QuoteLinesObj): It is the QUOTE LINES object created with the dictionary.
 ###
 Create from
     [Arguments]  ${dataDict}
     ${res}=  QuoteLinesAPI_ext.create from data  ${dataDict}
     [Return]  ${res}
 ### 
-# It verify if a QuoteLines exists in the system.
-# -param  quoteID(String): It is the ID of the QuoteLines.
-# -return(bool): It is true if the QuoteLines exist in the system.
+# It verify if a QUOTE LINES exists in the system.
+# -param  id(String): It is the ID of the quote.
+# -return(Bool): It is true if the QUOTE LINES exist in the system.
 ###
 Exists by ID
-    [Arguments]  ${quoteID}
-    ${response}=  GET request  ${quoteID}
-    ${status_code}=  Convert to string  ${response.status_code}
-    ${res}=  Set Variable  True
-    ${content}=  Convert to string   ${response.content}
-    IF  ${status_code} != ${http_success}
-        ${res}=  Set Variable  False
-    END
-    ${flag}=  GlobalAPI.String contains string  ${content}  "quoteLine":null
-    IF  ${flag} == True
-        ${res}=  Set Variable  False
-    END
-    [Return]  ${res}    
+    [Arguments]  ${id}
+    GlobalAPI.Action  GETTING QUOTE LINES ----------------
+    GlobalAPI.Write  Get data of the QUOTE LINES ID: ${id}
+    ${response}=  GET request  ${id}
+    GlobalAPI.Verification GET success  ${response.status_code} 
+    ${dictBody}=  Convert to dictionary  ${response.content}
+    GlobalAPI.WriteBox  QUOTE LINES data getted  ${dictBody}
+    ${res}=  Get From Dictionary  ${dictBody}  data
+    ${res}=  QuoteLinesAPI_ext.Create from data  ${res}
+    GlobalAPI.Object attribute should exists  ${res}  id
+    [Return]  ${res}
+
