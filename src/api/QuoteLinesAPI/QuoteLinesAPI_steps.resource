@@ -87,8 +87,7 @@ Verify the QuoteLine modifications
 Delete a QuoteLine
     [Arguments]  ${quoteline}
     GlobalAPI.Step  Delete an QuoteLine
-    ${qlID}=  GlobalAPI.Object get attribute  ${quoteline}  Id
-    ${qlEdit}=  QuoteLinesAPI.Delete  ${qlID}
+    ${qlEdit}=  QuoteLinesAPI.Delete  ${quoteline}
     [Return]  ${qlEdit}
 ###
 # It verify if a QuoteLine exists or not.
