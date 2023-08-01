@@ -26,6 +26,18 @@ Created a QuoteLine
     ${qlNew}=  QuoteLinesAPI.Create  ${data}
     [Return]  ${qlNew}
 ###
+# It create a new quote.
+# -param name(string): It is the name of the new quote line.
+# -param quote(QuotePbj): It is the quote object used to create the quote line.
+# -param productID( It is the quote ID relate to the Quote Line.
+# -return(QuoteLinesObj): It sis the object create in the quote lines
+###
+Created a QuoteLine from data
+    [Arguments]  ${data}
+    GlobalAPI.Step  Created a quote Lines
+    ${qlNew}=  QuoteLinesAPI.Create  ${data}
+    [Return]  ${qlNew}
+###
 # It verify that a opportuninty is created
 # -param opp(OpportunityObj): It is the opportunity to verify the object is the same.
 ###
@@ -82,21 +94,23 @@ Verify the QuoteLine modifications
 
 ###
 # It delete a QuoteLine
-# -param oppInfo(QuoteLineObj): It is the opportunity to be delete.
+# -param obj(QuoteLineObj): It is the quote line to be delete.
+# -return(Bool): It is true if the quote line has been delete.
 ###
 Delete a QuoteLine
-    [Arguments]  ${quoteline}
+    [Arguments]  ${obj}
     GlobalAPI.Step  Delete an QuoteLine
-    ${qlEdit}=  QuoteLinesAPI.Delete  ${quoteline}
-    [Return]  ${qlEdit}
+    ${flag}=  QuoteLinesAPI.Delete  ${obj}
+    [Return]  ${flag}
 ###
 # It verify if a QuoteLine exists or not.
 # -params ql(QuoteLinesObj): It is the QuoteLine object to verify if ecists.
 ###
-Verify the QuoteLine not exists  
+Verify the QuoteLine not exists
     [Arguments]  ${ql}
+    GlobalAPI.Step  Verify the QuoteLine not exists
     ${id}=  GlobalAPI.Object get attribute  ${ql}  Id
     ${flag}=  QuoteLinesAPI.Exists by ID  ${id}
-    Validations.Evaluate to be equals  False  ${flag}  The QuoteLine still exists when it should be delete.
-
+    Validations.Verify it is false  ${flag}  The QuoteLine still exists when it should be delete.
+    GlobalAPI.Success  The Quote Line [${id}] not exists in the sytem.
 

@@ -27,20 +27,6 @@ class OpportunityAPI_ext:
         res = OpportunityObj( dict )
         return res
     ###
-    # It return true if a string contains another string.
-    # -param str: It is the string where will be search.
-    # -param substr: It is string to search in another string.
-    # -return(bool): It is true if the str contains the substr.
-    #@keyword
-    #def string_contains_substr( self, str, substr):
-    #    if str == None:
-    #        return False
-    #    if substr == None:
-    #        return False
-    #    if str.find( substr ) > 0 :
-    #        return True
-    #    return False
-    ###
     # It is a flexible comparison. Both objects could have differents numbers of atributes,
     # but all attributes of the first object should be exists in the second object and they 
     # they should have the same values.

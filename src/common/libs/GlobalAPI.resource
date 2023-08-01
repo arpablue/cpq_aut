@@ -25,55 +25,6 @@ Test Start
     ${Log_ACtitivity_Test}=  Set variable  None
     Set Global Variable  ${Log_ACtitivity_Test}
 
-#################################### LOG METHODS ####################################
-###
-# It dilay a passed message with a speific text.
-# -param text(String): It is the message to be di`layed with the pass message.
-###
-Passed
-    [Arguments]  ${text}
-    GlobalTools.Passed  ${text}
-
-Success
-    [Arguments]  ${text}
-    GlobalTools.Success  ${text}
-
-Unsuccess
-    [Arguments]  ${text}
-    GlobalTools.Unsuccess  ${text}
-
-Warning
-    [Arguments]  ${text}
-    GlobalTools.Warning  ${text}
-
-Info
-    [Arguments]  ${text}
-    GlobalTools.Info  ${text}
-
-Step
-    [Arguments]  ${text}
-    GlobalTools.Step  ${text}
-
-Action
-    [Arguments]  ${text}
-    GlobalTools.Action  ${text}
-
-Write
-    [Arguments]  ${text}
-    GlobalTools.Write  ${text}
-
-Mistake
-    [Arguments]  ${text}
-    GlobalTools.Mistake  ${text}
-
-Error
-    [Arguments]  ${text}
-    GlobalTools.Error  ${text}
-
-Failed
-    [Arguments]  ${text}
-    GlobalTools.Failed  ${text}
-    
 ###
 # It write a message in the console delimeted buy lines
 # -params text: It is the message to be displayed
@@ -85,6 +36,24 @@ WriteBox
     Write  ${text}
     Write  =========================================
 ############################## eneral methods ######################
+###
+# It return the quantity of elements in a list.
+# -param list(List): It is the list to get the quantity of element of the list.
+# -return(int): It is the quantity of elements in the list.
+###
+List size
+    [Arguments]  ${list}
+    ${size}=  GlobalTools.List Size  ${list}
+    [Return]  ${size}
+###
+# It concat the elements of two lists.
+# -param listA(List): It is the first list to be concated, the elements of this list will be the first elements of the resutl list.
+# -param listB(List): it is the second list to be concated, the elements of this list wibe the last elements of the results.
+###
+List concat
+    [Arguments]  ${listA}  ${listB}
+    ${list}=  DictTools.List Concat  ${listA}  ${listB}
+    [Return]  ${list}
 ###
 # It encode a string to URL format.
 # -param target(String): It is the string to encode to URL format.
@@ -304,6 +273,55 @@ String contains string
     ${res}=  GlobalTools.String contains substr  ${str}  ${substr}
     [Return]  ${res}
 
+#################################### LOG METHODS ####################################
+###
+# It dilay a passed message with a speific text.
+# -param text(String): It is the message to be di`layed with the pass message.
+###
+Passed
+    [Arguments]  ${text}
+    GlobalTools.Passed  ${text}
+
+Success
+    [Arguments]  ${text}
+    GlobalTools.Success  ${text}
+
+Unsuccess
+    [Arguments]  ${text}
+    GlobalTools.Unsuccess  ${text}
+
+Warning
+    [Arguments]  ${text}
+    GlobalTools.Warning  ${text}
+
+Info
+    [Arguments]  ${text}
+    GlobalTools.Info  ${text}
+
+Step
+    [Arguments]  ${text}
+    GlobalTools.Step  ${text}
+
+Action
+    [Arguments]  ${text}
+    GlobalTools.Action  ${text}
+
+Write
+    [Arguments]  ${text}
+    GlobalTools.Write  ${text}
+
+Mistake
+    [Arguments]  ${text}
+    GlobalTools.Mistake  ${text}
+
+Error
+    [Arguments]  ${text}
+    GlobalTools.Error  ${text}
+
+Failed
+    [Arguments]  ${text}
+    GlobalTools.Failed  ${text}
+    
 
 ################  Http request library  #########################
 Validate code
@@ -379,61 +397,76 @@ Verification Server Error
 ########## evaluation methods ################
 Evaluate GET success
     [Arguments]  ${code}
-    GlobalTools.Evaluate Success Get  ${code}
+    ${res}=  GlobalTools.Evaluate Success Get  ${code}
+    [Return]  ${res}
 
 Evaluate GET NoContent
     [Arguments]  ${code}
-    GlobalTools.Evaluate Success Get NoContent  ${code}
+    ${res}=  GlobalTools.Evaluate Success Get NoContent  ${code}
+    [Return]  ${res}
 
 
 Evaluate POST Success
     [Arguments]  ${code}
-    GlobalTools.Evaluate Success POST  ${code}
+    ${res}=  GlobalTools.Evaluate Success POST  ${code}
+    [Return]  ${res}
 
 Evaluate POST Success NoContent
     [Arguments]  ${code}
-    GlobalTools.Evaluate Success POST NoContent  ${code}
+    ${res}=  GlobalTools.Evaluate Success POST NoContent  ${code}
+    [Return]  ${res}
 
 Evaluate PUT Success
     [Arguments]  ${code}
-    GlobalTools.Evaluate Success PUT  ${code}
+    ${res}=  GlobalTools.Evaluate Success PUT  ${code}
+    [Return]  ${res}
 
 Evaluate PUT Success NoContent
     [Arguments]  ${code}
-    GlobalTools.Evaluate Success PUT NoContent  ${code}
+    ${res}=  GlobalTools.Evaluate Success PUT NoContent  ${code}
+    [Return]  ${res}
 
 Evaluate DELETE Success
     [Arguments]  ${code}
-    GlobalTools.Evaluate Success DELETE  ${code}
+    ${res}=  GlobalTools.Evaluate Success DELETE  ${code}
+    [Return]  ${res}
 
 Evaluate DELETE Success NoContent
     [Arguments]  ${code}
-    GlobalTools.Evaluate Success DELETE NoContent  ${code}
+    ${res}=  GlobalTools.Evaluate Success DELETE NoContent  ${code}
+    [Return]  ${res}
 
 Evaluate PATCH Success
     [Arguments]  ${code}
-    GlobalTools.Evaluate Success PATCH  ${code}
+    ${res}=  GlobalTools.Evaluate Success PATCH  ${code}
+    [Return]  ${res}
 
 Evaluate PATCH Success NoContent
     [Arguments]  ${code}
-    GlobalTools.Evaluate Success PATCH NoContent  ${code}
+    ${res}=  GlobalTools.Evaluate Success PATCH NoContent  ${code}
+    [Return]  ${res}
 
 Evaluate NoUser
     [Arguments]  ${code}
-    GlobalTools.Evaluate NoUser  ${code}
+   ${res}=   GlobalTools.Evaluate NoUser  ${code}
+    [Return]  ${res}
 
 Evaluate Unauthorized Access
     [Arguments]  ${code}
-    GlobalTools.Evaluate Unauthorized Access  ${code}
+    ${res}=  GlobalTools.Evaluate Unauthorized Access  ${code}
+    [Return]  ${res}
 
 Evaluate Forbidden
     [Arguments]  ${code}
-    GlobalTools.Evaluate Forbidden  ${code}
+    ${res}=  GlobalTools.Evaluate Forbidden  ${code}
+    [Return]  ${res}
 
 Evaluate NotFound
     [Arguments]  ${code}
-    GlobalTools.Evaluate NotFound  ${code}
+    ${res}=  GlobalTools.Evaluate NotFound  ${code}
+    [Return]  ${res}
 
 Evaluate Server Error 
     [Arguments]  ${code}
-    GlobalTools.Evaluate Server Error  ${code}
+    ${res}=  GlobalTools.Evaluate Server Error  ${code}
+    [Return]  ${res}

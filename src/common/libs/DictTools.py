@@ -89,6 +89,23 @@ class DictTools:
                 res.append(key)
         return res
     ###
+    # It concat the elements of two lists.
+    # -param listA(List): It is the first list to be concated, the elements of this list will be the first elements of the resutl list.
+    # -param listB(List): it is the second list to be concated, the elements of this list wibe the last elements of the results.
+    ###
+    @keyword
+    def list_concat(self, listA, listB ):
+        if listA == None:
+            return listB
+        if listB == None:
+            return listA
+        res = []
+        for elem in listA:
+            res.append( elem )
+        for elem in listB:
+            res.append( elem )
+        return res
+    ###
     # It return the list of the keys that not exists or have differents values in both dictionaries.
     # -param dictA(dictionary): It is the first dictionary to verify the keys.
     # -param dictB(dictionary): It is the second dictionary to verify the keys if the dictionary exists in this dictionary.

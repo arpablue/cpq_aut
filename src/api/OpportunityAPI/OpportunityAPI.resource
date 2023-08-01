@@ -25,7 +25,7 @@ ${recordPath_opp}  /resources/records/opportunities_created.dat
 # It made a GET reques to the REST api service and return the response of the request.
 # -param opportunityID(String): It is the id of the opportunity to get the data.
 # -return(response): It is the response of the request.
-###
+###s
 GET request
     [Arguments]  ${opportunityID}
     ${headers}=  Create Dictionary  Authorization=${token}
@@ -83,9 +83,9 @@ Create from
 # -return(bool): It is true if the opportunity exist in the system.
 ###
 Exists by ID
-    [Arguments]  ${oppID}
-    GlobalAPI.Action  Exists by ID [${oppID}]
-    ${response}=  GET request  ${oppID}
+    [Arguments]  ${id}
+    GlobalAPI.Action  Opportunity Exists by ID [${id}]
+    ${response}=  GET request  ${id}
     ${status_code}=  Convert to string  ${response.status_code}
     ${res}=  Set Variable  True
     ${content}=  Convert to string   ${response.content}
@@ -96,7 +96,7 @@ Exists by ID
     ELSE
         ${res}=  GlobalAPI.Evaluate GET success  ${status_code}
     END
-    [Return]  ${res}    
+    [Return]  ${res} 
 ###
 # It return the data related to an opportunity.
 # -param id(string): it is the ID of the opportunity.

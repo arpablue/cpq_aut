@@ -72,17 +72,18 @@ Modify a quote
 ###
 # It verify that a opportuninty is created
 # -param obj(QuoteObj): It is the Quote to verify the object is the same.
+# [toReview]
 ###
 Verify if the quote has been created
     [Arguments]  ${obj}
     GlobalAPI.Step  Verify if the quote has been created
     ${id}=  GlobalAPI.Object get attribute  ${obj}  Id
     ${flag}=  QuoteAPI.Exists by ID  ${id}
-    #${oppInf}=  QuoteAPI.Get Info  ${id}
-    #Validations.Verify it is true  ${flag}  The quote[${id}] has not been created in the system
-    #${flag}=  QuoteAPI.Compare  ${obj}  ${oppInf}
-    #Validations.Verify it is true  ${flag}  the quotes[${id}] created and the quote that exists in the system are not the same
-    #GlobalAPI.Success  the quote [${id}] exists in the system
+    ${infObj}=  QuoteAPI.Get Info  ${id}
+    Validations.Verify it is true  ${flag}  The quote[${id}] has not been created in the system
+    ${flag}=  QuoteAPI.Compare  ${obj}  ${infObj}
+    Validations.Verify it is true  ${flag}  the quotes[${id}] created and the quote that exists in the system are not the same
+    GlobalAPI.Success  the quote [${id}] exists in the system
 
 ###
 # It verify that a opportuninty is created

@@ -42,6 +42,20 @@ class GlobalTools:
         contexts = ContextList()
         self.mContext = contexts.get_context( self.mExeutionContext )
     ###
+    # It return the quantity of elements of a list. If the list is empty or null then the method return 0.
+     # -param list(List): It is the list to count the quantity of elements.
+     # -return(Int): It is the quantity of elements of the list.
+     ###
+    @keyword
+    def list_size( self, list ):
+        size = 0
+        if list == None:
+            return size
+        for element in list:
+            size = size + 1
+        return size
+    
+    ###
     # It load the globals var of the projects in the config.yml file.
     ##
     def load_global_vars( self ):

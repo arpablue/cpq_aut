@@ -50,7 +50,6 @@ Verify it is false
         GlobalAPI.Failed  ${message}
         FAIL  ${message}
     END
-    GlobalAPI.Success  The element is FALSE
 
 Verify it is true
     [Arguments]  ${current}  ${message}
