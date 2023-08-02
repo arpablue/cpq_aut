@@ -114,3 +114,24 @@ Verify the QuoteLine not exists
     Validations.Verify it is false  ${flag}  The QuoteLine still exists when it should be delete.
     GlobalAPI.Success  The Quote Line [${id}] not exists in the sytem.
 
+###
+# It verify tha all quotes of the list are deleted from the system.
+# -param quoteList(List): It is a list of quotes to verified the quotes has been removed.
+# -return(Bool): It is true all quotes has been removed of the system.
+###
+Validate all quotes lines not exists
+    [Arguments]  ${list}
+    GlobalAPI.Step  Validate all quotes has been remove                               
+    ${res}=  Set Variable  True
+    FOR  ${element}  IN  @{list}
+        ${flag}=  QuoteAPI.Exists  ${element}
+        ${id}=  GlobalAPI.Object get attribute  ${element}  Id
+        IF  ${flag} == True
+            ${res}=  Set Variable  False
+            GlobalAPI.Error  The Quote[${id}] has not been removed the system.
+        ELSE
+            GlobalAPI.Success  The Quote[${id}] has been removed the system.
+        END
+    END
+    [Return]  ${res}
+

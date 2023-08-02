@@ -58,4 +58,3 @@ Verify it is true
         GlobalAPI.Failed  ${message}
         FAIL  ${message}
     END
-    GlobalAPI.Success  The element is TRUE

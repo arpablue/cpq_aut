@@ -37,15 +37,11 @@ It is not possible delete opportunity with is associated with one quote
     # Target actions to be tested
     OpportunityAPI_steps.Delete an opportunity  ${opp}
 
-    #Validate all quotes has been remove  @{quoteList}
-    #Validate all quote lines has been remove  @{quoteLines}
+    ${flag}=  QuoteAPI_steps.Validate all quotes not exists  ${quoteList}
+    ${flag2}=  QuoteLinesAPI_steps.Validate all quotes lines not exists  ${quoteLinesList}
 
-
-
-    #${size}=  Get Length  ${quoteLines}
-    #GlobalAPI.Write  Quantity of QuoteLines created: ${size}
-#    Opportunity - verify the has been deleted  ${opp}
-#    Quote - verify been delete for the opportunity  ${quotes}
+    Validations.Verify it is True  ${flag}  Some Quotes or QuoteLines has not been deleted.
+    Validations.Verify it is True  ${flag2}  Some Quote Lines or QuoteLines has not been deleted.
 
 *** Keywords ***
 ###
@@ -174,3 +170,4 @@ QuoteLines - Create quoteLines for the quote list
         ${size}=  Get Length  ${qls}
     END
     [Return]  ${qls}
+

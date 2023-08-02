@@ -200,11 +200,20 @@ Exists by ID
     ${content}=  Convert to string   ${response.content}
     ${flag}=  GlobalAPI.Validate code  ${status_code}
     IF  ${flag} == False
-        GlobalAPI.Warning  The [${status_code}] response code is not a valid code.
+        GlobalAPI.Warning  The object not Exists. The [${status_code}] response code is not a valid code.
         ${res}=  Set Variable  False
     ELSE
         ${res}=  GlobalAPI.Evaluate GET success  ${status_code}
     END
     [Return]  ${res} 
 
- 
+###
+# It verify if a quote exists in the system.
+# -param obj(QuoteObj): It is the quote toi verify if the object exists in the system.
+# -return(Bool): It is True if the object exists in the system.
+###
+Exists
+    [Arguments]  ${obj}
+    ${id}=  GlobalAPI.Object get attribute  ${obj}  Id
+    ${flag}=  Exists by ID  ${id}
+    [Return]  ${flag}
