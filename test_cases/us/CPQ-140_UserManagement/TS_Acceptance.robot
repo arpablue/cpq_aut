@@ -17,4 +17,6 @@ Verify the validation of the status token
     IF  ${flag} == False
         FAIL  The current token is Unauthorized when should be authorized.
     END
+    ${user}=  SessionAPI.Get User ID
+    GlobalAPI.Write  User ID: ${user}
     

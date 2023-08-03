@@ -5,18 +5,24 @@ Library    RequestsLibrary
 Library    Collections
 Library    JSONLibrary
 
+Resource    ../../../src/common/libs/Validations.resource
 Resource    ../../../src/common/libs/GlobalAPI.resource
 Library    ../../../src/common/libs/DictTools.py
 *** Variables ***
 # It is the reference of the end point for quotes
-${endPoint_session}  /v1/access
+${endPoint_session}  /v1/sessions
 
 *** Keywords ***
 ####################################################### HTTP REQUESTS #######################################################
-GEt single request
+GET direct request
+    ${headers}=  Create Dictionary  Authorization=${token}
+    ${response}=  GET On Session  ${SessionAPI}  ${endPoint_session}  headers=${headers}  expected_status=any
+    [Return]  ${response}
+
+GET single request
     [Arguments]  ${path}
     ${headers}=  Create Dictionary  Authorization=${token}
-    ${response}=  GET On Session  ${SessionAPI}  ${endPoint_session}/${path}  headers=${headers}
+    ${response}=  GET On Session  ${SessionAPI}  ${endPoint_session}/${path}  headers=${headers}  expected_status=any
     #GlobalAPI.WriteBox  QUOTE GET Response  ${response.content }
     [Return]  ${response}
 
@@ -28,7 +34,7 @@ GEt single request
 GET request
     [Arguments]  ${quoteID}
     ${headers}=  Create Dictionary  Authorization=${token}
-    ${response}=  GET On Session  ${SessionAPI}  ${endPoint_session}/${quoteID}  ${headers}
+    ${response}=  GET On Session  ${SessionAPI}  ${endPoint_session}/${quoteID}  ${headers}  expected_status=any
     #GlobalAPI.WriteBox  QUOTE GET Response  ${response.content }
     [Return]  ${response}
 
@@ -39,7 +45,7 @@ GET request
 ###
 POST request
     [Arguments]  ${dictData}
-    &{headers}=  Create Dictionary  Content-Type=${content_type}  Application=${application}  Authorization=${token}    # It does a POST request
+    &{headers}=  Create Dictionary  Content-Type=${content_type}  Application=${application}  Authorization=${token}  expected_status=any    # It does a POST request
     ${response}=  POST On Session  ${SessionAPI}  ${endPoint_session}  headers=${headers}  json=${dictData}
     #GlobalAPI.WriteBox  QUOTE POST Response  ${response.content }
     [Return]  ${response}
@@ -70,18 +76,40 @@ DELETE request
     [Return]  ${response}
 
 ####################################################### HTTP REQUESTS #######################################################
+###
+# It evaluate if the current token or teh session is authorized.
+# -return(Bool): It is true if the session is authorized.
+###
 IsActive
-    ${response}=  GEt single request  status
-    ${flag}=  Set Variable  False
-    GlobalAPI.Write  ${response}
-    #IF  ${response} != "None"
-    #    GlobalAPI.Write  Status Code: ${response.status_code}
-    #    GlobalAPI.Write  Content: ${response.content}
-    #    IF  ${response.status_code} == 200
-    #        ${flag}=  Set Variable  True
-    #    END
-    #END
+    ${response}=  GET direct request  
+    ${flag}=  GlobalAPI.Evaluate GET success  ${response.status_code} 
+    IF  ${flag} == True
+        ${strContent}=  Convert to String  ${response.content}
+        ${flag}=  GlobalAPI.String contains string  ${strContent}  "authenticated":true
+        GlobalAPI.Info  The token of the session is authorized: ${flag}
+    ELSE
+        GlobalAPI.Error  The current token is not authorized.
+    END
     [Return]  ${flag}
+###
+# It return The current user id relate to the session.
+# -return()
+Get User ID
+    ${response}=  GET direct request  
+    ${flag}=  GlobalAPI.Evaluate GET success  ${response.status_code} 
+    ${strContent}=  Convert to String  ${response.content}
+    ${res}=  Set Variable  None
+    IF  ${flag} == True
+        ${flag}=  GlobalAPI.String contains string  ${strContent}  "authenticated":true
+        GlobalAPI.Info  The token of the session is authorized: ${flag}
+        GlobalAPI.WriteBox  DATA RESPONSE  ${response.content}
+        ${data}=  Convert To Dictionary  ${response.content}
+        ${data}=  Get From Dictionary  ${data}  data
+        ${res}=  Get From Dictionary  ${data}  id
 
-Get Current User ID
-    Log to console  .........In development
+        GlobalAPI.Info  User ID of the current Session: ${res}
+    ELSE
+        GlobalAPI.Error  The current token is not authorized.
+
+    END
+    [Return]  ${res}
