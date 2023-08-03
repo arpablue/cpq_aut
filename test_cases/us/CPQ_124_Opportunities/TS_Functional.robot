@@ -22,6 +22,7 @@ ${productQTY}  5
 
 *** Test Cases ***
 It is not possible delete opportunity with is associated with one quote
+    [Tags]  acceptance  cpq-124
     ${qty}=  Set variable  2
     ${rand}=  GlobalAPI.Generate number
     ${opp}=  OpportunityAPI_steps.Create an opportunity using a text  ${rand}
@@ -30,9 +31,6 @@ It is not possible delete opportunity with is associated with one quote
     
     ${quoteList}=  QuoteAPI_steps.Create quotes for opportunity  ${opp}  ${rand}  ${qty}
     ${quoteLinesList}=  QuoteLinesAPI_steps.Create quoteLines for the quote list  ${quoteList}  ${rand}  ${qty}
-
-    #${quoteSize}=   Get Length  ${quoteList}
-    #${qlSize}=  Get Length  ${quoteLinesList}
 
     # Target actions to be tested
     OpportunityAPI_steps.Delete an opportunity  ${opp}

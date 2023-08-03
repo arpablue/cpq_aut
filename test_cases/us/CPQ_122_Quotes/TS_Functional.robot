@@ -22,6 +22,7 @@ ${productQTY}  5
 
 *** Test Cases ***
 It is not possible delete quotes with is associated with one quote
+    [Tags]  acceptance  cpq-122
     ${qty}=  Set Variable  3
     ${opp}=  OpportunityAPI_steps.Create a new opportunity  Optimus  This description is for
     ${quoteNew}=  QuoteAPI_steps.Create a new quote  OptimusQuote  Description for  ${opp}
