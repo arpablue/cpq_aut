@@ -35,6 +35,18 @@ Create a new opportunity
     ${new}=  OpportunityAPI.Create  ${data}
     [Return]  ${new}
 ###
+# It create an opportunity using a random number as part of the name and description.
+# -param text(String): It is the text to be added to the name and description of the opportunity.
+# -return(OpportunityObj): It is the Opportunity created.
+###
+Create an opportunity using a text
+    [Arguments]  ${text}
+    GlobalAPI.Step  Create an text
+    &{data}=  Create Dictionary  Name=Optimus_${text}  Description=Description for Optimus_${text}
+    ${obj}=  OpportunityAPI.Create  ${data}
+    [Return]  ${obj}
+
+###
 # It create an opportunity using as a dictionary to create an opportunity.
 # -param data(Dictionary): It is the parameters used to create the opportunity.
 # -return(OpportunityObj): It is the opportunity created.

@@ -96,7 +96,18 @@ Exists by ID
     ELSE
         ${res}=  GlobalAPI.Evaluate GET success  ${status_code}
     END
-    [Return]  ${res} 
+    [Return]  ${res}
+###
+# It verify if a quote exists in the system.
+# -param obj(OpportumityObj): It is the quote toi verify if the object exists in the system.
+# -return(Bool): It is True if the object exists in the system.
+###
+Exists
+    [Arguments]  ${obj}
+    ${id}=  GlobalAPI.Object get attribute  ${obj}  Id
+    ${flag}=  Exists by ID  ${id}
+    [Return]  ${flag}
+
 ###
 # It return the data related to an opportunity.
 # -param id(string): it is the ID of the opportunity.

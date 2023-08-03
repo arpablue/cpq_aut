@@ -38,6 +38,78 @@ Created a QuoteLine from data
     ${qlNew}=  QuoteLinesAPI.Create  ${data}
     [Return]  ${qlNew}
 ###
+# It create QuoteLines for a specific quote.
+# -param quote(QuoteObj): It is the quote use d to created the QuoteLines.
+# -param text(String): It is the text used for the name and description of the QuoteLine.
+# -param qty(String): It is the text used to create the name and the descritption.
+# -return(list): It is the list of the QuoteLines created for the quoted.
+###
+Create QuoteLines for a quote
+    [Arguments]  ${quote}  ${text}  ${qty}
+    GlobalAPI.Step  QuoteLine - Create QuoteLines for a quote - Quantity[${qty}]
+    IF  ${qty} < 1
+        GlobalAPI.Failed  It is not possible create QuoteLines for a quote, because the quantity is [${qty}]
+    END
+    ${id}=  GlobalAPI.Object get attribute  ${quote}  Id
+    @{qls}=  Create List
+    ${index}=  Set Variable  0
+    FOR  ${pos}  IN RANGE  ${qty}
+        GlobalAPI.Step  +++ ${pos}) Creating QuoteLines for the quote[${id}]
+        ${data}=  Create Dictionary  Name=QL_${text}  Description=Description for ${text}  ProductId=${productID}  ParentQuoteId=${id}  Quantity=${productQTY}
+        ${obj}=  QuoteLinesAPI.Create  ${data}
+        #QuoteLinesAPI_steps.Verify if the QuoteLine has been created  ${ql}
+        Append To List  ${qls}  ${obj}
+        ${index}=  Evaluate  ${index} + 1
+        ${size}=  GlobalAPI.List size  ${qls}
+    END
+    [return]  ${qls}
+###
+# It create quote lines for a each quote of list of quotes.
+# -param quotes(List): It is the a list of quotes.
+# -param text(String): It is the string used fo rth ename and the edescription used in the quote line creation process.
+# -param qyt(int): It is the quantity of the product used in the creation of the quote line.
+###
+Create quoteLines for the quote list
+    [Arguments]  ${quotes}  ${text}  ${qty}
+    GlobalAPI.Step  QuoteLines - Create quoteLines for the quote lists - Quantity[${qty}]
+    IF  ${qty} < 1
+        GlobalAPI.Failed  It is not possible create QuoteLines for a quote, because the quantity is [${qty}]
+    END
+    ${qls}=  Create List
+    ${size}=  Get Length  ${qls}
+    FOR  ${quote}  IN  @{quotes}
+        ${list}=  Create QuoteLines for a quote  ${quote}  ${text}  ${qty}
+        ${qls}=  GlobalAPI.List concat  ${qls}  ${list}
+        ${size}=  Get Length  ${qls}
+    END
+    [Return]  ${qls}
+###
+# It modify an quote using the id, the atribute of the object and the vqalue assigned to the attribute.
+# -param quoteLineObj(QuoteObj): It is the quote to be modified.
+# -param attr(string): It is the name of the attribute to be modified.
+# -param value(String): -It is the new value assigned to the attributed specified.
+###
+Modify a QuoteLine
+    [Arguments]  ${quoteLineObj}  ${attr}  ${value}
+    GlobalAPI.Step  Modify a quote
+    ${id}=  GlobalAPI.Object get attribute  ${quoteLineObj}  Id
+    ${random}=  GlobalAPI.Generate number
+    ${value}=  Replace String  ${value}  <value>  ${random}
+    &{data}=  Create Dictionary  ${attr}=${value}
+    ${res}=  QuoteLinesAPI.Modify  ${id}  ${data}
+    [Return]  ${res}
+
+###
+# It delete a QuoteLine
+# -param obj(QuoteLineObj): It is the quote line to be delete.
+# -return(Bool): It is true if the quote line has been delete.
+###
+Delete a QuoteLine
+    [Arguments]  ${obj}
+    GlobalAPI.Step  Delete an QuoteLine
+    ${flag}=  QuoteLinesAPI.Delete  ${obj}
+    [Return]  ${flag}
+###
 # It verify that a opportuninty is created
 # -param opp(OpportunityObj): It is the opportunity to verify the object is the same.
 ###
@@ -56,21 +128,6 @@ Verify if the QuoteLine has been created
     END
     Should Be True  ${flag}
     GlobalAPI.Success  The QuoteLine has been created without problems
-###
-# It modify an quote using the id, the atribute of the object and the vqalue assigned to the attribute.
-# -param quoteLineObj(QuoteObj): It is the quote to be modified.
-# -param attr(string): It is the name of the attribute to be modified.
-# -param value(String): -It is the new value assigned to the attributed specified.
-###
-Modify a QuoteLine
-    [Arguments]  ${quoteLineObj}  ${attr}  ${value}
-    GlobalAPI.Step  Modify a quote
-    ${id}=  GlobalAPI.Object get attribute  ${quoteLineObj}  Id
-    ${random}=  GlobalAPI.Generate number
-    ${value}=  Replace String  ${value}  <value>  ${random}
-    &{data}=  Create Dictionary  ${attr}=${value}
-    ${res}=  QuoteLinesAPI.Modify  ${id}  ${data}
-    [Return]  ${res}
 ###
 # It verify that a object has been modified.
 # -param quoteLineA(OpportunityObj): It is the opportunity orignal object.
@@ -91,17 +148,6 @@ Verify the QuoteLine modifications
     END
     ${size}=  Get Length  ${attrsDif}
     Validations.Evaluate to be equals  2  ${size}  The quantity of attributes modified are not 2
-
-###
-# It delete a QuoteLine
-# -param obj(QuoteLineObj): It is the quote line to be delete.
-# -return(Bool): It is true if the quote line has been delete.
-###
-Delete a QuoteLine
-    [Arguments]  ${obj}
-    GlobalAPI.Step  Delete an QuoteLine
-    ${flag}=  QuoteLinesAPI.Delete  ${obj}
-    [Return]  ${flag}
 ###
 # It verify if a QuoteLine exists or not.
 # -params ql(QuoteLinesObj): It is the QuoteLine object to verify if ecists.
@@ -134,4 +180,3 @@ Validate all quotes lines not exists
         END
     END
     [Return]  ${res}
-

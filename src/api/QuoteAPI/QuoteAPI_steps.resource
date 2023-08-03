@@ -9,7 +9,6 @@ Resource    ../../../src/api/QuoteAPI/QuoteAPI.resource
 Resource    ../../../src/api/QuoteLinesAPI/QuoteLinesAPI.resource
 
 *** Keywords ***
-
 # It create a quote to create a new quote in base an Quote.
 # -param name(String): It is the name assigned to the quote.
 # -param description(String): It is the description for the quote.
@@ -24,6 +23,37 @@ Create a new quote
     ${data}=  Create Dictionary  Name=${name}  Description=${description}  OpportunityId=${id}
     ${quote}=  QuoteAPI.Create  ${data}
     [Return]  ${quote}
+###
+# It cereate a quote usign a random value for the name and description for an opportunity. 
+# -param obj(OpportunityObj): It is the opportunity used to created the quote.
+# -param text(String): It is the text used to created the quote.
+###
+Create a quote
+    [Arguments]  ${obj}  ${text}
+    GlobalAPI.Step  Create a quote
+    ${obj}=  Create a new quote  Quote_${text}  Description for Quote_${text}  ${obj}
+    [Return]  ${obj}
+###
+# It create a number of quotes for specific opportunity.
+# -param opp(OpportunityObj): It is the opportunity to create the quotes.
+# -param qty(Int): It is the quantity of quotes to be created for the opportunity.
+# -return(List): It is the list of quotes created.
+###
+Create quotes for opportunity
+    [Arguments]  ${opp}  ${text}  ${qty}
+    GlobalAPI.Step  Quote - Create quotes for opportunity - Quantity[${qty}]
+    IF  ${qty} < 1
+        GlobalAPI.Failed  It is not possible create quotes for an opportunity, because the quantity is [${qty}]
+    END
+    ${id}=  GlobalAPI.Object get attribute  ${opp}  Id
+    @{quotes}=  Create List
+    FOR  ${pos}  IN RANGE  ${qty}
+        GlobalAPI.Step  +++ ${pos}) Creating quote for the opportunity[${id}]
+        ${quote}=  Create a quote  ${opp}  ${text}
+        Verify if the quote has been created  ${quote}
+        Append To List  ${quotes}  ${quote}
+    END
+    [return]  ${quotes}    
     
 ###
 # It compare two objects in base to the attribute specified. It the attribute have
