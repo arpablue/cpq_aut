@@ -36,4 +36,3 @@ It is possible delete a quote
     ${res}=  QuoteAPI_steps.Delete a quote  ${quoteNew}
     Validations.Verify it is true  ${res}  The Quote cannot be deleted.
     
- 

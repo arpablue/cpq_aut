@@ -79,7 +79,7 @@ Get Info
     ${dictBody}=  Convert to dictionary  ${response.content}
     GlobalAPI.WriteBox  QUOTE data getted  ${dictBody}
     ${res}=  Get From Dictionary  ${dictBody}  data
-    ${res}=  QUOTEAPI_ext.Create from data  ${res}
+    ${res}=  QuoteAPI_ext.Create from data  ${res}
     GlobalAPI.Object attribute should exists  ${res}  id
     [Return]  ${res}
 ###
