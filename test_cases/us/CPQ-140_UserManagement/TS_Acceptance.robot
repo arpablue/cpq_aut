@@ -13,7 +13,7 @@ Suite Setup  Start session
 
 *** Test Cases ***
 Verify the validation of the status token
-    [Tags]  acceptance  session
+    [Tags]  acceptance  session  cpq-140S
     ${flag}=  SessionAPI.isActive
     IF  ${flag} == False
         FAIL  The current token is Unauthorized when should be authorized.

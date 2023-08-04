@@ -36,4 +36,28 @@ It is possible create an opportunity without a description
     ${rand}=  GlobalAPI.Generate number
     ${data}=  Create dictionary  name=NoDesc_${rand}
     ${opp}=  OpportunityAPI.create  ${data}  200
+###
+# It verify that it is not possible if the attribute are not in capitalize format.
+###
+Verify that it is not possible create an oportunity with no capitaluise format
+    [Tags]  cpq-124  retest  regression  cpq-202  opportunity
+    OpportunityAPI_steps.Prepare requierements
+    ${data}=  Create Dictionary  name=Opptimus  description=It is a description for Opptimus
+    ${response}=  OpportunityAPI.POST request  ${data}
+    ${flag}=  GlobalAPI.Evaluate POST success  ${response.status_code}
+    IF  ${flag} == True
+        GlobalAPI.Failed  A opportunity with invalid vallues has been created, when it should not be created.
+    END
 
+###
+# It verify that it is not possible if the attribute are not in capitalize format.
+###
+Verify that an opportunity cannnot be created without a name
+    [Tags]  cpq-124  retest  regression  cpq-202  opportunity
+    OpportunityAPI_steps.Prepare requierements
+    ${data}=  Create Dictionary  Description=It is a description for Opptimus
+    ${response}=  OpportunityAPI.POST request  ${data}
+    ${flag}=  GlobalAPI.Evaluate POST success  ${response.status_code}
+    IF  ${flag} == True
+        GlobalAPI.Failed  A opportunity with invalid vallues has been created, when it should not be created.
+    END
