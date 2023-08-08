@@ -21,6 +21,12 @@ sys.path.append( src_path )
 
 from LolFile import LolFile
 
+dir = os.path.dirname( __file__ )
+src_pos = dir.index('src')
+src_path = dir[:src_pos] + os.path.join('src','file','DataFile')
+sys.path.append( src_path )
+
+from DataFile_ext import DataFile_ext
 
 dir = os.path.dirname( __file__ )
 src_pos = dir.index('src')
@@ -32,7 +38,7 @@ from PartnerObj import PartnerObj
 # It contain the methods to process some action related to partners.
 ### 
 @library
-class PartnerFile_ext:
+class PartnerFile_ext( DataFile_ext ):
     def __init__( self ):
         self.mGlobal = GlobalTools()
         self.mTools = DictTools()

@@ -34,13 +34,13 @@ GET single request
 
 ###
 # It made a GET reques to the REST api service and return the response of the request.
-# -param RolID(String): It is the id of the Rol to get the data.
-# -return(response): It is the response of the request.
+# -param value(String): It is the value used for the request in the role endpoint.
+# -return(Response): It is the response of the request.
 ###
 GET request
-    [Arguments]  ${RolID}
+    [Arguments]  ${value}
     ${headers}=  Create Dictionary  Authorization=${token}
-    ${response}=  GET On Session  ${SessionAPI}  ${endPoint_role}/${RolID}  headers=${headers}  expected_status=any
+    ${response}=  GET On Session  ${SessionAPI}  ${endPoint_role}/${value}  headers=${headers}  expected_status=any
     #GlobalAPI.WriteBox  Rol GET Response  ${response.content }
     [Return]  ${response}
 
@@ -102,12 +102,27 @@ Get all roles
     FOR  ${element}  IN  @{list}
         ${role}=  Create from data  ${element}
         Append to list  ${roles}  ${role}
-        GlobalAPI.Write  ${role}
+        #GlobalAPI.Write  ${role}
     END
     ${size}=  Get Length  ${roles}
     GlobalAPI.Write  Number of roles: ${size}
     [Return]  ${roles}
-    
+###
+# It return the list of roles that are visible.
+# -return(List); It is the list of RoleObj taht are visible in the system.
+###
 Get all visible roles
-    pass
-    # crate a keywork to pass a content and return the list of roles from the previous keyword
+    GlobalAPI.Action  Get all visible roles
+    ${response}=  GET request  visible
+    ${flag}=  GlobalAPI.Verification GET Success  ${response.status_code}
+    ${data}=  Convert to dictionary  ${response.content}
+    ${list}=  Get from dictionary  ${data}  data
+    ${roles}=  Create List
+    FOR  ${element}  IN  @{list}
+        ${role}=  Create from data  ${element}
+        Append to list  ${roles}  ${role}
+        #GlobalAPI.Write  ${role}
+    END
+    ${size}=  Get Length  ${roles}
+    GlobalAPI.Write  Number of roles: ${size}
+    [Return]  ${roles}
