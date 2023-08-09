@@ -126,3 +126,22 @@ Get all visible roles
     ${size}=  Get Length  ${roles}
     GlobalAPI.Write  Number of roles: ${size}
     [Return]  ${roles}
+###
+# It return the list of roles assegined to a User.
+# -param user(UserObj): It is the user to get the roles asssigned.
+# -return(List): It is the list of roles assigned to the user.
+###
+Get Roles of the user
+    [Arguments]  ${user}
+    GlobalAPI.Action  Get Roles of the user
+    GlobalAPI.WriteBox  Get roles for the user  ${user}
+    ${id}=  GlobalAPI.Object get attribute  ${user}  Id
+    GlobalAPI.Write  The user id: ${id}
+    ${ep}=  Set Variable  users/${id}
+    ${response}=  Get request  ${ep}
+    GlobalAPI.Verification GET Success  ${response.status_code}  It is not posssible get the roles of the user.
+    
+    GlobalAPI.WriteBox  RESPONSE  ${response.content}
+    GlobalAPI.Failed  Under Development
+
+

@@ -17,7 +17,9 @@ Get user in the position
     [Arguments]  ${position}
     ${user}=  UserFile_ext.Get user position  ${position}
     [Return]  ${user}
-
+###
+# It return a list of all ÜserObj in the files.
+# -return(List): It is the list of UserObj in the file.
 Get users in file
     ${users}=  UserFile_ext.Load users from file
     [Return]  ${users}

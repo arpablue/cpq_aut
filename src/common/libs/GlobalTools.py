@@ -356,12 +356,15 @@ class GlobalTools:
     # then a FAIL exception is raised to stop the execution of the step.
     # -param code(String/Int): It is the code to be verified.
     ###
-    def verification_response_code( self, code_name, code ):
+    def verification_response_code( self, code_name, code, message=None ):
         flag = self.evaluate_response_code( code_name, code )
         code = str( code )
         if flag == False:
-            msg = code_name +" - The current code is not the expected code. Currrent code [" + code + "]"
-            self.failed( msg)
+            msg = code_name +" - The current code is not the expected code. Currrent code [" + str( code ) + "]"
+            if not message == None:
+
+                msg = str( message ) + " - Current code[" + str( code ) +"]"
+            self.failed( msg )
 
 
 
@@ -382,8 +385,8 @@ class GlobalTools:
     # -param code(String/Int): It is the code to be verified.
     ###
     @keyword
-    def verification_Success_Get( self, code ):
-        self.verification_response_code( 'Success_Get' ,code )
+    def verification_Success_Get( self, code, msg=None ):
+        self.verification_response_code( 'Success_Get' ,code , msg )
         
         
         
@@ -402,8 +405,8 @@ class GlobalTools:
     # -param code(String/Int): It is the code to be verified.
     ###
     @keyword
-    def verification_Success_Get_NoContent( self, code ):
-        self.verification_response_code( 'Success_Get_NoContent' ,code )
+    def verification_Success_Get_NoContent( self, code, msg=None ):
+        self.verification_response_code( 'Success_Get_NoContent' ,code , msg )
 
 
 
@@ -424,8 +427,8 @@ class GlobalTools:
     # -param code(String/Int): It is the code to be verified.
     ###
     @keyword
-    def verification_Success_Post( self, code ):
-        self.verification_response_code( 'Success_Post' ,code )
+    def verification_Success_Post( self, code, msg=None ):
+        self.verification_response_code( 'Success_Post' ,code , msg )
 
 
 
@@ -445,8 +448,8 @@ class GlobalTools:
     # -param code(String/Int): It is the code to be verified.
     ###
     @keyword
-    def verification_Success_Post_NoContent( self, code ):
-        self.verification_response_code( 'Success_Post_NoContent' ,code )
+    def verification_Success_Post_NoContent( self, code, msg=None ):
+        self.verification_response_code( 'Success_Post_NoContent' , code , msg )
     
 
 
@@ -466,8 +469,8 @@ class GlobalTools:
     # -param code(String/Int): It is the code to be verified.
     ###
     @keyword
-    def verification_Success_Put( self, code ):
-        self.verification_response_code( 'Success_Put' ,code )
+    def verification_Success_Put( self, code, msg=None ):
+        self.verification_response_code( 'Success_Put' ,code , msg )
         
         
 
@@ -488,8 +491,8 @@ class GlobalTools:
     # -param code(String/Int): It is the code to be verified.
     ###
     @keyword
-    def verification_Success_Put_NoContent( self, code ):
-        self.verification_response_code( 'Success_Put_NoContent' ,code )
+    def verification_Success_Put_NoContent( self, code, msg=None ):
+        self.verification_response_code( 'Success_Put_NoContent' ,code , msg )
 
 
 
@@ -507,8 +510,8 @@ class GlobalTools:
     # -param code(String/Int): It is the code to be verified.
     ###
     @keyword
-    def verification_Success_Delete( self, code ):
-        self.verification_response_code( 'Success_Delete' ,code )
+    def verification_Success_Delete( self, code, msg=None ):
+        self.verification_response_code( 'Success_Delete' ,code , msg )
 
 
 
@@ -526,8 +529,8 @@ class GlobalTools:
     # -param code(String/Int): It is the code to be verified.
     ###
     @keyword
-    def verification_Success_Delete_NoContent( self, code ):
-        self.verification_response_code( 'Success_Delete_NoContent' ,code )
+    def verification_Success_Delete_NoContent( self, code, msg=None ):
+        self.verification_response_code( 'Success_Delete_NoContent' ,code , msg )
         
 
 
@@ -546,8 +549,8 @@ class GlobalTools:
     # -param code(String/Int): It is the code to be verified.
     ###
     @keyword
-    def verification_Success_Patch( self, code ):
-        self.verification_response_code( 'Success_Patch' ,code )
+    def verification_Success_Patch( self, code, msg=None ):
+        self.verification_response_code( 'Success_Patch' , code , msg )
         
 
 
@@ -566,8 +569,8 @@ class GlobalTools:
     # -param code(String/Int): It is the code to be verified.
     ###
     @keyword
-    def verification_Success_Patch_NoContent( self, code ):
-        self.verification_response_code( 'Success_Patch_NoContent' ,code )
+    def verification_Success_Patch_NoContent( self, code, msg=None ):
+        self.verification_response_code( 'Success_Patch_NoContent' , code , msg )
         
 
     ###
@@ -584,8 +587,8 @@ class GlobalTools:
     # -param code(String/Int): It is the code to be verified.
     ###
     @keyword
-    def verification_No_User( self, code ):
-        self.verification_response_code( 'No_User' ,code )
+    def verification_No_User( self, code, msg=None ):
+        self.verification_response_code( 'No_User' , code , msg )
 
 
 
@@ -603,8 +606,8 @@ class GlobalTools:
     # -param code(String/Int): It is the code to be verified.
     ###
     @keyword
-    def verification_Unauthorized_Access( self, code ):
-        self.verification_response_code( 'Unauthorized_Access' ,code )
+    def verification_Unauthorized_Access( self, code, msg=None ):
+        self.verification_response_code( 'Unauthorized_Access' , code , msg )
 
 
 
@@ -627,8 +630,8 @@ class GlobalTools:
     # -param code(String/Int): It is the code to be verified.
     ###
     @keyword
-    def verification_Forbidden( self, code ):
-        self.verification_response_code( 'Forbidden' ,code )
+    def verification_Forbidden( self, code, msg=None ):
+        self.verification_response_code( 'Forbidden' , code , msg )
 
 
 
@@ -649,8 +652,8 @@ class GlobalTools:
     # -param code(String/Int): It is the code to be verified.
     ###
     @keyword
-    def verification_NotFound( self, code ):
-        self.verification_response_code( 'NotFound' ,code )
+    def verification_NotFound( self, code, msg=None ):
+        self.verification_response_code( 'NotFound' , code , msg )
     
 
 
@@ -669,6 +672,6 @@ class GlobalTools:
     # -param code(String/Int): It is the code to be verified.
     ###
     @keyword
-    def verification_Server_Error( self, code ):
-        self.verification_response_code( 'Server_Error' ,code )
+    def verification_Server_Error( self, code, msg=None ):
+        self.verification_response_code( 'Server_Error' ,code, msg )
 

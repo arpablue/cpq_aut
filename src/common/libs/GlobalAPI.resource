@@ -176,17 +176,6 @@ Generate number wiht text
     ${res}=  Set Variable  ${text}_${number}
     Action  Generate number wiht text: ${res}
     [Return]  ${res}
-###
-# It verify the code status is equals to the pass code
-# -param status_code(int): It is the nuber of the status code.
-###
-#Pass verification code
-#    [Arguments]  ${status_code}
-#    # Verification of the 
-#    ${code}=  Convert To String  ${status_code}
-#    Write  Verifiying the PASS code (${code}) with ${status_code}
-#    Should be equal  ${code}  ${http_success}
-
 ###########################  OBJECTS #######################################
 ###
 # It return the full path of a path in the automation project.
@@ -334,65 +323,65 @@ Get code for
     ${res}=  GlobalTools.Get code for  ${code_name}
     [return]  ${res}
 Verification GET success
-    [Arguments]  ${code}
-    GlobalTools.Verification Success Get  ${code}
+    [Arguments]  ${code}  ${msg}=None
+    GlobalTools.Verification Success Get  ${code}  ${msg}
 
 Verification GET NoContent
-    [Arguments]  ${code}
-    GlobalTools.Verification Success Get NoContent  ${code}
+    [Arguments]  ${code}  ${msg}=None
+    GlobalTools.Verification Success Get NoContent  ${code}  ${msg}
 
 
 Verification POST Success
-    [Arguments]  ${code}
-    GlobalTools.Verification Success POST  ${code}
+    [Arguments]  ${code}  ${msg}=None
+    GlobalTools.Verification Success POST  ${code}  ${msg}
 
 Verification POST Success NoContent
-    [Arguments]  ${code}
-    GlobalTools.Verification Success POST NoContent  ${code}
+    [Arguments]  ${code}  ${msg}=None
+    GlobalTools.Verification Success POST NoContent  ${code}  ${msg}
 
 Verification PUT Success
-    [Arguments]  ${code}
-    GlobalTools.Verification Success PUT  ${code}
+    [Arguments]  ${code}  ${msg}=None
+    GlobalTools.Verification Success PUT  ${code}  ${msg}
 
 Verification PUT Success NoContent
-    [Arguments]  ${code}
-    GlobalTools.Verification Success PUT NoContent  ${code}
+    [Arguments]  ${code}  ${msg}=None
+    GlobalTools.Verification Success PUT NoContent  ${code}  ${msg}
 
 Verification DELETE Success
-    [Arguments]  ${code}
-    GlobalTools.Verification Success DELETE  ${code}
+    [Arguments]  ${code}  ${msg}=None
+    GlobalTools.Verification Success DELETE  ${code}  ${msg}
 
 Verification DELETE Success NoContent
-    [Arguments]  ${code}
-    GlobalTools.Verification Success DELETE NoContent  ${code}
+    [Arguments]  ${code}  ${msg}=None
+    GlobalTools.Verification Success DELETE NoContent  ${code}  ${msg}
 
 Verification PATCH Success
-    [Arguments]  ${code}
-    GlobalTools.Verification Success PATCH  ${code}
+    [Arguments]  ${code}  ${msg}=None
+    GlobalTools.Verification Success PATCH  ${code}  ${msg}
 
 Verification PATCH Success NoContent
-    [Arguments]  ${code}
-    GlobalTools.Verification Success PATCH NoContent  ${code}
+    [Arguments]  ${code}  ${msg}=None
+    GlobalTools.Verification Success PATCH NoContent  ${code}  ${msg}
 
 Verification NoUser
-    [Arguments]  ${code}
-    GlobalTools.Verification NoUser  ${code}
+    [Arguments]  ${code}  ${msg}=None
+    GlobalTools.Verification NoUser  ${code}  ${msg}
 
 Verification Unauthorized Access
-    [Arguments]  ${code}
-    GlobalTools.Verification Unauthorized Access  ${code}
+    [Arguments]  ${code}  ${msg}=None
+    GlobalTools.Verification Unauthorized Access  ${code}  ${msg}
 
-Verification Forbidden
-    [Arguments]  ${code}
-    GlobalTools.Verification Forbidden  ${code}
+Verification Forbidden  ${msg}=None
+    [Arguments]  ${code}  ${msg}=None
+    GlobalTools.Verification Forbidden  ${code}  ${msg}
 
-Verification NotFound
+Verification NotFound  ${msg}=None
     [Arguments]  ${code}
-    GlobalTools.Verification NotFound  ${code}
+    GlobalTools.Verification NotFound  ${code}  ${msg}
 
 Verification Server Error 
-    [Arguments]  ${code}
-    GlobalTools.Verification Server Error  ${code}
+    [Arguments]  ${code}  ${msg}=None
+    GlobalTools.Verification Server Error  ${code}  ${msg}
 
 ########## evaluation methods ################
 Evaluate GET success
