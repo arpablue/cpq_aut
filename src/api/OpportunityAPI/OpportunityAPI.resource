@@ -75,7 +75,7 @@ DELETE request
 ###
 Create from
     [Arguments]  ${dataDict}
-    ${res}=  OpportunityAPI_ext.create from data  ${dataDict}
+    ${res}=  OpportunityAPI_ext.Create from data  ${dataDict}
     [Return]  ${res}
 ### 
 # It verify if a opportunity exists in the system.

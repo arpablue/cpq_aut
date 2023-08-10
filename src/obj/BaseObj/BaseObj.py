@@ -4,7 +4,7 @@ import os
 
 dir = os.path.dirname( __file__ )
 src_pos = dir.index('src')
-src_path = dir[:src_pos] + os.path.join('src','comon','libs')
+src_path = dir[:src_pos] + os.path.join('src','common','libs')
 sys.path.append( src_path )
 
 from GlobalTools import GlobalTools
@@ -35,6 +35,17 @@ class BaseObj:
         if self.mAttrs == None:
             return []
         return self.mAttrs.keys()
+    ###
+    # It return a list of all values of the attributes of the current object.
+    # -return(List)
+    ###
+    def values(self):
+        keys = self.keys()
+        list = []
+        for key in keys:
+            value = self.mAttrs[ key ]
+            list.append( value )
+        return list
     ###
     # It return the data of the current quote in a strting using a json format.
     # -return(string): It is the data of the quote.

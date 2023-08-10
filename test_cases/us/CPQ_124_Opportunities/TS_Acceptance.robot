@@ -3,6 +3,7 @@ Library    RequestsLibrary
 Library    Collections
 
 Resource    ../../../src/common/libs/GlobalAPI.resource
+Resource    ../../../src/common/libs/Validations.resource
 Resource    ../../../src/api/OpportunityAPI/OpportunityAPI.resource
 Resource    ../../../src/api/OpportunityAPI/OpportunityAPI_steps.resource
 
@@ -47,3 +48,14 @@ It is possible delete an opportunity
     OpportunityAPI.Delete  ${oppNew}
     OpportunityAPI_steps.Verify the opportunity should not exist  ${oppNew}
 
+Verify the data to create an opportunity is saved
+    [Tags]  cpq-124  acceptance
+    OpportunityAPI_steps.Prepare requierements
+    ${data}=  Create Dictionary  Name=Opptimus  Description=It is a description for Opptimus
+    ${opp}=  OpportunityAPI.Create from  ${data}
+    ${oppNew}=  OpportunityAPI.Create  ${data}
+    ${flag}=  OpportunityAPI.Compare  ${opp}  ${oppNew}
+    IF  ${flag} == False
+        GlobalAPI.Failed  The data in the system is not the same that specified in the test case.
+    END
+    

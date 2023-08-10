@@ -21,6 +21,13 @@ sys.path.append( src_path )
 
 from LolFile import LolFile
 
+dir = os.path.dirname( __file__ )
+src_pos = dir.index('src')
+src_path = dir[:src_pos] + os.path.join('src','file','DataFile')
+sys.path.append( src_path )
+
+from DataFile_ext import DataFile_ext
+
 
 dir = os.path.dirname( __file__ )
 src_pos = dir.index('src')
@@ -32,7 +39,7 @@ from PermissionObj import PermissionObj
 # It contain the methods to process some action related to permissions.
 ### 
 @library
-class PermissionFile_ext:
+class PermissionFile_ext( DataFile_ext ):
     def __init__( self ):
         self.mGlobal = GlobalTools()
         self.mTools = DictTools()
