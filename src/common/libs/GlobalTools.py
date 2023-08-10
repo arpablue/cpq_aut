@@ -172,6 +172,10 @@ class GlobalTools:
             if not key in listA:
                 res.append( key )
         return res
+    ###
+    # It set on format a path.
+    # -param pathFile(String): It is the path file used.
+    ###
     def set_path_format(self, pathFile ):
         if pathFile == None:
             return ""
