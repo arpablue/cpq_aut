@@ -86,10 +86,62 @@ class HttpRequests:
         h = {
             'Authorization': self.get_token()
         }
-        print( 'GET Request to: ' + url )
         response = requests.get( url, headers=h )
-        print('Response Code: ' + str( response.status_code ) )
-        #print('Response content: ' + str( response.content ) )
-        #print('Response: ' + str( response ) )
         return response
-    
+    ###
+    # It execute a http POST request.
+    # -param json(Dictionary): It is the dictionary used to send to the host.
+    # -return(response): It is the response of the post request.
+    ###
+    def http_POST( self, value=None,  json=None, ):
+        url = self.get_url()
+        if not self.mEndPoint == None:
+            url = url + '/' + self.mEndPoint
+        if not value == None:
+            url = url + value
+        h = {
+            'Authorization': self.get_token()
+        }
+        if json == None:
+            response = requests.post( url, headers=h )
+        else:
+            response = requests.post( url, json=json, headers=h )
+        
+        return response
+    ###
+    # It execute a http PUT request.
+    # -param json(Dictionary): It is the dictionary used to send to the host.
+    # -return(response): It is the response of the post request.
+    ###
+    def http_PUT( self,  value=None, json=None):
+        url = self.get_url()
+        if not self.mEndPoint == None:
+            url = url + '/' + self.mEndPoint
+        if not value == None:
+            url = url + value
+        h = {
+            'Authorization': self.get_token()
+        }
+        if json == None:
+            response = requests.put( url, headers=h )
+        else:
+            response = requests.put( url, json=json, headers=h )
+        
+        return response
+    ###
+    # It execute a http PUT request.
+    # -param json(Dictionary): It is the dictionary used to send to the host.
+    # -return(response): It is the response of the post request.
+    ###
+    def http_DELETE( self, value=None):
+        url = self.get_url()
+        if not self.mEndPoint == None:
+            url = url + '/' + self.mEndPoint
+        if not value == None:
+            url = url + value
+        h = {
+            'Authorization': self.get_token()
+        }
+        print(" url: " + url )
+        response = requests.delete( url, headers=h )
+        return response
