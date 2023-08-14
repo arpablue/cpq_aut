@@ -1,19 +1,29 @@
 import os
+import sys
 import yaml
 import requests
 import json
 from robot.libraries.BuiltIn import BuiltIn
 
+
+dir = os.path.dirname( __file__ )
+src_pos = dir.index('src')
+src_path = dir[:src_pos] + os.path.join('src','http_requests','DataAPI')
+sys.path.append( src_path )
+from DataAPI import DataAPI
+
+
 ###
 # It contains the method to execute HTTP requests.
 ###
-class HttpRequests:
+class HttpRequests( DataAPI ):
     ###
     # Default constructor.
     ###
     def __init__( self ) -> None:
-        self.mData = self.load_yml('config.yml')
+        super().__init__()
         self.mEndPoint = None
+        self.mURL = self.mContext.get_url()
     ###
     # It specify the endpoint to be used in the url.
     # -param endpoint(String): It is the endpoint to be used in the 
@@ -62,13 +72,28 @@ class HttpRequests:
         with open( path , 'r' ) as file:
             data = yaml.safe_load( file )
         return data
+    ###
+    # It return the url of the execution of the automation.
+    # -return(String): It is the URL used in the execution of the automation.
     def get_url( self ):
         return self.mData[ 'url' ]
+    ###
+    # It return the token used in the test.
+    # -return(String): It is the token used in the automation.
+    ### 
     def get_token(self):
         return self.mData[ 'token' ]
+    ###
+    # It create a session for th econnection with the Web services.
+    ###
+    #def create_session( self ):
+    #    print(  'Under develolpment' )
     
-    def create_session( self ):
-        print(  'Under develolpment' )
+    ###
+    # It convert the content of the response to a dicttionary.
+    # -param content(ReponseData): It is the content of a response.
+    # -return(Dictionary):It is the data of the response in a dictionary.
+    ####
     def content_to_dictionary( self, content):
         data = json.loads( content.decode( 'utf-8' ) )
         return data

@@ -17,7 +17,7 @@ from RoleObj import RoleObj
 ###
 @library
 class RoleAPI_ext:
-        
+    ###    
     # It create a Rol object using as base a dictionary.
     # -param dict(dictionary): It is the data used to crearte the Rol object.
     # -return( RoleObj ) It is the Rol created from the data.
@@ -72,5 +72,3 @@ class RoleAPI_ext:
         if role == None:
             return 0
         return role.quotes_quantity()
-    
-    
