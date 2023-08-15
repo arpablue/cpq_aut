@@ -3,11 +3,11 @@ import os
 
 dir = os.path.dirname( __file__ )
 src_pos = dir.index('src')
-src_path = dir[:src_pos] + os.path.join('src','http_requests','ContextAPI')
+src_path = dir[:src_pos] + os.path.join('src','http_requests','LogAPI')
 sys.path.append( src_path )
-from ContextAPI import ContextAPI
+from LogAPI import LogAPI
 
-class ValidationAPI(ContextAPI):
+class ValidationAPI(LogAPI):
     ###
     # Default constructor.
     ###

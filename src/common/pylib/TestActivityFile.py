@@ -47,29 +47,34 @@ class TestActivityFile( LogFile ):
         sep = os.path.sep
         # get the project folder
         dir = self.get_prj_directory()
-        # Get the name of the *.robot file
-        suite_source = BuiltIn().get_variable_value("${SUITE_SOURCE}")
-        suite_source = suite_source.replace( dir , "" ) # deleting the refrence to the folder        
-        suite_source = suite_source.replace( "test_cases" , "" ) # deleting the refrence to the folder
+        try: 
+            # Get the name of the *.robot file
+            suite_source = BuiltIn().get_variable_value("${SUITE_SOURCE}")
+            suite_source = suite_source.replace( dir , "" ) # deleting the refrence to the folder        
+            suite_source = suite_source.replace( "test_cases" , "" ) # deleting the refrence to the folder
+            
+            # Get the name of the test case execution
+            test_name = BuiltIn().get_variable_value("${TEST_NAME}")
+            
+            # Create the name of the activity log file
+            test_name = test_name.strip().replace(" ","_") + ".log"
+            
+            # prepare the folder
+            # Generate the folder related to the *.robot file
+            folder = suite_source.replace(".robot","")
+            
+            # To concate the project folder with the folder of the *.robt file
+            dir = dir + sep + "test_result" + sep+ rand +sep + folder
+            dir = dir.replace( sep +sep, sep)
+            
+            self.mkdir( dir )
+            dir = dir + sep + test_name
+            dir = dir.replace( sep +sep, sep)
+            return dir
+        except NameError:
+            print( 'It is necesary run under ROBOT FRAMEWORK to create log files.' )
+        return []
         
-        # Get the name of the test case execution
-        test_name = BuiltIn().get_variable_value("${TEST_NAME}")
-        
-        # Create the name of the activity log file
-        test_name = test_name.strip().replace(" ","_") + ".log"
-        
-        # prepare the folder
-        # Generate the folder related to the *.robot file
-        folder = suite_source.replace(".robot","")
-        
-        # To concate the project folder with the folder of the *.robt file
-        dir = dir + sep + "test_result" + sep+ rand +sep + folder
-        dir = dir.replace( sep +sep, sep)
-        
-        self.mkdir( dir )
-        dir = dir + sep + test_name
-        dir = dir.replace( sep +sep, sep)
-        return dir
     ###
     # It write a message in the current test activity file.
     # -param msg(String): It is the message to write in the file.
@@ -77,6 +82,9 @@ class TestActivityFile( LogFile ):
     @keyword
     def writeln(self, msg):
         file = self.get_test_result_file()
+        if file == None:
+            logger.console("ERROR: It is necessary in a ROBOT FRAMEWORK context to createthe activity files.")
+            return
         self.set_file( file )
         self.open()
         super().writeln( msg )

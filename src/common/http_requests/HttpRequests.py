@@ -23,7 +23,7 @@ class HttpRequests( DataAPI ):
     def __init__( self ) -> None:
         super().__init__()
         self.mEndPoint = None
-        self.mURL = self.mContext.get_url()
+
     ###
     # It specify the endpoint to be used in the url.
     # -param endpoint(String): It is the endpoint to be used in the 
@@ -73,23 +73,6 @@ class HttpRequests( DataAPI ):
             data = yaml.safe_load( file )
         return data
     ###
-    # It return the url of the execution of the automation.
-    # -return(String): It is the URL used in the execution of the automation.
-    def get_url( self ):
-        return self.mData[ 'url' ]
-    ###
-    # It return the token used in the test.
-    # -return(String): It is the token used in the automation.
-    ### 
-    def get_token(self):
-        return self.mData[ 'token' ]
-    ###
-    # It create a session for th econnection with the Web services.
-    ###
-    #def create_session( self ):
-    #    print(  'Under develolpment' )
-    
-    ###
     # It convert the content of the response to a dicttionary.
     # -param content(ReponseData): It is the content of a response.
     # -return(Dictionary):It is the data of the response in a dictionary.
@@ -98,19 +81,35 @@ class HttpRequests( DataAPI ):
         data = json.loads( content.decode( 'utf-8' ) )
         return data
     ###
+    # It ser in format a URL.
+    # -param target(String): It is the URL to set on format,
+    # -return(String): It is the URL set on format.
+    ###
+    def url_format( self, target ):
+        if target == None:
+            return None
+        target = target.strip()
+        target = target.replace('//','/')
+        target = target.replace('https:/','https://')
+        target = target.replace('http:/','http://')
+        return target
+    ###
     # It execute a http GET request.
     # -param value(String):It is the value add to the endpoint extension.
     # -return(Response): It is the response of the request.
     ###
     def http_GET( self, value = None ):
         url = self.get_url()
+        
         if not self.mEndPoint == None:
             url = url + '/' + self.mEndPoint
         if not value == None:
             url = url + value
+        url = self.url_format( url )
         h = {
             'Authorization': self.get_token()
         }
+        self.write('GET requests: ' + url )
         response = requests.get( url, headers=h )
         return response
     ###
@@ -127,6 +126,7 @@ class HttpRequests( DataAPI ):
         h = {
             'Authorization': self.get_token()
         }
+        self.write('POST requests: ' + url )
         if json == None:
             response = requests.post( url, headers=h )
         else:
@@ -147,6 +147,7 @@ class HttpRequests( DataAPI ):
         h = {
             'Authorization': self.get_token()
         }
+        self.write('PUT requests: ' + url )
         if json == None:
             response = requests.put( url, headers=h )
         else:
@@ -167,6 +168,6 @@ class HttpRequests( DataAPI ):
         h = {
             'Authorization': self.get_token()
         }
-        print(" url: " + url )
+        self.write('DELETE requests: ' + url )
         response = requests.delete( url, headers=h )
         return response

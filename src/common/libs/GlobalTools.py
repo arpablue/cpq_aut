@@ -1,6 +1,5 @@
 from robot.api.deco import library
 from robot.api.deco import keyword
-from robot.api import logger
 from robot.libraries.BuiltIn import BuiltIn
 import os
 import sys

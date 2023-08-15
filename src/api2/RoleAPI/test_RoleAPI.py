@@ -21,6 +21,8 @@ def test_RoleApi_getRoles():
         return
     print( '[PASS] Quantity of roles: ' + str( size ) )
     
-    
+def clear_terminal():
+    os.system( 'cls' if os.name == 'nt' else 'clear' )
 
+clear_terminal()
 test_RoleApi_getRoles()

@@ -134,8 +134,8 @@ def test_HttpRequets_http_DELETE_delete_an_opportunity():
     print('Response Code: ' + str( response.status_code ) )
     print( response.content )
 
-#test_HttpRequests_load_YML_file()
-#test_HttpRequests_http_GET_it_is_possible_do_a_GET_and_get_a_response()
-#test_HttpRequets_http_POST_create_an_opportunity()
-#test_HttpRequets_http_PUT_modify_an_opportunity()
+test_HttpRequests_load_YML_file()
+test_HttpRequests_http_GET_it_is_possible_do_a_GET_and_get_a_response()
+test_HttpRequets_http_POST_create_an_opportunity()
+test_HttpRequets_http_PUT_modify_an_opportunity()
 test_HttpRequets_http_DELETE_delete_an_opportunity()
