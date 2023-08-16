@@ -50,18 +50,45 @@ class RoleAPI( HttpRequests ):
     ###
     # I call all rols in the system.
     # -return(List): It is a list of Roles RoleObj.
+    ###
     @keyword
     def get_all_roles( self ):
+        self.action("Get all roles")
         response = self.http_GET()
         code = response.status_code
+        self.write( "Current status code: " + str( code ) )
         list = self.content_to_dictionary( response.content )        
         flag = self.evaluate_Success_Get( code )
         if not flag :
-            self.write( 'Current status code: ' + str( code ) + ' - It is not possible get the roles list.')
+            self.error( 'Current status code: ' + str( code ) + ' - It is not possible get the roles list.')
             return []
         list = list['data']
         list = self.create_role_list( list )
+        self.write('-------- List of roles ---------')
+        for element in list:
+            self.write( element )
         return list
     
+    ###
+    # I call all rols in the system.
+    # -return(List): It is a list of Roles RoleObj.
+    ###
+    @keyword
+    def get_all_visible_roles( self ):
+        self.action("Get visible all roles")
+        response = self.http_GET('/visible')
+        code = response.status_code
+        self.write( "Current status code: " + str( code ) )
+        list = self.content_to_dictionary( response.content )        
+        flag = self.evaluate_Success_Get( code )
+        if not flag :
+            self.error( 'Current status code: ' + str( code ) + ' - It is not possible get the roles list.')
+            return []
+        list = list['data']
+        list = self.create_role_list( list )
+        self.write('-------- List of roles ---------')
+        for element in list:
+            self.write( element )
+        return list
         
     

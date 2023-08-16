@@ -81,7 +81,9 @@ DELETE request
 # -return(Bool): It is true if the session is authorized.
 ###
 IsActive
-    ${response}=  GET direct request  
+    ${response}=  GET direct request 
+    GlobalAPI.Write  The current status code: ${response.status_code}
+    GlobalAPI.WriteBox  REPONSE CONTENT  ${response.content}
     ${flag}=  GlobalAPI.Evaluate GET success  ${response.status_code} 
     IF  ${flag} == True
         ${strContent}=  Convert to String  ${response.content}
@@ -96,6 +98,8 @@ IsActive
 # -return()
 Get User ID
     ${response}=  GET direct request  
+    GlobalAPI.Write  The current status code: ${response.status_code}
+    GlobalAPI.WriteBox  REPONSE CONTENT  ${response.content}
     ${flag}=  GlobalAPI.Evaluate GET success  ${response.status_code} 
     ${strContent}=  Convert to String  ${response.content}
     ${res}=  Set Variable  None
