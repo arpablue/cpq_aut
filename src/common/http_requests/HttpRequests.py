@@ -1,19 +1,29 @@
 import os
+import sys
 import yaml
 import requests
 import json
 from robot.libraries.BuiltIn import BuiltIn
 
+
+dir = os.path.dirname( __file__ )
+src_pos = dir.index('src')
+src_path = dir[:src_pos] + os.path.join('src','http_requests','DataAPI')
+sys.path.append( src_path )
+from DataAPI import DataAPI
+
+
 ###
 # It contains the method to execute HTTP requests.
 ###
-class HttpRequests:
+class HttpRequests( DataAPI ):
     ###
     # Default constructor.
     ###
     def __init__( self ) -> None:
-        self.mData = self.load_yml('config.yml')
+        super().__init__()
         self.mEndPoint = None
+
     ###
     # It specify the endpoint to be used in the url.
     # -param endpoint(String): It is the endpoint to be used in the 
@@ -62,16 +72,27 @@ class HttpRequests:
         with open( path , 'r' ) as file:
             data = yaml.safe_load( file )
         return data
-    def get_url( self ):
-        return self.mData[ 'url' ]
-    def get_token(self):
-        return self.mData[ 'token' ]
-    
-    def create_session( self ):
-        print(  'Under develolpment' )
+    ###
+    # It convert the content of the response to a dicttionary.
+    # -param content(ReponseData): It is the content of a response.
+    # -return(Dictionary):It is the data of the response in a dictionary.
+    ####
     def content_to_dictionary( self, content):
         data = json.loads( content.decode( 'utf-8' ) )
         return data
+    ###
+    # It ser in format a URL.
+    # -param target(String): It is the URL to set on format,
+    # -return(String): It is the URL set on format.
+    ###
+    def url_format( self, target ):
+        if target == None:
+            return None
+        target = target.strip()
+        target = target.replace('//','/')
+        target = target.replace('https:/','https://')
+        target = target.replace('http:/','http://')
+        return target
     ###
     # It execute a http GET request.
     # -param value(String):It is the value add to the endpoint extension.
@@ -79,13 +100,16 @@ class HttpRequests:
     ###
     def http_GET( self, value = None ):
         url = self.get_url()
+        
         if not self.mEndPoint == None:
             url = url + '/' + self.mEndPoint
         if not value == None:
             url = url + value
+        url = self.url_format( url )
         h = {
             'Authorization': self.get_token()
         }
+        self.write('GET requests: ' + url )
         response = requests.get( url, headers=h )
         return response
     ###
@@ -102,6 +126,7 @@ class HttpRequests:
         h = {
             'Authorization': self.get_token()
         }
+        self.write('POST requests: ' + url )
         if json == None:
             response = requests.post( url, headers=h )
         else:
@@ -122,6 +147,7 @@ class HttpRequests:
         h = {
             'Authorization': self.get_token()
         }
+        self.write('PUT requests: ' + url )
         if json == None:
             response = requests.put( url, headers=h )
         else:
@@ -142,6 +168,6 @@ class HttpRequests:
         h = {
             'Authorization': self.get_token()
         }
-        print(" url: " + url )
+        self.write('DELETE requests: ' + url )
         response = requests.delete( url, headers=h )
         return response

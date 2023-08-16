@@ -24,14 +24,12 @@ def test_HttpRequests_http_GET_it_is_possible_do_a_GET_and_get_a_response():
     target.set_endpoint('v1/roles')
     response = target.http_GET()
     list = target.content_to_dictionary( response.content )
-    response = target.http_GET()
-    print('Response Code: ' + str( response.status_code ) )
-    print('-----------------')
-    print('-----------------')
-    print('-----------------')
+    
     list = list['data']
-    size = len( list )
-    print( 'Qunatity of elements: ' + str( size ) )
+    if list == None :
+        list = []
+    return list
+    
         
 def test_HttpRequets_http_POST_create_an_opportunity():
     target = HttpRequests()
@@ -136,8 +134,8 @@ def test_HttpRequets_http_DELETE_delete_an_opportunity():
     print('Response Code: ' + str( response.status_code ) )
     print( response.content )
 
-#test_HttpRequests_load_YML_file()
-#test_HttpRequests_http_GET_it_is_possible_do_a_GET_and_get_a_response()
-#test_HttpRequets_http_POST_create_an_opportunity()
-#test_HttpRequets_http_PUT_modify_an_opportunity()
+test_HttpRequests_load_YML_file()
+test_HttpRequests_http_GET_it_is_possible_do_a_GET_and_get_a_response()
+test_HttpRequets_http_POST_create_an_opportunity()
+test_HttpRequets_http_PUT_modify_an_opportunity()
 test_HttpRequets_http_DELETE_delete_an_opportunity()

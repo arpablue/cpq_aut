@@ -43,7 +43,7 @@
             }
         },
         "cpq":{
-            "url":"https://cpq-dev.cdsvisual.net",
+            "url":"https://cpq-dev.cdsvisual.net/v1",
             "domain": "Not specified",
             "http_codes":{
                 "Success_Get":200,
