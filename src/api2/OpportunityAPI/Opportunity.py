@@ -24,3 +24,9 @@ class OpportunityAPI( HttpRequests ):
     def __init__( self ):
         super().__init__()
         self.mEndPoint = '/opportunity'
+        
+    def create(self ):
+        data = {
+            'Name':'Oppor'
+        }
+        res = Opportunity()

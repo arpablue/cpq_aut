@@ -1,5 +1,6 @@
 import os
 import sys
+import random
 from robot.api.deco import library
 from robot.api.deco import keyword
 from robot.api import logger
@@ -18,4 +19,9 @@ class CrudAPI( HttpRequests ):
     ###
     def __init__( self ):
         super().__init__()
-        
+    ###
+    # It generate a random number, if the number is 
+    def rand(self, n=10000 ):
+        res = random.randint( 0, n )
+        self.write( 'Number generated: ' + str( res ) )
+        return res
