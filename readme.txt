@@ -86,18 +86,29 @@ python -m robot TS_Acceptance.robot
 Additionally to this in each folder, a batch file exists to execute each test plan in the folder,
 these files can be used as an example  to execute another test plan.
 
-    +cpq_aut
-        +---test_cases
-        |   +---us
-        |       +---CPQ-140_Roles
-        |   |          - TS_Acceptance.robot
-        |   |          - accept.bat
-        |       +---CPQ-124_Opportunities
-        |   |          - accept.bat
-        |   |          - functional.bat
-        |   |          - negative.bat
-
-
++---test_result
+    +---tr_20230803
+    |   +---us
+    |       +---CPQ_122_Quotes
+    |       |   +---TS_Acceptance
+    |       |   +---TS_Functional
+    |       +---CPQ_123_QuoteLines
+    |       |   +---TS_Acceptance
+    |       +---CPQ_124_Opportunities
+    |           +---TS_Acceptance
+    |           +---TS_Functional
+    +---tr_20230811
+    |   +---us
+    |       +---CPQ-140_UserManagement
+    |       |   +---TS_Acceptance
+    |       +---CPQ_122_Quotes
+    |       |   +---TS_Acceptance
+    |       |   +---TS_Functional
+    |       +---CPQ_123_QuoteLines
+    |       |   +---TS_Acceptance
+    |       +---CPQ_124_Opportunities
+    |           +---TS_Acceptance
+    |           +---TS_Functional
 
 After the execution, ROBOT FRAMEWORK will create the files related to the test results. 
 Additionally to this the automation framework creates log files, related to the data and 
@@ -339,6 +350,67 @@ The test cases are created in the ../test_cases folder, in this folder we have t
     - test_plans : It contains the test plan created for the project.
     - us : It contains the implementation of the test cases of the user store, for the details 
 			go in the execution section.
+            The folders created here are with the format tr_<year><month><date>, ex: tr_20230803; 
+            inside of this folder, the path the of the execution will be created and a folder with
+            the name of the *.robot files executed, in these files an LOG file willbe generarted with
+            the name of the test case executed, it is the activities files.
+
+        +---test_result
+            +---tr_20230803
+            |   +---us
+            |       +---CPQ_122_Quotes
+            |       |   +---TS_Acceptance
+            |       |       +- test_plan_1.log
+            |       |       +- test_plan_2.log
+            |       |       +- test_plan_3.log
+            |       |   +---TS_Functional
+            |       |       +- test_plan_1.log
+            |       |       +- test_plan_2.log
+            |       |       +- test_plan_3.log
+            |       +---CPQ_123_QuoteLines
+            |       |   +---TS_Acceptance
+            |       |       +- test_plan_1.log
+            |       |       +- test_plan_2.log
+            |       |       +- test_plan_3.log
+            |       +---CPQ_124_Opportunities
+            |           +---TS_Functional
+            |       |       +- test_plan_1.log
+            |       |       +- test_plan_2.log
+            |       |       +- test_plan_3.log
+
+    Activity File
+    --------------
+    The activity file is log file with a struture to understand the action and data used in the execution 
+    of the test case. 
+
+    The GlobalAPI.resources file containt the methods to use the structure of the activity file.
+    The structure of the test case group action and what happen with the data before and after apply an action 
+    or process. In the current project the structure of the activities file are:
+
+        Steps ...........................
+            Action ......................
+            <notification> ..............
+                .........mesages.........
+        
+
+        Steps: It is the direct reference to the steps of the test case, it have a global actions to execute
+                steps, these cactions could be with the same objective or with differents objective.
+        
+        Action: It is a group of action with a specific objetive.
+
+        <notifications>: It to show a specific messages, this are unusual message to show special cases, results 
+                        or states, these methods could be warning, info, pass, error, etc.
+                        
+                        - Failed( text ): The Failed method raise an exception, this stop the execution of the 
+                        test case and set the state of the test case in FAIL.
+
+        ...messages......: This are minor messages to show single actions or to show results.
+
+                            - Write( text ) : This method is used to display singles messages in the activity loq.
+
+                            - Writebox( text, value): This method displaye a "box" in the activity log, is used to display
+                            data with complex structures or objects.
+
 
 
 6) Test results
